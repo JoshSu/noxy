@@ -130,7 +130,7 @@
 
         <resources>
             <resource>
-                <directory>../artemis-core/src/main/init.d/</directory>
+                <directory>../../artemis-framework/artemis-daemon/src/main/init.d/</directory>
                 <filtering>true</filtering>
                 <includes>
                     <include>artemis-daemon</include>
@@ -208,7 +208,7 @@
                     <!-- expand "SNAPSHOT" to what is in the "USER" env variable -->
                     <snapshotEnv>USER</snapshotEnv>
                     <verbose>true</verbose>
-                    <controlDir>${basedir}/../artemis-core/src/main/deb</controlDir>
+                    <controlDir>${basedir}/..</controlDir>
                     <attach>false</attach>
 
                     <dataSet>
