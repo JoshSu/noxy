@@ -136,13 +136,13 @@
 
         <resources>
 
-            <!--<resource>-->
-                <!--<directory>../../artemis-framework/artemis-daemon/src/main/init.d/</directory>-->
-                <!--<filtering>true</filtering>-->
-                <!--<includes>-->
-                    <!--<include>artemis-daemon</include>-->
-                <!--</includes>-->
-            <!--</resource>-->
+            <resource>
+                <directory>${project.build.outputDirectory}/test-classes/artemis-daemon/init.d</directory>
+                <filtering>true</filtering>
+                <includes>
+                    <include>artemis-daemon</include>
+                </includes>
+            </resource>
 
             <resource>
                 <directory>src/main/resources</directory>
@@ -155,7 +155,6 @@
         </resources>
 
         <plugins>
-
 
             <!--
 
@@ -173,6 +172,10 @@
                     <resourceBundles>
                         <resourceBundle>com.spinn3r.artemis:artemis-daemon:${project.version}</resourceBundle>
                     </resourceBundles>
+                    <!--<outputDirectory>-->
+                        <!--${project.build.outputDirectory}/artemis-daemon-->
+                    <!--</outputDirectory>-->
+
                 </configuration>
                 <executions>
                     <execution>
