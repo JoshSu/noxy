@@ -19,8 +19,8 @@
         </dependency>
 
         <dependency>
-            <groupId>com.spinn3r.artemis.proxy</groupId>
-            <artifactId>artemis-proxy-framework</artifactId>
+            <groupId>com.spinn3r.noxy</groupId>
+            <artifactId>noxy-framework</artifactId>
             <version>${project.version}</version>
         </dependency>
 
