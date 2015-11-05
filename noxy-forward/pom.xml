@@ -31,6 +31,12 @@
     <dependencies>
 
         <dependency>
+            <groupId>com.spinn3r.artemis</groupId>
+            <artifactId>artemis-daemon</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
             <groupId>com.spinn3r.noxy</groupId>
             <artifactId>noxy-framework</artifactId>
             <version>${project.version}</version>
@@ -129,13 +135,14 @@
     <build>
 
         <resources>
-            <resource>
-                <directory>../../artemis-framework/artemis-daemon/src/main/init.d/</directory>
-                <filtering>true</filtering>
-                <includes>
-                    <include>artemis-daemon</include>
-                </includes>
-            </resource>
+
+            <!--<resource>-->
+                <!--<directory>../../artemis-framework/artemis-daemon/src/main/init.d/</directory>-->
+                <!--<filtering>true</filtering>-->
+                <!--<includes>-->
+                    <!--<include>artemis-daemon</include>-->
+                <!--</includes>-->
+            <!--</resource>-->
 
             <resource>
                 <directory>src/main/resources</directory>
@@ -148,6 +155,33 @@
         </resources>
 
         <plugins>
+
+
+            <!--
+
+             The remote resources plugin is designed to read in our daemon
+             resources so that we can use them in the build.
+
+             https://maven.apache.org/plugins/maven-remote-resources-plugin/examples/sharing-resources.html
+
+            -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-remote-resources-plugin</artifactId>
+                <version>1.5</version>
+                <configuration>
+                    <resourceBundles>
+                        <resourceBundle>com.spinn3r.artemis:artemis-daemon:${project.version}</resourceBundle>
+                    </resourceBundles>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>process</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
 
             <plugin>
 
