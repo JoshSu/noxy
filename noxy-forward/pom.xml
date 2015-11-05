@@ -245,7 +245,9 @@
                     <!-- expand "SNAPSHOT" to what is in the "USER" env variable -->
                     <snapshotEnv>USER</snapshotEnv>
                     <verbose>true</verbose>
-                    <controlDir>${basedir}/..</controlDir>
+                    <!--<controlDir>/home/burton/projects/spinn3r-app/noxy/noxy-forward/target/classes/artemis-daemon/control/</controlDir>-->
+
+                    <controlDir>/tmp/control</controlDir>
                     <attach>false</attach>
 
                     <dataSet>
