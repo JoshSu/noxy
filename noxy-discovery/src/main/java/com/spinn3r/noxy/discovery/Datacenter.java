@@ -9,6 +9,14 @@ public class Datacenter {
 
     private String location;
 
+    /**
+     *
+     *
+     * @param name The name of the data center.  This is just a human readable
+     *             string and specific to your application.
+     *
+     * @param location The physical location of this datacenter.  Example: San Jose, CA
+     */
     public Datacenter(String name, String location) {
         this.name = name;
         this.location = location;
