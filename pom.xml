@@ -24,6 +24,7 @@
         <module>noxy-forward</module>
         <module>noxy-reverse</module>
         <module>noxy-framework</module>
+        <module>noxy-discovery</module>
     </modules>
 
     <scm>
