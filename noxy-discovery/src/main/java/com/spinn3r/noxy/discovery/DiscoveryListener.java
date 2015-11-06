@@ -8,11 +8,11 @@ public interface DiscoveryListener {
     /**
      * Called when a host enters the cluster.
      */
-    void onEnter( Host host );
+    void onJoin( Endpoint endpoint);
 
     /**
      * Called when a host leaves the cluster.
      */
-    void onLeave( Host host );
+    void onLeave( Endpoint endpoint);
 
 }
