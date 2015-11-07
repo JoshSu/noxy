@@ -4,6 +4,7 @@ machine:
 
 dependencies:
   override:
+    - rm -rf ~/.m2/repository/com/spinn3r/artemis/
     - time mvn -T 4 -Dproject.updatePolicy=always -DskipTests install
     - time mvn -e -T 4 -Dproject.updatePolicy=always dependency:go-offline
 
