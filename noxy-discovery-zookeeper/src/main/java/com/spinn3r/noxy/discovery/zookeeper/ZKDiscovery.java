@@ -7,7 +7,9 @@ import com.spinn3r.log5j.Logger;
 import com.spinn3r.noxy.discovery.*;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.api.CuratorWatcher;
+import org.apache.zookeeper.KeeperException;
 import org.apache.zookeeper.WatchedEvent;
+import org.apache.zookeeper.data.Stat;
 
 import java.util.List;
 import java.util.Map;
@@ -70,18 +72,29 @@ public class ZKDiscovery implements Discovery {
 
             String root = ZKClusterPaths.root( cluster );
 
-            curatorFramework.create()
-              .creatingParentsIfNeeded()
-              .forPath( root );
+            try {
+
+                Stat stat = curatorFramework.checkExists().forPath( root );
+
+                if ( stat == null ) {
+                    curatorFramework.create()
+                      .creatingParentsIfNeeded()
+                      .forPath( root );
+                }
+
+            } catch ( KeeperException.NodeExistsException e ) {
+                // this is ok.. .this is what we want.
+            }
 
             List<String> children = curatorFramework
                 .getChildren()
                 .usingWatcher( new ChildrenWatcher() )
                 .forPath( root );
 
-            //discoverChildren( children );
+            handleFoundChildren( children );
 
         } catch (Throwable t) {
+            t.printStackTrace(); // FIXME:
             throw new DiscoveryListenerException( "Could not get children: ", t );
         }
 
@@ -102,11 +115,13 @@ public class ZKDiscovery implements Discovery {
 
         @Override
         public void process(WatchedEvent watchedEvent) throws Exception {
+
             try {
                 discoverChildren();
             } catch (Throwable t) {
                 log.error( "Could not discovery children: ", t );
             }
+
         }
 
     }

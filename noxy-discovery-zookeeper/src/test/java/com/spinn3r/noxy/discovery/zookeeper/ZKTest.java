@@ -111,6 +111,24 @@ public class ZKTest extends BaseZookeeperTest {
 
         System.out.printf( "done\n" );
 
+    }
+
+    @Test
+    @Ignore
+    public void testCreatePathTwice() throws Exception {
+
+        CuratorFramework curatorFramework = curatorFrameworkProvider.get();
+
+        String path = "/foo";
+
+        curatorFramework.create()
+          .creatingParentsIfNeeded()
+          .forPath( path );
+
+        curatorFramework.create()
+          .creatingParentsIfNeeded()
+          .forPath( path );
+
 
     }
 
