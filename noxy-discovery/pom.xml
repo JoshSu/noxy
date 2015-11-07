@@ -14,4 +14,12 @@
 
     <description>Module for performing dynamic discovery of services.</description>
 
+    <dependencies>
+        <dependency>
+            <groupId>com.spinn3r.artemis.json</groupId>
+            <artifactId>artemis-json</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
+
 </project>

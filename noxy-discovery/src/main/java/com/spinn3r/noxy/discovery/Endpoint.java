@@ -1,8 +1,12 @@
 package com.spinn3r.noxy.discovery;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.spinn3r.artemis.json.JSON;
+
 /**
  *
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Endpoint {
 
     private String address;
@@ -51,6 +55,14 @@ public class Endpoint {
                  ", hostType=" + endpointType +
                  ", datacenter=" + datacenter +
                  '}';
+    }
+
+    public String toJSON() {
+        return JSON.toJSON(this);
+    }
+
+    public static Endpoint fromJSON( String json ) {
+        return JSON.fromJSON( Endpoint.class, json );
     }
 
 }

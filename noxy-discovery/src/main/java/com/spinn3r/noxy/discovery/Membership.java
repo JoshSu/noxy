@@ -9,12 +9,12 @@ public interface Membership {
      * Join the cluster.  This will cause the onJoin methods to be called
      * on all DiscoveryListeners in the cluster.
      */
-    void join( Endpoint endpoint);
+    void join( Endpoint endpoint) throws MembershipException;
 
     /**
      * Leave the cluster.  This will cause the onLeave methods to be called
      * on all DiscoveryListeners in the cluster.  Usually called on shutdown.
      */
-    void leave( Endpoint endpoint);
+    void leave( Endpoint endpoint) throws MembershipException;
 
 }
