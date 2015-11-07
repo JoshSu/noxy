@@ -22,10 +22,10 @@
 
     <modules>
         <module>noxy-forward</module>
-        <module>noxy-reverse</module>
-        <module>noxy-framework</module>
         <module>noxy-discovery</module>
-        <module>noxy-discovery-zookeper</module>
+        <module>noxy-discovery-zookeeper</module>
+        <module>noxy-framework</module>
+        <module>noxy-reverse</module>
     </modules>
 
     <scm>
