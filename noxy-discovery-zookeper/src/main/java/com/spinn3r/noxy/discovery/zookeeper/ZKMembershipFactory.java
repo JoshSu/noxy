@@ -14,12 +14,9 @@ public class ZKMembershipFactory implements MembershipFactory {
 
     private final Provider<CuratorFramework> curatorFrameworkProvider;
 
-    private final Cluster cluster;
-
     @Inject
-    ZKMembershipFactory(Provider<CuratorFramework> curatorFrameworkProvider, Cluster cluster) {
+    ZKMembershipFactory(Provider<CuratorFramework> curatorFrameworkProvider) {
         this.curatorFrameworkProvider = curatorFrameworkProvider;
-        this.cluster = cluster;
     }
 
     @Override

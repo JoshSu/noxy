@@ -22,6 +22,10 @@ public class Datacenter {
         this.location = location;
     }
 
+    private Datacenter() {
+        // json constructor
+    }
+
     public String getName() {
         return name;
     }

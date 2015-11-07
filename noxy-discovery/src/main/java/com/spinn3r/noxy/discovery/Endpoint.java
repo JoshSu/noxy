@@ -31,6 +31,10 @@ public class Endpoint {
         this.datacenter = datacenter;
     }
 
+    private Endpoint() {
+        // json constructor
+    }
+
     public String getAddress() {
         return address;
     }
@@ -52,7 +56,7 @@ public class Endpoint {
         return "Endpoint{" +
                  "address='" + address + '\'' +
                  ", hostname='" + hostname + '\'' +
-                 ", hostType=" + endpointType +
+                 ", endpointType=" + endpointType +
                  ", datacenter=" + datacenter +
                  '}';
     }
@@ -62,6 +66,10 @@ public class Endpoint {
     }
 
     public static Endpoint fromJSON( String json ) {
+        return JSON.fromJSON( Endpoint.class, json );
+    }
+
+    public static Endpoint fromJSON( byte[] json ) {
         return JSON.fromJSON( Endpoint.class, json );
     }
 

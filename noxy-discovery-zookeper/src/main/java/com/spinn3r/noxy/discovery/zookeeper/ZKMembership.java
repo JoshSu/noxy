@@ -7,6 +7,7 @@ import com.spinn3r.noxy.discovery.Endpoint;
 import com.spinn3r.noxy.discovery.Membership;
 import com.spinn3r.noxy.discovery.MembershipException;
 import org.apache.curator.framework.CuratorFramework;
+import org.apache.zookeeper.CreateMode;
 
 /**
  *
@@ -30,7 +31,14 @@ public class ZKMembership implements Membership {
             String json = endpoint.toJSON();
             byte[] json_data = json.getBytes( Charsets.UTF_8 );
 
-            curatorFrameworkProvider.get().create().forPath( path, json_data );
+            CuratorFramework curatorFramework = curatorFrameworkProvider.get();
+
+            curatorFramework
+              .create()
+              .creatingParentsIfNeeded()
+              .withMode( CreateMode.EPHEMERAL )
+              .forPath( path, json_data );
+
         } catch (Exception e) {
             throw new MembershipException( String.format( "Could not join noxy cluster %s for endpoint: %s ", cluster.getName(), endpoint.getAddress() ),  e );
         }

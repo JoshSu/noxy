@@ -7,6 +7,10 @@ public class Cluster {
 
     private String name;
 
+    public Cluster(String name) {
+        this.name = name;
+    }
+
     public String getName() {
         return name;
     }
