@@ -25,6 +25,7 @@
         <module>noxy-reverse</module>
         <module>noxy-framework</module>
         <module>noxy-discovery</module>
+        <module>noxy-discovery-zookeper</module>
     </modules>
 
     <scm>
