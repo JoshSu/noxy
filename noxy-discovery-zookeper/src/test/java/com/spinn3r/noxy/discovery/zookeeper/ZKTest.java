@@ -1,5 +1,6 @@
 package com.spinn3r.noxy.discovery.zookeeper;
 
+import com.google.common.collect.Maps;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.spinn3r.artemis.init.Launcher;
@@ -11,23 +12,27 @@ import com.spinn3r.noxy.discovery.zookeeper.init.ZKNoxyDiscoveryService;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.zookeeper.data.Stat;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
+import java.util.Map;
+
 import static org.junit.Assert.*;
-import static org.hamcrest.Matchers.*;
 
 public class ZKTest extends BaseZookeeperTest {
 
     Launcher launcher;
 
     @Inject
-    DiscoveryListenerFactory discoveryListenerFactory;
+    DiscoveryFactory discoveryFactory;
 
     @Inject
     MembershipFactory membershipFactory;
 
     @Inject
     Provider<CuratorFramework> curatorFrameworkProvider;
+
+    Cluster cluster = new Cluster( "test" );
 
     Datacenter datacenter = new Datacenter( "local", "Castro Valley, CA" );
     Endpoint endpoint = new Endpoint( "localhost:12345", "localhost", EndpointType.WEBSERVER, datacenter );
@@ -47,7 +52,6 @@ public class ZKTest extends BaseZookeeperTest {
     @Test
     public void testMembershipJoinAndLeave() throws Exception {
 
-        Cluster cluster = new Cluster( "test" );
         Membership membership = membershipFactory.create( cluster );
         membership.join( endpoint );
 
@@ -76,7 +80,39 @@ public class ZKTest extends BaseZookeeperTest {
 
     }
 
+    @Test
+    @Ignore
+    public void testDiscoveryListener() throws Exception {
 
+        Discovery discovery = discoveryFactory.create( cluster );
+
+        Map<String,Endpoint> endpointMap = Maps.newConcurrentMap();
+
+        DiscoveryListener discoveryListener = new DiscoveryListener() {
+
+            @Override
+            public void onJoin(Endpoint endpoint) {
+                endpointMap.put( endpoint.getAddress(), endpoint );
+            }
+
+            @Override
+            public void onLeave(Endpoint endpoint) {
+                endpointMap.remove( endpoint.getAddress() );
+            }
+
+        };
+
+        // FIXME: this test won't work because the second call
+
+        discovery.register( discoveryListener );
+
+        Membership membership = membershipFactory.create( cluster );
+        membership.join( endpoint );
+
+        System.out.printf( "done\n" );
+
+
+    }
 
     static class TestServiceReferences extends ServiceReferences {
 
