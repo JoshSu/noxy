@@ -21,7 +21,7 @@ import static org.junit.Assert.assertThat;
  *
  */
 @Ignore
-public class ProxyServiceTest extends BaseLauncherTest {
+public class ForwardProxyServiceTest extends BaseLauncherTest {
 
     @Inject
     HttpRequestBuilder httpRequestBuilder;
@@ -34,7 +34,7 @@ public class ProxyServiceTest extends BaseLauncherTest {
                      MockVersionService.class,
                      ConsoleLoggingService.class,
                      DefaultHttpRequestBuilderService.class,
-                     ProxyService.class );
+                     ForwardProxyService.class );
 
     }
 

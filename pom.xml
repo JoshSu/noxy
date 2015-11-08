@@ -26,6 +26,8 @@
         <module>noxy-discovery-zookeeper</module>
         <module>noxy-framework</module>
         <module>noxy-reverse</module>
+        <module>noxy-discovery-support</module>
+        <module>noxy-discovery-none</module>
     </modules>
 
     <scm>

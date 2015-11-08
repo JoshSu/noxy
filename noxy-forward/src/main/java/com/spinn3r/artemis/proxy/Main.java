@@ -17,7 +17,7 @@ public class Main {
             Initializer initializer = new Initializer( ROLE );
 
             initializer.replace( Caller.class, new Caller( Main.class) );
-            initializer.launch( new ForwardServiceReferences() );
+            initializer.launch( new ForwardProxyServiceReferences() );
 
             Thread.sleep( Long.MAX_VALUE );
 

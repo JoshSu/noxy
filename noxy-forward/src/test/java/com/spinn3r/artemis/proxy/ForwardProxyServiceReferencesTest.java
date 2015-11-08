@@ -14,7 +14,7 @@ import static org.junit.Assert.assertEquals;
 /**
  *
  */
-public class ForwardServiceReferencesTest {
+public class ForwardProxyServiceReferencesTest {
 
     public static final String ROLE = "robot";
 
@@ -25,7 +25,7 @@ public class ForwardServiceReferencesTest {
 
         initializer.replace( Caller.class, new Caller( Robot.class) );
 
-        initializer.init( new ForwardServiceReferences() );
+        initializer.init( new ForwardProxyServiceReferences() );
 
         Injector injector = initializer.getInjector();
 

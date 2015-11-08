@@ -4,12 +4,10 @@ import com.spinn3r.artemis.http.init.DefaultWebserverReferencesService;
 import com.spinn3r.artemis.http.init.WebserverService;
 import com.spinn3r.artemis.init.ServiceReferences;
 import com.spinn3r.artemis.init.services.HostnameService;
-import com.spinn3r.artemis.init.services.PropertiesService;
 import com.spinn3r.artemis.init.services.VersionService;
 import com.spinn3r.artemis.logging.init.LoggingService;
 import com.spinn3r.artemis.metrics.init.GlobalMetricsService;
-import com.spinn3r.artemis.metrics.init.MetricsService;
-import com.spinn3r.artemis.proxy.init.ProxyService;
+import com.spinn3r.artemis.proxy.init.ForwardProxyService;
 //import com.spinn3r.artemis.sequence.zookeeper.init.ZKGlobalMutexService;
 import com.spinn3r.artemis.sequence.none.init.NoGlobalMutexService;
 import com.spinn3r.artemis.time.init.SystemClockService;
@@ -18,9 +16,9 @@ import com.spinn3r.artemis.time.init.UptimeService;
 /**
  *
  */
-public class ForwardServiceReferences extends ServiceReferences {
+public class ForwardProxyServiceReferences extends ServiceReferences {
 
-    public ForwardServiceReferences() {
+    public ForwardProxyServiceReferences() {
 
         add( SystemClockService.class );
         add( HostnameService.class );
@@ -30,7 +28,7 @@ public class ForwardServiceReferences extends ServiceReferences {
         add( GlobalMetricsService.class );
         add( UptimeService.class );
         add( DefaultWebserverReferencesService.class );
-        add( ProxyService.class );
+        add( ForwardProxyService.class );
         add( WebserverService.class );
 
     }

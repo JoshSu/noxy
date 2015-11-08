@@ -18,31 +18,27 @@ import java.util.List;
 /**
  *
  */
-@Config( path = "proxy.conf",
+@Config( path = "forward-proxy.conf",
          required = true,
-         implementation = ProxyConfig.class )
-public class ProxyService extends BaseService {
+         implementation = ForwardProxyConfig.class )
+public class ForwardProxyService extends BaseService {
 
-    private final ProxyConfig proxyConfig;
+    private final ForwardProxyConfig forwardProxyConfig;
 
     private final LoggingHttpFiltersSourceAdapterFactory loggingHttpFiltersSourceAdapterFactory;
 
     private final List<HttpProxyServer> httpProxyServers = Lists.newArrayList();
 
     @Inject
-    ProxyService(ProxyConfig proxyConfig, LoggingHttpFiltersSourceAdapterFactory loggingHttpFiltersSourceAdapterFactory) {
-        this.proxyConfig = proxyConfig;
+    ForwardProxyService(ForwardProxyConfig forwardProxyConfig, LoggingHttpFiltersSourceAdapterFactory loggingHttpFiltersSourceAdapterFactory) {
+        this.forwardProxyConfig = forwardProxyConfig;
         this.loggingHttpFiltersSourceAdapterFactory = loggingHttpFiltersSourceAdapterFactory;
-    }
-
-    @Override
-    public void init() {
     }
 
     @Override
     public void start() throws Exception {
 
-        List<ProxyServerDescriptor> servers = proxyConfig.getServers();
+        List<ProxyServerDescriptor> servers = forwardProxyConfig.getServers();
 
         if ( servers == null || servers.size() == 0 ) {
             warn( "No servers defined." );
@@ -80,7 +76,7 @@ public class ProxyService extends BaseService {
           .withAddress( address )
           .withNetworkInterface( networkInterface );
 
-        if ( proxyConfig.getEnableRequestLogging() ) {
+        if ( forwardProxyConfig.getEnableRequestLogging() ) {
             Log5jLogListener log5jLogListener = new Log5jLogListener();
             LoggingHttpFiltersSourceAdapter loggingHttpFiltersSourceAdapter = loggingHttpFiltersSourceAdapterFactory.create( log5jLogListener );
             httpProxyServerBootstrap.withFiltersSource( loggingHttpFiltersSourceAdapter );

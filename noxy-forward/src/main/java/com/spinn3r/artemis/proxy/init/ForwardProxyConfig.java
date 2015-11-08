@@ -9,7 +9,7 @@ import java.util.List;
  *
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class ProxyConfig {
+public class ForwardProxyConfig {
 
     private boolean enableRequestLogging = true;
 

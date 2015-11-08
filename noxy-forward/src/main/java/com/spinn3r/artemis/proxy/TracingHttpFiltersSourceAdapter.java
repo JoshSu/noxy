@@ -1,7 +1,5 @@
 package com.spinn3r.artemis.proxy;
 
-import com.google.inject.Inject;
-import com.spinn3r.artemis.proxy.init.ProxyConfig;
 import com.spinn3r.log5j.Logger;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.http.HttpObject;
