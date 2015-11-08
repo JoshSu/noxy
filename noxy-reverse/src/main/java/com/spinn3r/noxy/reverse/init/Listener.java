@@ -1,5 +1,6 @@
 package com.spinn3r.noxy.reverse.init;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.google.common.collect.Lists;
 
 import java.util.List;
@@ -8,6 +9,7 @@ import java.util.List;
  * A configuration to listen on a port and direct all requests to a backend
  *
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Listener {
 
     private String name;
