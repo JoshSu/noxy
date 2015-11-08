@@ -9,7 +9,7 @@ import com.spinn3r.noxy.discovery.zookeeper.ZKMembershipFactory;
 /**
  *
  */
-public class ZKNoxyDiscoveryService extends BaseService {
+public class ZKDiscoveryService extends BaseService {
 
     @Override
     public void init() {

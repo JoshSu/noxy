@@ -28,6 +28,7 @@
         <module>noxy-reverse</module>
         <module>noxy-discovery-support</module>
         <module>noxy-discovery-none</module>
+        <module>noxy-discovery-fixed</module>
     </modules>
 
     <scm>

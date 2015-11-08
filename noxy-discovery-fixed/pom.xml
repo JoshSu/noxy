@@ -9,32 +9,19 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.spinn3r.noxy.discovery.support</groupId>
-    <artifactId>noxy-discovery-support</artifactId>
+    <groupId>com.spinn3r.noxy.discovery.fixed</groupId>
+    <artifactId>noxy-discovery-fixed</artifactId>
 
     <dependencies>
-
         <dependency>
-            <groupId>com.spinn3r.noxy.discovery.zookeeper</groupId>
-            <artifactId>noxy-discovery-zookeeper</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.spinn3r.noxy.discovery.fixed</groupId>
-            <artifactId>noxy-discovery-fixed</artifactId>
+            <groupId>com.spinn3r.noxy.discovery</groupId>
+            <artifactId>noxy-discovery</artifactId>
             <version>${project.version}</version>
         </dependency>
 
         <dependency>
             <groupId>com.spinn3r.artemis.init</groupId>
             <artifactId>artemis-init</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.spinn3r.noxy.discovery</groupId>
-            <artifactId>noxy-discovery</artifactId>
             <version>${project.version}</version>
         </dependency>
 

@@ -10,12 +10,10 @@ import com.spinn3r.artemis.init.ServiceReferences;
 import com.spinn3r.artemis.test.zookeeper.BaseZookeeperTest;
 import com.spinn3r.artemis.zookeeper.init.ZookeeperService;
 import com.spinn3r.noxy.discovery.*;
-import com.spinn3r.noxy.discovery.zookeeper.init.ZKNoxyDiscoveryService;
-import com.yammer.metrics.core.Stoppable;
+import com.spinn3r.noxy.discovery.zookeeper.init.ZKDiscoveryService;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.zookeeper.data.Stat;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.List;
@@ -213,7 +211,7 @@ public class ZKTest extends BaseZookeeperTest {
 
         public TestServiceReferences() {
             add( ZookeeperService.class );
-            add( ZKNoxyDiscoveryService.class );
+            add( ZKDiscoveryService.class );
         }
 
     }
