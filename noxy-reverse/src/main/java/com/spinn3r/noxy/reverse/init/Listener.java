@@ -16,7 +16,9 @@ public class Listener {
 
     private Binding binding = null;
 
-    private List<Server> servers = Lists.newArrayList();
+    private ServerTemplate serverTemplate = new ServerTemplate();
+
+    private List<Server> servers = Lists.newCopyOnWriteArrayList();
 
     private boolean logging = true;
 
@@ -59,4 +61,5 @@ public class Listener {
                  ", checks=" + checks +
                  '}';
     }
+
 }
