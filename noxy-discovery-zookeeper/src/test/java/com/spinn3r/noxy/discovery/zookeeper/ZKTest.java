@@ -1,5 +1,7 @@
 package com.spinn3r.noxy.discovery.zookeeper;
 
+import com.google.common.base.Stopwatch;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
@@ -9,15 +11,21 @@ import com.spinn3r.artemis.test.zookeeper.BaseZookeeperTest;
 import com.spinn3r.artemis.zookeeper.init.ZookeeperService;
 import com.spinn3r.noxy.discovery.*;
 import com.spinn3r.noxy.discovery.zookeeper.init.ZKNoxyDiscoveryService;
+import com.yammer.metrics.core.Stoppable;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.zookeeper.data.Stat;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.*;
+
+import static com.jayway.awaitility.Awaitility.*;
 
 public class ZKTest extends BaseZookeeperTest {
 
@@ -81,8 +89,52 @@ public class ZKTest extends BaseZookeeperTest {
     }
 
     @Test
-    @Ignore
     public void testDiscoveryListener() throws Exception {
+
+        Discovery discovery = discoveryFactory.create( cluster );
+
+        Map<String,Endpoint> endpointMap = Maps.newConcurrentMap();
+
+        CountDownLatch joinLatch = new CountDownLatch( 1 );
+        CountDownLatch leaveLatch = new CountDownLatch( 1 );
+
+        DiscoveryListener discoveryListener = new DiscoveryListener() {
+
+            @Override
+            public void onJoin(Endpoint endpoint) {
+                endpointMap.put( endpoint.getAddress(), endpoint );
+                joinLatch.countDown();
+            }
+
+            @Override
+            public void onLeave(Endpoint endpoint) {
+                endpointMap.remove( endpoint.getAddress() );
+                leaveLatch.countDown();
+            }
+
+        };
+
+        discovery.register( discoveryListener );
+
+        Membership membership = membershipFactory.create( cluster );
+        membership.join( endpoint );
+
+        joinLatch.await();
+
+        System.out.printf( "Got our onJoin call\n" );
+
+        membership.leave( endpoint );
+
+        System.out.printf( "Left the cluster\n" );
+
+        leaveLatch.await();
+
+        System.out.printf( "done\n" );
+
+    }
+
+    @Test
+    public void testBulkClusterJoining() throws Exception {
 
         Discovery discovery = discoveryFactory.create( cluster );
 
@@ -102,33 +154,48 @@ public class ZKTest extends BaseZookeeperTest {
 
         };
 
-        // FIXME: this test won't work because the second call
-
         discovery.register( discoveryListener );
 
         Membership membership = membershipFactory.create( cluster );
-        membership.join( endpoint );
 
-        System.out.printf( "done\n" );
+        Stopwatch stopwatch = Stopwatch.createStarted();
 
-    }
+        // setting this to 100k takes about 1.5 minutes to register them all
+        int nrRecords = 10_000;
 
-    @Test
-    @Ignore
-    public void testCreatePathTwice() throws Exception {
+        List<Endpoint> endpoints = Lists.newArrayList();
 
-        CuratorFramework curatorFramework = curatorFrameworkProvider.get();
+        System.out.printf( "Joining nodes...\n" );
 
-        String path = "/foo";
+        for (int i = 0; i < nrRecords; i++) {
 
-        curatorFramework.create()
-          .creatingParentsIfNeeded()
-          .forPath( path );
+            Endpoint endpoint = new Endpoint( "localhost:" + (1000 + i), "localhost", EndpointType.WEBSERVER, datacenter );
+            membership.join( endpoint );
+            endpoints.add( endpoint );
 
-        curatorFramework.create()
-          .creatingParentsIfNeeded()
-          .forPath( path );
+        }
 
+        System.out.printf( "Leaving nodes...\n" );
+
+        await()
+          .timeout( 60, TimeUnit.SECONDS )
+          .until( () -> {
+              assertEquals( nrRecords, endpointMap.size() );
+          } );
+
+        for (Endpoint endpoint : endpoints) {
+            membership.leave( endpoint );
+        }
+
+        await()
+          .timeout( 60, TimeUnit.SECONDS )
+          .until( () -> { assertEquals( 0, endpointMap.size() ); } );
+
+        ZKDiscovery zkDiscovery = (ZKDiscovery)discovery;
+
+        System.out.printf( "NR getChildren calls: %s\n", zkDiscovery.getChildrenCalls.get() );
+
+        System.out.printf( "Took: %s\n", stopwatch.stop() );
 
     }
 
