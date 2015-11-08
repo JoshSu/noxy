@@ -1,4 +1,4 @@
-package com.spinn3r.artemis.proxy;
+package com.spinn3r.noxy.forward;
 
 import com.spinn3r.artemis.init.Initializer;
 import com.spinn3r.artemis.init.advertisements.Caller;

@@ -1,4 +1,4 @@
-package com.spinn3r.artemis.proxy.init;
+package com.spinn3r.noxy.forward.init;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 

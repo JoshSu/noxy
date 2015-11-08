@@ -1,4 +1,4 @@
-package com.spinn3r.artemis.proxy;
+package com.spinn3r.noxy.forward;
 
 import com.spinn3r.log5j.Logger;
 import io.netty.channel.ChannelHandlerContext;

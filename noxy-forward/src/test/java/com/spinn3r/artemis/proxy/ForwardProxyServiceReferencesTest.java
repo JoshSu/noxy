@@ -4,6 +4,7 @@ import com.google.inject.Injector;
 import com.spinn3r.artemis.init.Initializer;
 import com.spinn3r.artemis.init.advertisements.Caller;
 import com.spinn3r.artemis.init.config.ResourceConfigLoader;
+import com.spinn3r.noxy.forward.ForwardProxyServiceReferences;
 import org.junit.Test;
 
 import java.awt.Robot;

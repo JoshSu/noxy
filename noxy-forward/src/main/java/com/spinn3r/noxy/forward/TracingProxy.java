@@ -1,4 +1,4 @@
-package com.spinn3r.artemis.proxy;
+package com.spinn3r.noxy.forward;
 
 import org.littleshoot.proxy.HttpProxyServerBootstrap;
 import org.littleshoot.proxy.impl.DefaultHttpProxyServer;

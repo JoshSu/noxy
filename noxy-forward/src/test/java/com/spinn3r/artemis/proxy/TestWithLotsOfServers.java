@@ -2,7 +2,6 @@ package com.spinn3r.artemis.proxy;
 
 import com.google.common.base.Stopwatch;
 import com.google.common.collect.Lists;
-import com.spinn3r.artemis.proxy.init.ProxyServerDescriptor;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.littleshoot.proxy.HttpProxyServer;
