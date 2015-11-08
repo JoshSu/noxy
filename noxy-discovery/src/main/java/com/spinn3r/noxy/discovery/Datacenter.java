@@ -1,8 +1,11 @@
 package com.spinn3r.noxy.discovery;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 /**
  *
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Datacenter {
 
     private String name;
