@@ -4,8 +4,6 @@ import com.google.inject.Injector;
 import com.spinn3r.artemis.init.Initializer;
 import com.spinn3r.artemis.init.advertisements.Caller;
 import com.spinn3r.artemis.init.config.ResourceConfigLoader;
-import com.spinn3r.artemis.network.builder.HttpRequestBuilder;
-import junit.framework.TestCase;
 import org.junit.Test;
 
 import java.awt.Robot;
@@ -16,7 +14,7 @@ import static org.junit.Assert.assertEquals;
 /**
  *
  */
-public class ProxyServiceReferencesTest {
+public class ForwardServiceReferencesTest {
 
     public static final String ROLE = "robot";
 
@@ -27,7 +25,7 @@ public class ProxyServiceReferencesTest {
 
         initializer.replace( Caller.class, new Caller( Robot.class) );
 
-        initializer.init( new ProxyServiceReferences() );
+        initializer.init( new ForwardServiceReferences() );
 
         Injector injector = initializer.getInjector();
 

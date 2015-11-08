@@ -10,7 +10,35 @@
     <groupId>com.spinn3r.noxy.reverse</groupId>
     <artifactId>noxy-reverse</artifactId>
 
+    <properties>
+
+        <daemon.port>7100</daemon.port>
+        <daemon.jmxPort>7101</daemon.jmxPort>
+
+        <daemon.classname>com.spinn3r.noxy.reverse.Main</daemon.classname>
+        <daemon.minMemory>2048M</daemon.minMemory>
+        <daemon.maxMemory>2048M</daemon.maxMemory>
+        <daemon.preferIPv6Addresses>false</daemon.preferIPv6Addresses>
+        <daemon.stackSize>512K</daemon.stackSize>
+
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <skipJdeb>false</skipJdeb>
+
+    </properties>
+
     <dependencies>
+
+        <dependency>
+            <groupId>com.spinn3r.noxy.discovery</groupId>
+            <artifactId>noxy-discovery</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.spinn3r.noxy.discovery.zookeeper</groupId>
+            <artifactId>noxy-discovery-zookeeper</artifactId>
+            <version>${project.version}</version>
+        </dependency>
 
         <dependency>
             <groupId>com.spinn3r.artemis.http</groupId>

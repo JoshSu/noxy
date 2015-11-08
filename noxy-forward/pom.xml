@@ -17,7 +17,7 @@
         <daemon.port>7000</daemon.port>
         <daemon.jmxPort>7001</daemon.jmxPort>
 
-        <daemon.classname>com.spinn3r.artemis.proxy.Main</daemon.classname>
+        <daemon.classname>com.spinn3r.noxy.forward.Main</daemon.classname>
         <daemon.minMemory>4096M</daemon.minMemory>
         <daemon.maxMemory>4096M</daemon.maxMemory>
         <daemon.preferIPv6Addresses>true</daemon.preferIPv6Addresses>
@@ -29,6 +29,18 @@
     </properties>
 
     <dependencies>
+
+        <dependency>
+            <groupId>com.spinn3r.noxy.discovery</groupId>
+            <artifactId>noxy-discovery</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.spinn3r.noxy.discovery.zookeeper</groupId>
+            <artifactId>noxy-discovery-zookeeper</artifactId>
+            <version>${project.version}</version>
+        </dependency>
 
         <dependency>
             <groupId>com.spinn3r.artemis</groupId>

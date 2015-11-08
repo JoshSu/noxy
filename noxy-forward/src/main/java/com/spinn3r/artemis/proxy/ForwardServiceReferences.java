@@ -18,9 +18,9 @@ import com.spinn3r.artemis.time.init.UptimeService;
 /**
  *
  */
-public class ProxyServiceReferences extends ServiceReferences {
+public class ForwardServiceReferences extends ServiceReferences {
 
-    public ProxyServiceReferences() {
+    public ForwardServiceReferences() {
 
         add( SystemClockService.class );
         add( HostnameService.class );

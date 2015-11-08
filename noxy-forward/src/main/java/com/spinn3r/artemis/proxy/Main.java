@@ -3,8 +3,6 @@ package com.spinn3r.artemis.proxy;
 import com.spinn3r.artemis.init.Initializer;
 import com.spinn3r.artemis.init.advertisements.Caller;
 
-import java.awt.Robot;
-
 /**
  *
  */
@@ -19,7 +17,7 @@ public class Main {
             Initializer initializer = new Initializer( ROLE );
 
             initializer.replace( Caller.class, new Caller( Main.class) );
-            initializer.launch( new ProxyServiceReferences() );
+            initializer.launch( new ForwardServiceReferences() );
 
             Thread.sleep( Long.MAX_VALUE );
 
