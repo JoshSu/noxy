@@ -9,7 +9,7 @@ import com.spinn3r.artemis.network.NetworkException;
 import com.spinn3r.artemis.network.builder.HttpRequestBuilder;
 import com.spinn3r.artemis.network.builder.proxies.Proxies;
 import com.spinn3r.artemis.network.init.DirectNetworkService;
-import com.spinn3r.artemis.proxy.logging.LoggingHttpFiltersSourceAdapterFactory;
+import com.spinn3r.noxy.logging.LoggingHttpFiltersSourceAdapterFactory;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;

@@ -1,4 +1,4 @@
-package com.spinn3r.artemis.proxy.logging;
+package com.spinn3r.noxy.logging;
 
 import com.spinn3r.artemis.time.Clock;
 import com.spinn3r.log5j.Logger;

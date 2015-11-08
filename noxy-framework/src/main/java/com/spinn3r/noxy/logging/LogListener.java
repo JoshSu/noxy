@@ -1,4 +1,4 @@
-package com.spinn3r.artemis.proxy.logging;
+package com.spinn3r.noxy.logging;
 
 /**
  * A listener that can listen to the requests being proxied.
