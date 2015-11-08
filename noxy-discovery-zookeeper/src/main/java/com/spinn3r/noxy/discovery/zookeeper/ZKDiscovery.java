@@ -35,8 +35,7 @@ public class ZKDiscovery implements Discovery {
 
     private List<DiscoveryListener> discoveryListeners = Lists.newCopyOnWriteArrayList();
 
-    // number of time getChildren has been called
-    protected AtomicLong getChildrenCalls = new AtomicLong( 0 );
+    private ZKDiscoveryStateListener zkDiscoveryStateListener = new NullZKDiscoveryStateListener();
 
     public ZKDiscovery(Provider<CuratorFramework> curatorFrameworkProvider, Cluster cluster) throws DiscoveryListenerException {
         this.curatorFrameworkProvider = curatorFrameworkProvider;
@@ -56,6 +55,9 @@ public class ZKDiscovery implements Discovery {
         discoveryListeners.add( discoveryListener );
     }
 
+    public void setZkDiscoveryStateListener(ZKDiscoveryStateListener zkDiscoveryStateListener) {
+        this.zkDiscoveryStateListener = zkDiscoveryStateListener;
+    }
 
     private void fireOnJoin( Endpoint endpoint ) {
 
@@ -94,7 +96,7 @@ public class ZKDiscovery implements Discovery {
                 .usingWatcher( new ChildrenWatcher() )
                 .forPath( root );
 
-            getChildrenCalls.getAndIncrement();
+            zkDiscoveryStateListener.onChildren( children );
 
             handleChildren( children );
 

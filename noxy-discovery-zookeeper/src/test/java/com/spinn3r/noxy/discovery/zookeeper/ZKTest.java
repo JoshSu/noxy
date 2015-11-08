@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicLong;
 
 import static org.junit.Assert.*;
 
@@ -136,7 +137,16 @@ public class ZKTest extends BaseZookeeperTest {
     @Test
     public void testBulkClusterJoining() throws Exception {
 
-        Discovery discovery = discoveryFactory.create( cluster );
+        ZKDiscovery zkDiscovery = (ZKDiscovery)discoveryFactory.create( cluster );
+
+        AtomicLong onChildrenCalls = new AtomicLong( 0 );
+
+        zkDiscovery.setZkDiscoveryStateListener( new ZKDiscoveryStateListener() {
+            @Override
+            public void onChildren(List<String> children) {
+                onChildrenCalls.getAndIncrement();
+            }
+        } );
 
         Map<String,Endpoint> endpointMap = Maps.newConcurrentMap();
 
@@ -154,7 +164,7 @@ public class ZKTest extends BaseZookeeperTest {
 
         };
 
-        discovery.register( discoveryListener );
+        zkDiscovery.register( discoveryListener );
 
         Membership membership = membershipFactory.create( cluster );
 
@@ -191,9 +201,9 @@ public class ZKTest extends BaseZookeeperTest {
           .timeout( 60, TimeUnit.SECONDS )
           .until( () -> { assertEquals( 0, endpointMap.size() ); } );
 
-        ZKDiscovery zkDiscovery = (ZKDiscovery)discovery;
+        System.out.printf( "NR getChildren calls: %s\n", onChildrenCalls.get() );
 
-        System.out.printf( "NR getChildren calls: %s\n", zkDiscovery.getChildrenCalls.get() );
+        assertTrue( onChildrenCalls.get() < 100 );
 
         System.out.printf( "Took: %s\n", stopwatch.stop() );
 
@@ -205,6 +215,7 @@ public class ZKTest extends BaseZookeeperTest {
             add( ZookeeperService.class );
             add( ZKNoxyDiscoveryService.class );
         }
+
     }
 
 }
