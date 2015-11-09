@@ -11,7 +11,7 @@ import java.util.List;
  *
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Group {
+public class ClusterReference {
 
     private Cluster cluster;
 

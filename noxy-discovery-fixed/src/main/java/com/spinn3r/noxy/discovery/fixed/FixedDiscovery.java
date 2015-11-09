@@ -5,7 +5,7 @@ import com.spinn3r.noxy.discovery.Discovery;
 import com.spinn3r.noxy.discovery.DiscoveryListener;
 import com.spinn3r.noxy.discovery.Endpoint;
 import com.spinn3r.noxy.discovery.fixed.init.FixedDiscoveryConfig;
-import com.spinn3r.noxy.discovery.fixed.init.Group;
+import com.spinn3r.noxy.discovery.fixed.init.ClusterReference;
 
 /**
  *
@@ -27,13 +27,13 @@ public class FixedDiscovery implements Discovery {
         // go through and call all the onJoin methods of the discovery listener
         // for this cluster.
 
-        if ( ! fixedDiscoveryConfig.getGroups().containsKey( cluster.getName() ) ) {
+        if ( ! fixedDiscoveryConfig.getClusters().containsKey( cluster.getName() ) ) {
             throw new RuntimeException( "No cluster group defined for: " + cluster.getName() );
         }
 
-        Group group = fixedDiscoveryConfig.getGroups().get( cluster.getName() );
+        ClusterReference clusterReference = fixedDiscoveryConfig.getClusters().get( cluster.getName() );
 
-        for (Endpoint endpoint : group.getEndpoints()) {
+        for (Endpoint endpoint : clusterReference.getEndpoints()) {
             discoveryListener.onJoin( endpoint );
         }
 
