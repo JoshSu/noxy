@@ -94,9 +94,7 @@ public class ReverseProxyService extends BaseService {
 
             };
 
-            Discovery discovery = discoveryFactory.create( cluster );
-
-            discovery.register( discoveryListener );
+            Discovery discovery = discoveryFactory.create( cluster, discoveryListener );
 
             ServerMetaIndexProvider serverMetaIndexProvider = new ServerMetaIndexProvider();
             serverMetaIndexProvider.set( serverMetaIndex );

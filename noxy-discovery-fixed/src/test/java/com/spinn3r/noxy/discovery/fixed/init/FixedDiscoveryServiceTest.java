@@ -29,11 +29,9 @@ public class FixedDiscoveryServiceTest extends BaseLauncherTest {
 
         Cluster cluster = new Cluster( "spinn3r" );
 
-        Discovery discovery = discoveryFactory.create( cluster );
-
         List<Endpoint> endpoints = Lists.newArrayList();
 
-        discovery.register( new DiscoveryListener() {
+        DiscoveryListener discoveryListener = new DiscoveryListener() {
 
             @Override
             public void onJoin(Endpoint endpoint) {
@@ -45,7 +43,9 @@ public class FixedDiscoveryServiceTest extends BaseLauncherTest {
 
             }
 
-        } );
+        };
+
+        Discovery discovery = discoveryFactory.create( cluster, discoveryListener );
 
         assertEquals( "[Endpoint{address='localhost:1234', hostname='localhost', endpointType=FORWARD_PROXY, datacenter=Datacenter{name='fal21', location='Falkenstein, Germany'}}]", endpoints.toString() );
 

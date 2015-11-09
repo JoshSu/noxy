@@ -9,7 +9,7 @@ import com.spinn3r.noxy.discovery.none.init.NullDiscoveryService;
 public class NullDiscoveryFactory implements DiscoveryFactory {
 
     @Override
-    public Discovery create(Cluster cluster) throws DiscoveryListenerException {
+    public Discovery create(Cluster cluster, DiscoveryListener discoveryListener) throws DiscoveryListenerException {
 
         return new Discovery() {
             @Override

@@ -90,8 +90,6 @@ public class ZKTest extends BaseZookeeperTest {
     @Test
     public void testDiscoveryListener() throws Exception {
 
-        Discovery discovery = discoveryFactory.create( cluster );
-
         Map<String,Endpoint> endpointMap = Maps.newConcurrentMap();
 
         CountDownLatch joinLatch = new CountDownLatch( 1 );
@@ -113,7 +111,7 @@ public class ZKTest extends BaseZookeeperTest {
 
         };
 
-        discovery.register( discoveryListener );
+        Discovery discovery = discoveryFactory.create( cluster, discoveryListener );
 
         Membership membership = membershipFactory.create( cluster );
         membership.join( endpoint );
@@ -135,17 +133,6 @@ public class ZKTest extends BaseZookeeperTest {
     @Test
     public void testBulkClusterJoining() throws Exception {
 
-        ZKDiscovery zkDiscovery = (ZKDiscovery)discoveryFactory.create( cluster );
-
-        AtomicLong onChildrenCalls = new AtomicLong( 0 );
-
-        zkDiscovery.setZkDiscoveryStateListener( new ZKDiscoveryStateListener() {
-            @Override
-            public void onChildren(List<String> children) {
-                onChildrenCalls.getAndIncrement();
-            }
-        } );
-
         Map<String,Endpoint> endpointMap = Maps.newConcurrentMap();
 
         DiscoveryListener discoveryListener = new DiscoveryListener() {
@@ -162,7 +149,11 @@ public class ZKTest extends BaseZookeeperTest {
 
         };
 
-        zkDiscovery.register( discoveryListener );
+        ZKDiscovery zkDiscovery = (ZKDiscovery)discoveryFactory.create( cluster, discoveryListener );
+
+        AtomicLong onChildrenCalls = new AtomicLong( 0 );
+
+        zkDiscovery.setZkDiscoveryStateListener( children -> onChildrenCalls.getAndIncrement() );
 
         Membership membership = membershipFactory.create( cluster );
 

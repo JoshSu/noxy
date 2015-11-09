@@ -1,10 +1,7 @@
 package com.spinn3r.noxy.discovery.fixed.init;
 
 import com.google.inject.Inject;
-import com.spinn3r.noxy.discovery.Cluster;
-import com.spinn3r.noxy.discovery.Discovery;
-import com.spinn3r.noxy.discovery.DiscoveryFactory;
-import com.spinn3r.noxy.discovery.DiscoveryListenerException;
+import com.spinn3r.noxy.discovery.*;
 import com.spinn3r.noxy.discovery.fixed.FixedDiscovery;
 
 /**
@@ -20,7 +17,7 @@ public class FixedDiscoveryFactory implements DiscoveryFactory {
     }
 
     @Override
-    public Discovery create(Cluster cluster) throws DiscoveryListenerException {
+    public Discovery create(Cluster cluster, DiscoveryListener discoveryListener) throws DiscoveryListenerException {
         return new FixedDiscovery( fixedDiscoveryConfig, cluster );
     }
 

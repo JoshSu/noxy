@@ -26,6 +26,8 @@ public class MembershipSupportService extends BaseService {
     @Override
     public void init() {
 
+        info( "Running with %s", membershipSupportConfig.getProvider() );
+
         switch ( membershipSupportConfig.getProvider() ) {
 
             case ZOOKEEPER:

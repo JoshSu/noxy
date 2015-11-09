@@ -37,7 +37,7 @@ public class ZKDiscovery implements Discovery {
 
     private ZKDiscoveryStateListener zkDiscoveryStateListener = new NullZKDiscoveryStateListener();
 
-    public ZKDiscovery(Provider<CuratorFramework> curatorFrameworkProvider, Cluster cluster) throws DiscoveryListenerException {
+    public ZKDiscovery(Provider<CuratorFramework> curatorFrameworkProvider, Cluster cluster, DiscoveryListener discoveryListener) throws DiscoveryListenerException {
         this.curatorFrameworkProvider = curatorFrameworkProvider;
         this.cluster = cluster;
         this.root = ZKClusterPaths.root( cluster );
@@ -45,6 +45,8 @@ public class ZKDiscovery implements Discovery {
         // I think we have to use inBackground() and we get back a String of paths
         // but then we have to stat them all and I think we also have to keep
         // an eye out for deleted nodes too...
+
+        register( discoveryListener );
 
         discoverChildren();
 

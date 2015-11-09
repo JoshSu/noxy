@@ -19,8 +19,8 @@ public class ZKDiscoveryFactory implements DiscoveryFactory {
 
 
     @Override
-    public Discovery create(Cluster cluster) throws DiscoveryListenerException {
-        return new ZKDiscovery( curatorFrameworkProvider, cluster );
+    public Discovery create(Cluster cluster, DiscoveryListener discoveryListener) throws DiscoveryListenerException {
+        return new ZKDiscovery( curatorFrameworkProvider, cluster, discoveryListener );
     }
 
 }

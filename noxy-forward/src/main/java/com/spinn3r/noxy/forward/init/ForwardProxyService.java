@@ -109,6 +109,8 @@ public class ForwardProxyService extends BaseService {
                                               EndpointType.FORWARD_PROXY,
                                               forwardProxyConfig.getDatacenter() );
 
+            info( "Advertising endpoint: %s", endpoint );
+
             membership.join( endpoint );
 
         }

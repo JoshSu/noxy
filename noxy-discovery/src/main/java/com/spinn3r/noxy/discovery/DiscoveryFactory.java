@@ -10,6 +10,6 @@ public interface DiscoveryFactory {
      * using should have a unique name (and other properties) which are
      * represented by the cluster.
      */
-    Discovery create( Cluster cluster ) throws DiscoveryListenerException;
+    Discovery create( Cluster cluster, DiscoveryListener discoveryListener ) throws DiscoveryListenerException;
 
 }
