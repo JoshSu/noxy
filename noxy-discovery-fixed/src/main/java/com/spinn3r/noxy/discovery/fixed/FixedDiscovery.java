@@ -16,9 +16,10 @@ public class FixedDiscovery implements Discovery {
 
     private final Cluster cluster;
 
-    public FixedDiscovery(FixedDiscoveryConfig fixedDiscoveryConfig, Cluster cluster) {
+    public FixedDiscovery(FixedDiscoveryConfig fixedDiscoveryConfig, Cluster cluster, DiscoveryListener discoveryListener) {
         this.fixedDiscoveryConfig = fixedDiscoveryConfig;
         this.cluster = cluster;
+        register( discoveryListener );
     }
 
     @Override

@@ -18,7 +18,7 @@ public class FixedDiscoveryFactory implements DiscoveryFactory {
 
     @Override
     public Discovery create(Cluster cluster, DiscoveryListener discoveryListener) throws DiscoveryListenerException {
-        return new FixedDiscovery( fixedDiscoveryConfig, cluster );
+        return new FixedDiscovery( fixedDiscoveryConfig, cluster, discoveryListener );
     }
 
 }
