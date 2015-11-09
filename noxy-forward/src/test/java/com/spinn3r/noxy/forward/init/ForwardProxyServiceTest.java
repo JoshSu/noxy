@@ -8,6 +8,7 @@ import com.spinn3r.artemis.logging.init.ConsoleLoggingService;
 import com.spinn3r.artemis.network.builder.DefaultHttpRequestBuilderService;
 import com.spinn3r.artemis.network.builder.HttpRequestBuilder;
 import com.spinn3r.artemis.network.builder.proxies.Proxies;
+import com.spinn3r.noxy.discovery.support.init.MembershipSupportService;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -33,6 +34,7 @@ public class ForwardProxyServiceTest extends BaseLauncherTest {
                      MockVersionService.class,
                      ConsoleLoggingService.class,
                      DefaultHttpRequestBuilderService.class,
+                     MembershipSupportService.class,
                      ForwardProxyService.class );
 
     }

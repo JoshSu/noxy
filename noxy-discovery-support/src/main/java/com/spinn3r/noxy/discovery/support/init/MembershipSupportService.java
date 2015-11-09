@@ -3,6 +3,7 @@ package com.spinn3r.noxy.discovery.support.init;
 import com.google.inject.Inject;
 import com.spinn3r.artemis.init.BaseService;
 import com.spinn3r.artemis.init.Config;
+import com.spinn3r.artemis.zookeeper.init.ZookeeperService;
 import com.spinn3r.noxy.discovery.fixed.init.FixedDiscoveryService;
 import com.spinn3r.noxy.discovery.none.init.NullDiscoveryService;
 import com.spinn3r.noxy.discovery.zookeeper.init.ZKDiscoveryService;
@@ -28,6 +29,7 @@ public class MembershipSupportService extends BaseService {
         switch ( membershipSupportConfig.getProvider() ) {
 
             case ZOOKEEPER:
+                include( ZookeeperService.class );
                 include( ZKDiscoveryService.class );
                 break;
 
