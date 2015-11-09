@@ -7,6 +7,7 @@ import com.spinn3r.artemis.init.services.HostnameService;
 import com.spinn3r.artemis.init.services.VersionService;
 import com.spinn3r.artemis.logging.init.LoggingService;
 import com.spinn3r.artemis.metrics.init.GlobalMetricsService;
+import com.spinn3r.artemis.sequence.init.SequenceSupportService;
 import com.spinn3r.noxy.discovery.support.init.MembershipSupportService;
 import com.spinn3r.noxy.forward.init.ForwardProxyService;
 //import com.spinn3r.artemis.sequence.zookeeper.init.ZKGlobalMutexService;
@@ -25,7 +26,7 @@ public class ForwardProxyServiceReferences extends ServiceReferences {
         add( HostnameService.class );
         add( VersionService.class );
         add( LoggingService.class );
-        add( NoGlobalMutexService.class );
+        add( SequenceSupportService.class );
         add( GlobalMetricsService.class );
         add( UptimeService.class );
         add( DefaultWebserverReferencesService.class );

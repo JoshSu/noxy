@@ -29,6 +29,12 @@
     <dependencies>
 
         <dependency>
+            <groupId>com.spinn3r.artemis.sequence</groupId>
+            <artifactId>artemis-sequence-support</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
             <groupId>com.spinn3r.noxy.discovery.support</groupId>
             <artifactId>noxy-discovery-support</artifactId>
             <version>${project.version}</version>
