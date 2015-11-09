@@ -20,7 +20,6 @@ import static org.junit.Assert.assertThat;
 /**
  *
  */
-@Ignore
 public class ForwardProxyServiceTest extends BaseLauncherTest {
 
     @Inject
@@ -54,7 +53,7 @@ public class ForwardProxyServiceTest extends BaseLauncherTest {
         Proxy proxy = Proxies.create( String.format( "http://localhost:%s", 8080 ) );
         String contentWithEncoding = httpRequestBuilder.get( "https://www.google.com" ).withProxy( proxy ).execute().getContentWithEncoding();
 
-        assertThat( contentWithEncoding, containsString( "Facebook" ) );
+        assertThat( contentWithEncoding, containsString( "<title>Google</title>" ) );
 
     }
 

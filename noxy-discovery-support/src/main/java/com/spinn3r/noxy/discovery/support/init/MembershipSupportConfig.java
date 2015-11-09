@@ -6,17 +6,17 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
  *
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class DiscoveryListenerSupportConfig {
+public class MembershipSupportConfig {
 
-    private DiscoveryListenerProvider provider = DiscoveryListenerProvider.FIXED;
+    private MembershipProvider provider = MembershipProvider.NONE;
 
-    public DiscoveryListenerProvider getProvider() {
+    public MembershipProvider getProvider() {
         return provider;
     }
 
     @Override
     public String toString() {
-        return "DiscoveryListenerSupportConfig{" +
+        return "MembershipSupportConfig{" +
                  "provider=" + provider +
                  '}';
     }

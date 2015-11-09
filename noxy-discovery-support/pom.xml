@@ -21,6 +21,12 @@
         </dependency>
 
         <dependency>
+            <groupId>com.spinn3r.noxy.discovery.none</groupId>
+            <artifactId>noxy-discovery-none</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
             <groupId>com.spinn3r.noxy.discovery.fixed</groupId>
             <artifactId>noxy-discovery-fixed</artifactId>
             <version>${project.version}</version>

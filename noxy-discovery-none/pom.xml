@@ -16,4 +16,20 @@
         Noop discovery service... which doesn't actually do anything.
     </description>
 
+    <dependencies>
+
+        <dependency>
+            <groupId>com.spinn3r.artemis.init</groupId>
+            <artifactId>artemis-init</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.spinn3r.noxy.discovery</groupId>
+            <artifactId>noxy-discovery</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+    </dependencies>
+
 </project>

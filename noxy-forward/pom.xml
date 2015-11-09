@@ -37,6 +37,12 @@
         </dependency>
 
         <dependency>
+            <groupId>com.spinn3r.noxy.discovery.support</groupId>
+            <artifactId>noxy-discovery-support</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
             <groupId>com.spinn3r.noxy.discovery.zookeeper</groupId>
             <artifactId>noxy-discovery-zookeeper</artifactId>
             <version>${project.version}</version>
