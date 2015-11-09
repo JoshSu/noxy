@@ -28,12 +28,11 @@ public class DiscoveryListenerSupportService extends BaseService {
         switch ( discoveryListenerSupportConfig.getProvider() ) {
 
             case ZOOKEEPER:
-                include( ZookeeperService.class );
-                include( ZKDiscoveryService.class );
+                include( ZookeeperService.REF, ZKDiscoveryService.REF );
                 break;
 
             case FIXED:
-                include( FixedDiscoveryService.class );
+                include( FixedDiscoveryService.REF );
                 break;
 
             default:

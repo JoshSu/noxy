@@ -29,12 +29,11 @@ public class MembershipSupportService extends BaseService {
         switch ( membershipSupportConfig.getProvider() ) {
 
             case ZOOKEEPER:
-                include( ZookeeperService.class );
-                include( ZKDiscoveryService.class );
+                include( ZookeeperService.REF, ZKDiscoveryService.REF );
                 break;
 
             case NONE:
-                include( NullDiscoveryService.class );
+                include( NullDiscoveryService.REF );
                 break;
 
             default:

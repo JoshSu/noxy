@@ -29,6 +29,7 @@
         <module>noxy-discovery-support</module>
         <module>noxy-discovery-none</module>
         <module>noxy-discovery-fixed</module>
+        <module>noxy-integration-test</module>
     </modules>
 
     <scm>
