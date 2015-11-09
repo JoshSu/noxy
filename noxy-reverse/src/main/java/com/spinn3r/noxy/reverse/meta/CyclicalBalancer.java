@@ -2,6 +2,7 @@ package com.spinn3r.noxy.reverse.meta;
 
 import com.spinn3r.artemis.util.misc.CyclicalConcurrentIterator;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -13,7 +14,7 @@ public class CyclicalBalancer<T> implements Balancer<T> {
 
     private final int size;
 
-    public CyclicalBalancer( List<T> items ) {
+    public CyclicalBalancer( Collection<T> items ) {
         this.cyclicalConcurrentIterator = new CyclicalConcurrentIterator<>( items );
         this.size = items.size();
 

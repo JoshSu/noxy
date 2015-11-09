@@ -5,6 +5,8 @@ import com.google.inject.Inject;
 import com.spinn3r.artemis.init.AtomicReferenceProvider;
 import com.spinn3r.artemis.init.BaseService;
 import com.spinn3r.artemis.init.Config;
+import com.spinn3r.log5j.Logger;
+import com.spinn3r.noxy.discovery.*;
 import com.spinn3r.noxy.logging.Log5jLogListener;
 import com.spinn3r.noxy.logging.LoggingHttpFiltersSourceAdapterFactory;
 import com.spinn3r.noxy.reverse.LoadBalancingReverseProxyHostResolver;
@@ -16,6 +18,7 @@ import com.spinn3r.artemis.util.net.HostPort;
 import org.littleshoot.proxy.*;
 import org.littleshoot.proxy.impl.DefaultHttpProxyServer;
 
+import java.net.UnknownHostException;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -28,6 +31,8 @@ import java.util.concurrent.Executors;
          implementation = ReverseProxyConfig.class )
 public class ReverseProxyService extends BaseService {
 
+    private static final Logger log = Logger.getLogger();
+
     private final ReverseProxyConfig reverseProxyConfig;
 
     private final LoggingHttpFiltersSourceAdapterFactory loggingHttpFiltersSourceAdapterFactory;
@@ -38,11 +43,14 @@ public class ReverseProxyService extends BaseService {
 
     private final AtomicReferenceProvider<ListenerMetaIndex> listenerMetaIndexProvider = new AtomicReferenceProvider<>( null );
 
+    private final DiscoveryFactory discoveryFactory;
+
     @Inject
-    ReverseProxyService(ReverseProxyConfig reverseProxyConfig, LoggingHttpFiltersSourceAdapterFactory loggingHttpFiltersSourceAdapterFactory, CheckDaemonFactory checkDaemonFactory) {
+    ReverseProxyService(ReverseProxyConfig reverseProxyConfig, LoggingHttpFiltersSourceAdapterFactory loggingHttpFiltersSourceAdapterFactory, CheckDaemonFactory checkDaemonFactory, DiscoveryFactory discoveryFactory) {
         this.reverseProxyConfig = reverseProxyConfig;
         this.loggingHttpFiltersSourceAdapterFactory = loggingHttpFiltersSourceAdapterFactory;
         this.checkDaemonFactory = checkDaemonFactory;
+        this.discoveryFactory = discoveryFactory;
     }
 
 
@@ -56,13 +64,39 @@ public class ReverseProxyService extends BaseService {
 
         for (Listener listener : reverseProxyConfig.getListeners()) {
 
-            List<HostPort> serverAddresses = Lists.newArrayList();
+            Cluster cluster = listener.getCluster();
 
-            for ( Server server : listener.getServers() ) {
-                serverAddresses.add( new HostPort( server.getAddress() ) );
-            }
+            ServerMetaIndex serverMetaIndex = new ServerMetaIndex();
 
-            ServerMetaIndex serverMetaIndex = ServerMetaIndex.fromServers( listener.getServers() );
+            DiscoveryListener discoveryListener = new DiscoveryListener() {
+                @Override
+                public void onJoin(Endpoint endpoint) {
+
+                    try {
+
+                        Server server = Servers.apply( listener.getServerTemplate(), endpoint );
+                        ServerMeta serverMeta = new ServerMeta( server );
+
+                        serverMetaIndex.add( serverMeta );
+
+                        log.info( "Added endpoint %s to cluster %s", endpoint, cluster );
+
+                    } catch (UnknownHostException e) {
+                        log.error( "Unable to add discovered server to balancer: " + endpoint, e );
+                    }
+
+                }
+
+                @Override
+                public void onLeave(Endpoint endpoint) {
+                    serverMetaIndex.remove(  serverMetaIndex.key( endpoint ) );
+                }
+
+            };
+
+            Discovery discovery = discoveryFactory.create( cluster );
+
+            discovery.register( discoveryListener );
 
             ServerMetaIndexProvider serverMetaIndexProvider = new ServerMetaIndexProvider();
             serverMetaIndexProvider.set( serverMetaIndex );

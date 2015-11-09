@@ -8,7 +8,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class DiscoveryListenerSupportConfig {
 
-    private DiscoveryListenerProvider provider;
+    private DiscoveryListenerProvider provider = DiscoveryListenerProvider.FIXED;
 
     public DiscoveryListenerProvider getProvider() {
         return provider;

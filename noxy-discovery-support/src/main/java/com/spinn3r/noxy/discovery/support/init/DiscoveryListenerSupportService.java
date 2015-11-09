@@ -10,7 +10,7 @@ import com.spinn3r.noxy.discovery.zookeeper.init.ZKDiscoveryService;
  *
  */
 @Config( path = "discovery-listener-support.conf",
-         required = true,
+         required = false,
          implementation = DiscoveryListenerSupportConfig.class )
 public class DiscoveryListenerSupportService extends BaseService {
 
@@ -32,6 +32,7 @@ public class DiscoveryListenerSupportService extends BaseService {
 
             case FIXED:
                 include( FixedDiscoveryService.class );
+                break;
 
             default:
                 throw new RuntimeException( "Unknown provider: " + discoveryListenerSupportConfig.getProvider() );

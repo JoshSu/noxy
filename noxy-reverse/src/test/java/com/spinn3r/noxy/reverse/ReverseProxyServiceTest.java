@@ -13,6 +13,7 @@ import com.spinn3r.artemis.network.builder.HttpRequest;
 import com.spinn3r.artemis.network.builder.HttpRequestBuilder;
 import com.spinn3r.artemis.network.builder.proxies.Proxies;
 import com.spinn3r.artemis.network.init.DirectNetworkService;
+import com.spinn3r.noxy.discovery.support.init.DiscoveryListenerSupportService;
 import com.spinn3r.noxy.reverse.init.ReverseProxyService;
 import com.spinn3r.noxy.reverse.meta.ListenerMeta;
 import com.spinn3r.noxy.reverse.meta.ListenerMetaIndex;
@@ -54,6 +55,7 @@ public class ReverseProxyServiceTest extends BaseLauncherTest {
                      MockVersionService.class,
                      DirectNetworkService.class,
                      ConsoleLoggingService.class,
+                     DiscoveryListenerSupportService.class,
                      ReverseProxyService.class );
 
         int startingPort = 1880;

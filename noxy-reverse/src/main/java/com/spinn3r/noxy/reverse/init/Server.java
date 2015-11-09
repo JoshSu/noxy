@@ -18,6 +18,17 @@ public class Server {
 
     private long inter = 1000;
 
+    public Server(String name, String address, boolean disabled, boolean check, long inter) {
+        this.name = name;
+        this.address = address;
+        this.disabled = disabled;
+        this.check = check;
+        this.inter = inter;
+    }
+
+    private Server() {
+    }
+
     public String getName() {
         return name;
     }

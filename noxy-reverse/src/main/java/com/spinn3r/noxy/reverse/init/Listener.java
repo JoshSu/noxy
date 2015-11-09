@@ -2,6 +2,7 @@ package com.spinn3r.noxy.reverse.init;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.google.common.collect.Lists;
+import com.spinn3r.noxy.discovery.Cluster;
 
 import java.util.List;
 
@@ -18,13 +19,13 @@ public class Listener {
 
     private ServerTemplate serverTemplate = new ServerTemplate();
 
-    private List<Server> servers = Lists.newCopyOnWriteArrayList();
-
     private boolean logging = true;
 
     private int connectTimeout = 40000;
 
     private Checks checks = new Checks();
+
+    private Cluster cluster = null;
 
     public String getName() {
         return name;
@@ -34,8 +35,8 @@ public class Listener {
         return binding;
     }
 
-    public List<Server> getServers() {
-        return servers;
+    public ServerTemplate getServerTemplate() {
+        return serverTemplate;
     }
 
     public boolean getLogging() {
@@ -50,15 +51,20 @@ public class Listener {
         return checks;
     }
 
+    public Cluster getCluster() {
+        return cluster;
+    }
+
     @Override
     public String toString() {
         return "Listener{" +
                  "name='" + name + '\'' +
                  ", binding=" + binding +
-                 ", servers=" + servers +
+                 ", serverTemplate=" + serverTemplate +
                  ", logging=" + logging +
                  ", connectTimeout=" + connectTimeout +
                  ", checks=" + checks +
+                 ", cluster=" + cluster +
                  '}';
     }
 
