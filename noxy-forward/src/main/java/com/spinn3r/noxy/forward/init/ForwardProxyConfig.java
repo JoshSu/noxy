@@ -13,37 +13,16 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ForwardProxyConfig {
 
-    private Cluster cluster = null;
+    private List<Proxy> proxies = Lists.newArrayList();
 
-    private Datacenter datacenter = null;
-
-    private boolean enableRequestLogging = true;
-
-    private List<ProxyServerDescriptor> servers = Lists.newArrayList();
-
-    public Cluster getCluster() {
-        return cluster;
-    }
-
-    public Datacenter getDatacenter() {
-        return datacenter;
-    }
-
-    public List<ProxyServerDescriptor> getServers() {
-        return servers;
-    }
-
-    public boolean getEnableRequestLogging() {
-        return enableRequestLogging;
+    public List<Proxy> getProxies() {
+        return proxies;
     }
 
     @Override
     public String toString() {
         return "ForwardProxyConfig{" +
-                 "cluster=" + cluster +
-                 ", datacenter=" + datacenter +
-                 ", enableRequestLogging=" + enableRequestLogging +
-                 ", servers=" + servers +
+                 "proxies=" + proxies +
                  '}';
     }
 

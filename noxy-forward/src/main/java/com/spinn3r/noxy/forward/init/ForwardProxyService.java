@@ -37,8 +37,6 @@ public class ForwardProxyService extends BaseService {
 
     private final Provider<Hostname> hostnameProvider;
 
-    private Membership membership = null;
-
     @Inject
     ForwardProxyService(ForwardProxyConfig forwardProxyConfig, LoggingHttpFiltersSourceAdapterFactory loggingHttpFiltersSourceAdapterFactory, MembershipFactory membershipFactory, Provider<Hostname> hostnameProvider) {
         this.forwardProxyConfig = forwardProxyConfig;
@@ -50,28 +48,36 @@ public class ForwardProxyService extends BaseService {
     @Override
     public void start() throws Exception {
 
-        List<ProxyServerDescriptor> servers = forwardProxyConfig.getServers();
+        for (Proxy proxy : forwardProxyConfig.getProxies()) {
 
-        if ( servers == null || servers.size() == 0 ) {
-            warn( "No servers defined." );
-            return;
-        }
+            List<ProxyServerDescriptor> servers = proxy.getServers();
 
-        if ( forwardProxyConfig.getCluster() != null ) {
-            membership = membershipFactory.create( forwardProxyConfig.getCluster() );
-        }
+            if ( servers == null || servers.size() == 0 ) {
+                warn( "No servers defined." );
+                return;
+            }
 
-        HttpProxyServer proto = create( DefaultHttpProxyServer.bootstrap(), servers.get( 0 ) );
-        httpProxyServers.add( proto );
+            info( "Starting proxy in cluster %s and datacenter %s", proxy.getCluster(), proxy.getDatacenter() );
 
-        for (int i = 1; i < servers.size(); i++) {
-            ProxyServerDescriptor proxyServerDescriptor = servers.get( i );
-            httpProxyServers.add( create( proto.clone(), proxyServerDescriptor ) );
+            Membership membership = null;
+
+            if ( proxy.getCluster() != null ) {
+                membership = membershipFactory.create( proxy.getCluster() );
+            }
+
+            HttpProxyServer proto = create( DefaultHttpProxyServer.bootstrap(), servers.get( 0 ), proxy, membership );
+            httpProxyServers.add( proto );
+
+            for (int i = 1; i < servers.size(); i++) {
+                ProxyServerDescriptor proxyServerDescriptor = servers.get( i );
+                httpProxyServers.add( create( proto.clone(), proxyServerDescriptor, proxy, membership ) );
+            }
+
         }
 
     }
 
-    private HttpProxyServer create( HttpProxyServerBootstrap httpProxyServerBootstrap, ProxyServerDescriptor proxyServerDescriptor ) throws MembershipException {
+    private HttpProxyServer create( HttpProxyServerBootstrap httpProxyServerBootstrap, ProxyServerDescriptor proxyServerDescriptor, Proxy proxy, Membership membership ) throws MembershipException {
 
         info( "Creating proxy server: %s", proxyServerDescriptor );
 
@@ -94,7 +100,7 @@ public class ForwardProxyService extends BaseService {
           .withAddress( address )
           .withNetworkInterface( networkInterface );
 
-        if ( forwardProxyConfig.getEnableRequestLogging() ) {
+        if ( proxy.getEnableRequestLogging() ) {
             Log5jLogListener log5jLogListener = new Log5jLogListener();
             LoggingHttpFiltersSourceAdapter loggingHttpFiltersSourceAdapter = loggingHttpFiltersSourceAdapterFactory.create( log5jLogListener );
             httpProxyServerBootstrap.withFiltersSource( loggingHttpFiltersSourceAdapter );
@@ -107,7 +113,7 @@ public class ForwardProxyService extends BaseService {
             Endpoint endpoint = new Endpoint( addressHostPort.format(),
                                               hostnameProvider.get().getValue(),
                                               EndpointType.FORWARD_PROXY,
-                                              forwardProxyConfig.getDatacenter() );
+                                              proxy.getDatacenter() );
 
             info( "Advertising endpoint: %s", endpoint );
 
