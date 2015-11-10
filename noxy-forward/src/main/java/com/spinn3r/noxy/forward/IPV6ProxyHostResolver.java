@@ -15,6 +15,10 @@ public class IPV6ProxyHostResolver extends BaseHostResolver {
 
         InetAddress inetAddress = randomize( filter( Inet6Address.getAllByName( host ), Inet6Address.class ) );
 
+        if ( inetAddress == null ) {
+            return null;
+        }
+
         return new InetSocketAddress( inetAddress, port );
 
     }

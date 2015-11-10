@@ -12,6 +12,10 @@ public class IPV4ProxyHostResolver extends BaseHostResolver {
 
         InetAddress inetAddress = randomize( filter( Inet4Address.getAllByName( host ), Inet4Address.class ) );
 
+        if ( inetAddress == null ) {
+            return null;
+        }
+
         return new InetSocketAddress( inetAddress, port );
 
     }
