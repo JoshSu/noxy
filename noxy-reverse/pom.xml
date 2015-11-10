@@ -138,14 +138,14 @@
 
         <resources>
 
-            <resource>
-                <directory>target/classes/artemis-daemon/init.d</directory>
-                <filtering>true</filtering>
-                <includes>
-                    <include>artemis-daemon</include>
-                </includes>
-                <targetPath>init.d/</targetPath>
-            </resource>
+            <!--<resource>-->
+                <!--<directory>target/classes/artemis-daemon/init.d</directory>-->
+                <!--<filtering>true</filtering>-->
+                <!--<includes>-->
+                    <!--<include>artemis-daemon</include>-->
+                <!--</includes>-->
+                <!--<targetPath>init.d/${project.name}</targetPath>-->
+            <!--</resource>-->
 
             <resource>
                 <directory>src/main/resources</directory>
