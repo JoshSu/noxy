@@ -8,13 +8,14 @@ import com.spinn3r.artemis.init.advertisements.Caller;
  */
 public class Main {
 
+    public static final String PRODUCT = "noxy";
     public static final String ROLE = "proxy";
 
     public static void main(String[] args) {
 
         try {
 
-            Initializer initializer = new Initializer( ROLE );
+            Initializer initializer = new Initializer( PRODUCT, ROLE );
 
             initializer.replace( Caller.class, new Caller( Main.class) );
             initializer.launch( new ReverseProxyServiceReferences() );
