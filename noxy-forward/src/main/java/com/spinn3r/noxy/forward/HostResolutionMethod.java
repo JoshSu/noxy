@@ -9,4 +9,6 @@ public enum HostResolutionMethod {
 
     IPV4,
 
+    STANDARD
+
 }

@@ -10,6 +10,7 @@ import com.spinn3r.artemis.util.net.HostPort;
 import com.spinn3r.noxy.discovery.*;
 import com.spinn3r.noxy.forward.IPV4ProxyHostResolver;
 import com.spinn3r.noxy.forward.IPV6ProxyHostResolver;
+import com.spinn3r.noxy.forward.StandardProxyHostResolver;
 import com.spinn3r.noxy.logging.Log5jLogListener;
 import com.spinn3r.noxy.logging.LoggingHttpFiltersSourceAdapter;
 import com.spinn3r.noxy.logging.LoggingHttpFiltersSourceAdapterFactory;
@@ -105,6 +106,10 @@ public class ForwardProxyService extends BaseService {
 
             case IPV6:
                 hostResolver = new IPV6ProxyHostResolver();
+                break;
+
+            case STANDARD:
+                hostResolver = new StandardProxyHostResolver();
                 break;
 
             default:
