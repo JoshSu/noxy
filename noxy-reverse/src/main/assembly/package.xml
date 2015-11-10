@@ -10,10 +10,11 @@
     <files>
 
         <file>
-            <source>target/classes/artemis-daemon/init.d/artemis-daemon</source>
+            <source>target/maven-shared-archive-resources/artemis-daemon/init.d/artemis-daemon</source>
             <outputDirectory>init.d</outputDirectory>
             <destName>${project.name}</destName>
             <fileMode>755</fileMode>
+            <filtered>true</filtered>
         </file>
 
     </files>

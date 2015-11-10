@@ -198,40 +198,6 @@
                 </executions>
             </plugin>
 
-            <!--<plugin>-->
-                <!--<groupId>org.apache.maven.plugins</groupId>-->
-                <!--<artifactId>maven-resources-plugin</artifactId>-->
-                <!--<version>2.7</version>-->
-                <!--<configuration>-->
-                    <!--<encoding>UTF-8</encoding>-->
-
-                    <!--<resources>-->
-
-                        <!--<resource>-->
-                            <!--<directory>target/classes/artemis-daemon/init.d</directory>-->
-                            <!--<filtering>true</filtering>-->
-                            <!--<includes>-->
-                                <!--<include>artemis-daemon</include>-->
-                            <!--</includes>-->
-                        <!--</resource>-->
-
-                    <!--</resources>-->
-
-                    <!--&lt;!&ndash; FIXME: this isn't working the way I think &ndash;&gt;-->
-
-                    <!--<outputDirectory>target/classes/artemis-daemon.filtered/init.d</outputDirectory>-->
-
-                <!--</configuration>-->
-                <!--<executions>-->
-                    <!--<execution>-->
-                        <!--<phase>prepare-package</phase>-->
-                        <!--<goals>-->
-                            <!--<goal>copy-resources</goal>-->
-                        <!--</goals>-->
-                    <!--</execution>-->
-                <!--</executions>-->
-            <!--</plugin>-->
-
             <plugin>
 
                 <artifactId>maven-assembly-plugin</artifactId>
@@ -291,7 +257,6 @@
                     <!-- expand "SNAPSHOT" to what is in the "USER" env variable -->
                     <snapshotEnv>USER</snapshotEnv>
                     <verbose>true</verbose>
-                    <!--<controlDir>/home/burton/projects/spinn3r-app/noxy/noxy-forward/target/maven-shared-archive-resources/artemis-daemon/control</controlDir>-->
                     <controlDir>${project.build.directory}/maven-shared-archive-resources/artemis-daemon/control</controlDir>
 
                     <attach>false</attach>

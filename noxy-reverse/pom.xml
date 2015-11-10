@@ -138,15 +138,6 @@
 
         <resources>
 
-            <!--<resource>-->
-                <!--<directory>target/classes/artemis-daemon/init.d</directory>-->
-                <!--<filtering>true</filtering>-->
-                <!--<includes>-->
-                    <!--<include>artemis-daemon</include>-->
-                <!--</includes>-->
-                <!--<targetPath>init.d/${project.name}</targetPath>-->
-            <!--</resource>-->
-
             <resource>
                 <directory>src/main/resources</directory>
                 <filtering>true</filtering>
@@ -175,18 +166,38 @@
                     <resourceBundles>
                         <resourceBundle>com.spinn3r.artemis:artemis-daemon:${project.version}</resourceBundle>
                     </resourceBundles>
-                    <!--<outputDirectory>-->
-                    <!--${project.build.outputDirectory}/artemis-daemon-->
-                    <!--</outputDirectory>-->
 
                 </configuration>
                 <executions>
                     <execution>
+                        <phase>prepare-package</phase>
                         <goals>
                             <goal>process</goal>
                         </goals>
                     </execution>
                 </executions>
+            </plugin>
+
+            <plugin>
+
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>2.5.5</version>
+                <configuration>
+                    <descriptors>
+                        <descriptor>src/main/assembly/package.xml</descriptor>
+                    </descriptors>
+                </configuration>
+
+                <executions>
+                    <execution>
+                        <id>make-assembly</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
+
             </plugin>
 
             <!-- mvn clean dependency:copy-dependencies -->
@@ -226,7 +237,7 @@
                     <!-- expand "SNAPSHOT" to what is in the "USER" env variable -->
                     <snapshotEnv>USER</snapshotEnv>
                     <verbose>true</verbose>
-                    <controlDir>${project.build.outputDirectory}/artemis-daemon/control/</controlDir>
+                    <controlDir>${project.build.directory}/maven-shared-archive-resources/artemis-daemon/control</controlDir>
 
                     <attach>false</attach>
 
@@ -260,10 +271,9 @@
 
                         <data>
 
-                            <src>target/classes/init.d</src>
+                            <src>target/${project.name}-${project.version}-bin/${project.name}-${project.version}/init.d</src>
                             <type>directory</type>
                             <includes>**</includes>
-
                             <mapper>
                                 <type>perm</type>
                                 <prefix>/etc/init.d</prefix>
@@ -279,6 +289,7 @@
             </plugin>
 
         </plugins>
+
     </build>
 
 </project>
