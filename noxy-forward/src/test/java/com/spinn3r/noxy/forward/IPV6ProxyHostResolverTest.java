@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.spinn3r.artemis.util.misc.Histograph;
 import com.spinn3r.artemis.util.misc.HitIndex;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.net.Inet6Address;
@@ -30,6 +31,7 @@ public class IPV6ProxyHostResolverTest {
     }
 
     @Test
+    @Ignore
     public void testResolve() throws Exception {
 
         InetSocketAddress inetSocketAddress = hostResolver.resolve( "google.com", 80 );
