@@ -13,7 +13,7 @@ import java.util.Random;
  */
 public abstract class BaseHostResolver implements HostResolver {
 
-    private Random random = new Random();
+    protected Random random = new Random();
 
     protected InetAddress randomize( List<InetAddress> addresses ) {
 
