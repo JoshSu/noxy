@@ -13,6 +13,11 @@ test:
   override:
     - mvn -P artifactory -Dproject.updatePolicy=always -T 4 test org.vafer:jdeb:jdeb
 
+  post:
+    - mkdir -p $CIRCLE_TEST_REPORTS/junit/
+    - find . -type f -regex ".*/target/surefire-reports/.*xml" -exec cp {} $CIRCLE_TEST_REPORTS/junit/ \;
+    - find . -type f -regex ".*/target/surefire-reports/.*html" -exec cp {} $CIRCLE_TEST_REPORTS/junit/ \;
+
 deployment:
   staging:
     branch: master
