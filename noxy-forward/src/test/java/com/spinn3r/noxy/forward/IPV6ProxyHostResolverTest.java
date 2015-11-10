@@ -34,6 +34,9 @@ public class IPV6ProxyHostResolverTest {
 
         InetSocketAddress inetSocketAddress = hostResolver.resolve( "google.com", 80 );
 
+        assertNotNull( inetSocketAddress );
+        assertNotNull( inetSocketAddress.getAddress() );
+
         assertThat( inetSocketAddress.getAddress().toString(), containsString( ":" ) );
 
         System.out.printf( "%s\n", inetSocketAddress.getAddress() );
