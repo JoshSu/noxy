@@ -10,7 +10,7 @@
     <files>
 
         <file>
-            <source>target/classes/artemis-daemon</source>
+            <source>target/classes/artemis-daemon/init.d/artemis-daemon</source>
             <outputDirectory>init.d</outputDirectory>
             <destName>${project.name}</destName>
             <fileMode>755</fileMode>
