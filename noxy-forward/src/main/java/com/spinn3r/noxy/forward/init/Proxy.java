@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.google.common.collect.Lists;
 import com.spinn3r.noxy.discovery.Cluster;
 import com.spinn3r.noxy.discovery.Datacenter;
+import com.spinn3r.noxy.forward.HostResolutionMethod;
 
 import java.util.List;
 
@@ -23,6 +24,8 @@ public class Proxy {
 
     private List<ProxyServerDescriptor> servers = Lists.newArrayList();
 
+    private HostResolutionMethod hostResolutionMethod = HostResolutionMethod.IPV4;
+
     public Cluster getCluster() {
         return cluster;
     }
@@ -39,13 +42,18 @@ public class Proxy {
         return servers;
     }
 
+    public HostResolutionMethod getHostResolutionMethod() {
+        return hostResolutionMethod;
+    }
+
     @Override
     public String toString() {
-        return "Listener{" +
+        return "Proxy{" +
                  "cluster=" + cluster +
                  ", datacenter=" + datacenter +
                  ", enableRequestLogging=" + enableRequestLogging +
                  ", servers=" + servers +
+                 ", hostResolutionMethod=" + hostResolutionMethod +
                  '}';
     }
 

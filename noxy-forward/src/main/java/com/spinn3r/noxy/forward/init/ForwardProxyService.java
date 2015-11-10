@@ -8,9 +8,12 @@ import com.spinn3r.artemis.init.Config;
 import com.spinn3r.artemis.init.advertisements.Hostname;
 import com.spinn3r.artemis.util.net.HostPort;
 import com.spinn3r.noxy.discovery.*;
+import com.spinn3r.noxy.forward.IPV4ProxyHostResolver;
+import com.spinn3r.noxy.forward.IPV6ProxyHostResolver;
 import com.spinn3r.noxy.logging.Log5jLogListener;
 import com.spinn3r.noxy.logging.LoggingHttpFiltersSourceAdapter;
 import com.spinn3r.noxy.logging.LoggingHttpFiltersSourceAdapterFactory;
+import org.littleshoot.proxy.HostResolver;
 import org.littleshoot.proxy.HttpProxyServer;
 import org.littleshoot.proxy.HttpProxyServerBootstrap;
 import org.littleshoot.proxy.impl.DefaultHttpProxyServer;
@@ -92,12 +95,32 @@ public class ForwardProxyService extends BaseService {
             name = proxyServerDescriptor.getInbound().getAddress() + ":" + proxyServerDescriptor.getInbound().getPort();
         }
 
-        // TODO: use a custom HostResolver for ipv6 and then one for ipv4 depending
+        HostResolver hostResolver;
+
+        switch ( proxy.getHostResolutionMethod() ) {
+
+            case IPV4:
+                hostResolver = new IPV4ProxyHostResolver();
+                break;
+
+            case IPV6:
+                hostResolver = new IPV6ProxyHostResolver();
+                break;
+
+            default:
+                throw new RuntimeException( "Unknown host resolution method: " + proxy.getHostResolutionMethod() );
+
+        }
+
+        // use a custom HostResolver for ipv6 and then one for ipv4 depending
         // on which mode a connection is taking.
+
+        info( "Using host resolver: %s" , hostResolver.getClass() );
 
         httpProxyServerBootstrap
           .withName( name )
           .withAddress( address )
+          .withServerResolver( hostResolver )
           .withNetworkInterface( networkInterface );
 
         if ( proxy.getEnableRequestLogging() ) {
