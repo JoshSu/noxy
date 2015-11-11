@@ -60,7 +60,7 @@ public class FullIntegrationTest extends BaseZookeeperTest {
     }
 
     @Test
-    public void test1() throws Exception {
+    public void testChecksBringingForwardyProxyOnline() throws Exception {
 
         // ok.. both services should be up and running.. wait for the components to be up
         // and running
