@@ -80,7 +80,10 @@ public class FullIntegrationTest extends BaseZookeeperTest {
 
     private Launcher launchForwardProxy() throws Exception {
 
-        Launcher launcher = Launcher.forResourceConfigLoader().build();
+        TestResourcesConfigLoader testResourcesConfigLoader
+          = new TestResourcesConfigLoader( "src/test/resources/noxy-forward" );
+
+        Launcher launcher = Launcher.forConfigLoader( testResourcesConfigLoader ).build();
 
         launcher.launch( new ForwardProxyServiceReferences() );
 
