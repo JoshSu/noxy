@@ -6,6 +6,7 @@ import com.spinn3r.artemis.init.Launcher;
 import com.spinn3r.artemis.init.MockHostnameService;
 import com.spinn3r.artemis.init.MockVersionService;
 import com.spinn3r.artemis.init.ServiceReferences;
+import com.spinn3r.artemis.init.config.TestResourcesConfigLoader;
 import com.spinn3r.artemis.logging.init.ConsoleLoggingService;
 import com.spinn3r.artemis.test.zookeeper.BaseZookeeperTest;
 import com.spinn3r.noxy.discovery.support.init.DiscoveryListenerSupportService;
@@ -89,7 +90,10 @@ public class FullIntegrationTest extends BaseZookeeperTest {
 
     private Launcher launchReverseProxy() throws Exception {
 
-        Launcher launcher = Launcher.forResourceConfigLoader().build();
+        TestResourcesConfigLoader testResourcesConfigLoader
+          = new TestResourcesConfigLoader( "src/test/resources/noxy-reverse" );
+
+        Launcher launcher = Launcher.forConfigLoader(testResourcesConfigLoader).build();
 
         launcher.launch( new ReverseProxyServiceReferences() );
 

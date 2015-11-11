@@ -11,26 +11,40 @@ import java.util.concurrent.ExecutorService;
  */
 public class ListenerMeta {
 
-    private Listener listener;
+    private final Listener listener;
 
-    private OnlineServerMetaIndexProvider onlineServerMetaIndexProvider;
+    private final ServerMetaIndexProvider serverMetaIndexProvider;
 
-    private CheckDaemon checkDaemon;
+    private final OnlineServerMetaIndexProvider onlineServerMetaIndexProvider;
 
-    private HttpProxyServer httpProxyServer;
+    private final CheckDaemon checkDaemon;
 
-    private ExecutorService executorService;
+    private final HttpProxyServer httpProxyServer;
 
-    public ListenerMeta(Listener listener, OnlineServerMetaIndexProvider onlineServerMetaIndexProvider, CheckDaemon checkDaemon, HttpProxyServer httpProxyServer, ExecutorService executorService) {
+    private final ExecutorService executorService;
+
+    public ListenerMeta( Listener listener,
+                         ServerMetaIndexProvider serverMetaIndexProvider,
+                         OnlineServerMetaIndexProvider onlineServerMetaIndexProvider,
+                         CheckDaemon checkDaemon,
+                         HttpProxyServer httpProxyServer,
+                         ExecutorService executorService ) {
+
         this.listener = listener;
+        this.serverMetaIndexProvider = serverMetaIndexProvider;
         this.onlineServerMetaIndexProvider = onlineServerMetaIndexProvider;
         this.checkDaemon = checkDaemon;
         this.httpProxyServer = httpProxyServer;
         this.executorService = executorService;
+
     }
 
     public Listener getListener() {
         return listener;
+    }
+
+    public ServerMetaIndexProvider getServerMetaIndexProvider() {
+        return serverMetaIndexProvider;
     }
 
     public OnlineServerMetaIndexProvider getOnlineServerMetaIndexProvider() {

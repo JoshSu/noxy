@@ -9,6 +9,7 @@ import com.spinn3r.artemis.logging.init.LoggingService;
 import com.spinn3r.artemis.metrics.init.GlobalMetricsService;
 import com.spinn3r.artemis.sequence.init.SequenceSupportService;
 import com.spinn3r.noxy.discovery.support.init.DiscoveryListenerSupportService;
+import com.spinn3r.noxy.reverse.admin.init.ReverseProxyAdminWebserverReferencesService;
 import com.spinn3r.noxy.reverse.init.ReverseProxyService;
 import com.spinn3r.artemis.sequence.none.init.NoGlobalMutexService;
 import com.spinn3r.artemis.time.init.SystemClockService;
@@ -28,6 +29,7 @@ public class ReverseProxyServiceReferences extends ServiceReferences {
         add( GlobalMetricsService.class );
         add( UptimeService.class );
         add( DefaultWebserverReferencesService.class );
+        add( ReverseProxyAdminWebserverReferencesService.class );
         add( DiscoveryListenerSupportService.class );
         add( ReverseProxyService.class );
         add( WebserverService.class );

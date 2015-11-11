@@ -135,7 +135,12 @@ public class ReverseProxyService extends BaseService {
 
             executorService.submit( checkDaemon );
 
-            ListenerMeta listenerMeta = new ListenerMeta( listener, onlineServerMetaIndexProvider, checkDaemon, httpProxyServer, executorService );
+            ListenerMeta listenerMeta = new ListenerMeta( listener,
+                                                          serverMetaIndexProvider,
+                                                          onlineServerMetaIndexProvider,
+                                                          checkDaemon,
+                                                          httpProxyServer,
+                                                          executorService );
 
             listenerMetas.add( listenerMeta );
 
