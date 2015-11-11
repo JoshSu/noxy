@@ -29,9 +29,9 @@ public class ReverseProxyServiceReferences extends ServiceReferences {
         add( GlobalMetricsService.class );
         add( UptimeService.class );
         add( DefaultWebserverReferencesService.class );
-        add( ReverseProxyAdminWebserverReferencesService.class );
         add( DiscoveryListenerSupportService.class );
         add( ReverseProxyService.class );
+        add( ReverseProxyAdminWebserverReferencesService.class );
         add( WebserverService.class );
     }
 

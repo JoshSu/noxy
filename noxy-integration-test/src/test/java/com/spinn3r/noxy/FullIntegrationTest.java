@@ -2,20 +2,29 @@ package com.spinn3r.noxy;
 
 import com.google.inject.Inject;
 import com.google.inject.Provider;
+import com.spinn3r.artemis.http.init.DefaultWebserverReferencesService;
+import com.spinn3r.artemis.http.init.WebserverService;
 import com.spinn3r.artemis.init.Launcher;
 import com.spinn3r.artemis.init.MockHostnameService;
 import com.spinn3r.artemis.init.MockVersionService;
 import com.spinn3r.artemis.init.ServiceReferences;
 import com.spinn3r.artemis.init.config.TestResourcesConfigLoader;
 import com.spinn3r.artemis.logging.init.ConsoleLoggingService;
+import com.spinn3r.artemis.metrics.init.MetricsService;
+import com.spinn3r.artemis.network.builder.DirectHttpRequestBuilder;
+import com.spinn3r.artemis.network.init.DirectNetworkService;
 import com.spinn3r.artemis.test.zookeeper.BaseZookeeperTest;
+import com.spinn3r.artemis.time.init.SyntheticClockService;
+import com.spinn3r.artemis.time.init.UptimeService;
 import com.spinn3r.noxy.discovery.support.init.DiscoveryListenerSupportService;
 import com.spinn3r.noxy.discovery.support.init.MembershipSupportService;
 import com.spinn3r.noxy.forward.init.ForwardProxyService;
+import com.spinn3r.noxy.reverse.admin.init.ReverseProxyAdminWebserverReferencesService;
 import com.spinn3r.noxy.reverse.init.ReverseProxyService;
 import com.spinn3r.noxy.reverse.meta.ListenerMeta;
 import com.spinn3r.noxy.reverse.meta.ListenerMetaIndex;
 import com.spinn3r.noxy.reverse.meta.OnlineServerMetaIndexProvider;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -32,6 +41,9 @@ import static org.junit.Assert.*;
  */
 public class FullIntegrationTest extends BaseZookeeperTest {
 
+    @Inject
+    DirectHttpRequestBuilder directHttpRequestBuilder;
+
     ForwardProxyComponents forwardProxyComponents;
 
     ReverseProxyComponents reverseProxyComponents;
@@ -39,6 +51,8 @@ public class FullIntegrationTest extends BaseZookeeperTest {
     Launcher forwardProxyLauncher;
 
     Launcher reverseProxyLauncher;
+
+    Launcher mainLauncher;
 
     @Override
     @Before
@@ -57,10 +71,30 @@ public class FullIntegrationTest extends BaseZookeeperTest {
         reverseProxyComponents = new ReverseProxyComponents();
         reverseProxyLauncher.getInjector().injectMembers( reverseProxyComponents );
 
+        mainLauncher = Launcher.forResourceConfigLoader().build();
+        mainLauncher.launch( new MainServiceReferences() );
+        mainLauncher.getInjector().injectMembers( this );
+
+    }
+
+    @Override
+    @After
+    public void tearDown() throws Exception {
+
+        if ( reverseProxyLauncher != null )
+            reverseProxyLauncher.stop();
+
+        if ( forwardProxyLauncher != null )
+            forwardProxyLauncher.stop();
+
+        if ( mainLauncher != null )
+            mainLauncher.stop();
+
+        super.tearDown();
     }
 
     @Test
-    public void testChecksBringingForwardyProxyOnline() throws Exception {
+    public void testChecksBringingForwardProxyOnline() throws Exception {
 
         // ok.. both services should be up and running.. wait for the components to be up
         // and running
@@ -77,6 +111,28 @@ public class FullIntegrationTest extends BaseZookeeperTest {
         } );
 
     }
+
+    @Test
+    public void testStatusAPI() throws Exception {
+
+        // ok.. both services should be up and running.. wait for the components to be up
+        // and running
+
+        ListenerMeta listenerMeta = reverseProxyComponents.listenerMetaIndexProvider.get().getListenerMetas().get( 0 );
+
+        OnlineServerMetaIndexProvider onlineServerMetaIndexProvider = listenerMeta.getOnlineServerMetaIndexProvider();
+
+        await().until( () -> {
+            assertThat( onlineServerMetaIndexProvider.get().getBalancer().size(), equalTo( 2 ) );
+        } );
+
+
+        String status = directHttpRequestBuilder.get( "http://localhost:7100/status" ).execute().getContentWithEncoding();
+
+        System.out.printf( "%s\n", status );
+
+    }
+
 
     private Launcher launchForwardProxy() throws Exception {
 
@@ -135,12 +191,24 @@ public class FullIntegrationTest extends BaseZookeeperTest {
 
             add( MockHostnameService.class );
             add( MockVersionService.class );
+            add( SyntheticClockService.class );
             add( ConsoleLoggingService.class );
+            add( UptimeService.class );
+            add( MetricsService.class );
+            add( DefaultWebserverReferencesService.class );
             add( DiscoveryListenerSupportService.class );
             add( ReverseProxyService.class );
+            add( ReverseProxyAdminWebserverReferencesService.class );
+            add( WebserverService.class );
 
         }
 
+    }
+
+    static class MainServiceReferences extends ServiceReferences {
+        public MainServiceReferences() {
+            add( DirectNetworkService.class );
+        }
     }
 
 }
