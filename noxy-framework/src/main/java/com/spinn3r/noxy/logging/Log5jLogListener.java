@@ -1,6 +1,7 @@
 package com.spinn3r.noxy.logging;
 
 import com.spinn3r.log5j.Logger;
+import io.netty.handler.codec.http.HttpObject;
 
 /**
  * A log listener that just logs messages to log5j (Spinn3r's internal async
@@ -9,6 +10,16 @@ import com.spinn3r.log5j.Logger;
 public class Log5jLogListener implements LogListener {
 
     private static final Logger log = Logger.getLogger();
+
+    private final boolean trace;
+
+    public Log5jLogListener() {
+        this( false );
+    }
+
+    public Log5jLogListener(boolean trace) {
+        this.trace = trace;
+    }
 
     @Override
     public void onLogMessage(LogMessage logMessage) {
@@ -30,6 +41,24 @@ public class Log5jLogListener implements LogListener {
                   secureLogMessage.getProtocolVersion(),
                   secureLogMessage.getResolutionServerHostAndPort(),
                   secureLogMessage.getResolvedRemoteAddress() );
+    }
+
+    @Override
+    public void clientToProxyRequest(HttpObject httpObject) {
+
+        if ( trace ) {
+            log.info( "clientToProxyRequest: \n%s", httpObject );
+        }
+
+    }
+
+    @Override
+    public void proxyToClientResponse(HttpObject httpObject) {
+
+        if ( trace ) {
+            log.info( "proxyToClientResponse: \n%s", httpObject );
+        }
+
     }
 
 }

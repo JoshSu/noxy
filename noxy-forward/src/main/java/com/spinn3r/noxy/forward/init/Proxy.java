@@ -22,6 +22,8 @@ public class Proxy {
 
     private boolean enableRequestLogging = true;
 
+    private boolean enableRequestTracing = false;
+
     private List<ProxyServerDescriptor> servers = Lists.newArrayList();
 
     private HostResolutionMethod hostResolutionMethod = HostResolutionMethod.IPV4;
@@ -38,6 +40,10 @@ public class Proxy {
         return enableRequestLogging;
     }
 
+    public boolean getEnableRequestTracing() {
+        return enableRequestTracing;
+    }
+
     public List<ProxyServerDescriptor> getServers() {
         return servers;
     }
@@ -52,6 +58,7 @@ public class Proxy {
                  "cluster=" + cluster +
                  ", datacenter=" + datacenter +
                  ", enableRequestLogging=" + enableRequestLogging +
+                 ", enableRequestTracing=" + enableRequestTracing +
                  ", servers=" + servers +
                  ", hostResolutionMethod=" + hostResolutionMethod +
                  '}';

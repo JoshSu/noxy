@@ -118,7 +118,7 @@ public class ReverseProxyService extends BaseService {
             HttpFiltersSourceAdapter httpFiltersSourceAdapterDelegate = new HttpFiltersSourceAdapter();
 
             if ( listener.getLogging() ) {
-                Log5jLogListener log5jLogListener = new Log5jLogListener();
+                Log5jLogListener log5jLogListener = new Log5jLogListener( listener.getTracing() );
                 httpFiltersSourceAdapterDelegate = loggingHttpFiltersSourceAdapterFactory.create( log5jLogListener );
                 info( "HTTP request log enabled for proxy requests." );
             }

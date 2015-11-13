@@ -72,7 +72,10 @@ public class LoggingHttpFiltersSourceAdapter extends HttpFiltersSourceAdapter {
 
             }
 
+            logListener.clientToProxyRequest( httpObject );
+
             return super.clientToProxyRequest( httpObject );
+
         }
 
         @Override
@@ -85,9 +88,13 @@ public class LoggingHttpFiltersSourceAdapter extends HttpFiltersSourceAdapter {
                 long duration = clock.currentTimeMillis() - httpRequestTimestamp;
                 LogMessage logMessage = new LogMessage( httpRequest.getMethod(), httpRequest.getProtocolVersion(), httpRequestUri, httpResponse.getStatus(), duration, resolutionServerHostAndPort, resolvedRemoteAddress );
                 logListener.onLogMessage( logMessage );
+
             }
 
+            logListener.proxyToClientResponse( httpObject );
+
             return super.proxyToClientResponse( httpObject );
+
         }
 
 

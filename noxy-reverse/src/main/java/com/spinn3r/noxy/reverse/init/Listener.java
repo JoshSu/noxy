@@ -21,6 +21,8 @@ public class Listener {
 
     private boolean logging = true;
 
+    private boolean tracing = false;
+
     private int connectTimeout = 40000;
 
     private Checks checks = new Checks();
@@ -43,6 +45,10 @@ public class Listener {
         return logging;
     }
 
+    public boolean getTracing() {
+        return tracing;
+    }
+
     public int getConnectTimeout() {
         return connectTimeout;
     }
@@ -62,10 +68,10 @@ public class Listener {
                  ", binding=" + binding +
                  ", serverTemplate=" + serverTemplate +
                  ", logging=" + logging +
+                 ", tracing=" + tracing +
                  ", connectTimeout=" + connectTimeout +
                  ", checks=" + checks +
                  ", cluster=" + cluster +
                  '}';
     }
-
 }
