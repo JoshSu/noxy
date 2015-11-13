@@ -62,6 +62,9 @@ public class ReverseProxyService extends BaseService {
     @Override
     public void start() throws Exception {
 
+        //TODO: in the future we can share the bootstrap and clone it.
+        // this would improve performance and scalability.
+
         for (Listener listener : reverseProxyConfig.getListeners()) {
 
             Cluster cluster = listener.getCluster();

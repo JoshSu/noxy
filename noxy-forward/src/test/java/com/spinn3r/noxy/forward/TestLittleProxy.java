@@ -1,4 +1,4 @@
-package com.spinn3r.artemis.proxy;
+package com.spinn3r.noxy.forward;
 
 import com.google.common.collect.Lists;
 import com.google.inject.Inject;

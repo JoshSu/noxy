@@ -1,7 +1,6 @@
 package com.spinn3r.noxy;
 
 import com.google.inject.Inject;
-import com.google.inject.Provider;
 import com.spinn3r.artemis.http.init.DebugWebserverReferencesService;
 import com.spinn3r.artemis.http.init.DefaultWebserverReferencesService;
 import com.spinn3r.artemis.http.init.WebserverService;
@@ -22,11 +21,7 @@ import com.spinn3r.artemis.util.io.Sockets;
 import com.spinn3r.noxy.discovery.support.init.DiscoveryListenerSupportService;
 import com.spinn3r.noxy.discovery.support.init.MembershipSupportService;
 import com.spinn3r.noxy.forward.init.ForwardProxyService;
-import com.spinn3r.noxy.reverse.admin.init.ReverseProxyAdminWebserverReferencesService;
 import com.spinn3r.noxy.reverse.init.ReverseProxyService;
-import com.spinn3r.noxy.reverse.meta.ListenerMeta;
-import com.spinn3r.noxy.reverse.meta.ListenerMetaIndex;
-import com.spinn3r.noxy.reverse.meta.OnlineServerMetaIndexProvider;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -34,18 +29,11 @@ import org.junit.Test;
 
 import java.net.Proxy;
 
-import static com.jayway.awaitility.Awaitility.await;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 
-/**
- * Test using a reverse proxy pointing to a forward proxy pointing to the Internet
- * and using zookeeper to have each component discovery each other.
- *
- * In the future we might use Netty's static webserver support to serve up files
- * and have a full pipeline
- */
-public class FullIntegrationTest extends BaseZookeeperTest {
+@Ignore
+public class FullIntegrationPinpointProblemTest extends BaseZookeeperTest {
 
     @Inject
     DirectHttpRequestBuilder directHttpRequestBuilder;
@@ -66,14 +54,11 @@ public class FullIntegrationTest extends BaseZookeeperTest {
         super.setUp();
 
         forwardProxyLauncher = launchForwardProxy();
+
+        forwardProxyComponents = new ForwardProxyComponents();
+        forwardProxyLauncher.getInjector().injectMembers( forwardProxyComponents );
+
         reverseProxyLauncher = launchReverseProxy();
-
-        forwardProxyComponents = new ForwardProxyComponents();
-        forwardProxyLauncher.getInjector().injectMembers( forwardProxyComponents );
-
-        forwardProxyComponents = new ForwardProxyComponents();
-        forwardProxyLauncher.getInjector().injectMembers( forwardProxyComponents );
-
         reverseProxyComponents = new ReverseProxyComponents();
         reverseProxyLauncher.getInjector().injectMembers( reverseProxyComponents );
 
@@ -100,42 +85,20 @@ public class FullIntegrationTest extends BaseZookeeperTest {
     }
 
     @Test
-    public void testChecksBringingForwardProxyOnline() throws Exception {
+    @Ignore
+    public void testBulkRequests1() throws Exception {
 
-        // ok.. both services should be up and running.. wait for the components to be up
-        // and running
+        Proxy proxy = Proxies.create( String.format( "http://localhost:%s", 8081 ) );
 
-        assertNotNull( reverseProxyComponents );
-        assertNotNull( reverseProxyComponents.listenerMetaIndexProvider );
+        int nrRequest = 100;
 
-        ListenerMeta listenerMeta = reverseProxyComponents.listenerMetaIndexProvider.get().getListenerMetas().get( 0 );
+        for (int i = 0; i < nrRequest; i++) {
 
-        OnlineServerMetaIndexProvider onlineServerMetaIndexProvider = listenerMeta.getOnlineServerMetaIndexProvider();
+            String contentWithEncoding = directHttpRequestBuilder.get( "http://cnn.com" ).withProxy( proxy ).execute().getContentWithEncoding();
 
-        await().until( () -> {
-            assertThat( onlineServerMetaIndexProvider.get().getBalancer().size(), equalTo( 2 ) );
-        } );
+            assertThat( contentWithEncoding, containsString( "CNN" ) );
 
-    }
-
-    @Test
-    public void testStatusAPI() throws Exception {
-
-        // ok.. both services should be up and running.. wait for the components to be up
-        // and running
-
-        ListenerMeta listenerMeta = reverseProxyComponents.listenerMetaIndexProvider.get().getListenerMetas().get( 0 );
-
-        OnlineServerMetaIndexProvider onlineServerMetaIndexProvider = listenerMeta.getOnlineServerMetaIndexProvider();
-
-        await().until( () -> {
-            assertThat( onlineServerMetaIndexProvider.get().getBalancer().size(), equalTo( 2 ) );
-        } );
-
-
-        String status = directHttpRequestBuilder.get( "http://localhost:7100/status" ).execute().getContentWithEncoding();
-
-        System.out.printf( "%s\n", status );
+        }
 
     }
 
@@ -160,24 +123,6 @@ public class FullIntegrationTest extends BaseZookeeperTest {
             assertEquals( "hello", contentWithEncoding );
 
         } );
-
-    }
-
-    @Test
-    @Ignore
-    public void testBulkRequests1() throws Exception {
-
-        Proxy proxy = Proxies.create( String.format( "http://localhost:%s", 8081 ) );
-
-        int nrRequest = 100;
-
-        for (int i = 0; i < nrRequest; i++) {
-
-            String contentWithEncoding = directHttpRequestBuilder.get( "http://cnn.com" ).withProxy( proxy ).execute().getContentWithEncoding();
-
-            assertThat( contentWithEncoding, containsString( "CNN" ) );
-
-        }
 
     }
 
@@ -226,9 +171,9 @@ public class FullIntegrationTest extends BaseZookeeperTest {
     }
 
     static class ReverseProxyComponents {
-
-        @Inject
-        Provider<ListenerMetaIndex> listenerMetaIndexProvider;
+//
+//        @Inject
+//        Provider<ListenerMetaIndex> listenerMetaIndexProvider;
 
     }
 
@@ -245,8 +190,8 @@ public class FullIntegrationTest extends BaseZookeeperTest {
             add( DefaultWebserverReferencesService.class );
             add( DiscoveryListenerSupportService.class );
             add( ReverseProxyService.class );
-            add( ReverseProxyAdminWebserverReferencesService.class );
-            add( WebserverService.class );
+//            add( ReverseProxyAdminWebserverReferencesService.class );
+//            add( WebserverService.class );
 
         }
 
