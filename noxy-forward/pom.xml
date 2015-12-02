@@ -139,6 +139,12 @@
         </dependency>
 
         <dependency>
+            <groupId>com.spinn3r.artemis.http</groupId>
+            <artifactId>artemis-http</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
             <groupId>com.spinn3r.artemis.network</groupId>
             <artifactId>artemis-network</artifactId>
             <version>${project.version}</version>
@@ -148,13 +154,6 @@
         <dependency>
             <groupId>com.spinn3r.artemis.init</groupId>
             <artifactId>artemis-init-test</artifactId>
-            <version>${project.version}</version>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>com.spinn3r.artemis.http</groupId>
-            <artifactId>artemis-http</artifactId>
             <version>${project.version}</version>
             <scope>test</scope>
         </dependency>
