@@ -21,7 +21,7 @@
         <daemon.minMemory>4096M</daemon.minMemory>
         <daemon.maxMemory>4096M</daemon.maxMemory>
         <daemon.preferIPv6Addresses>true</daemon.preferIPv6Addresses>
-        <daemon.stackSize>512K</daemon.stackSize>
+        <daemon.stackSize>1024K</daemon.stackSize>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <skipJdeb>false</skipJdeb>
