@@ -52,6 +52,8 @@ public class ForwardProxyService extends BaseService {
     @Override
     public void start() throws Exception {
 
+        int id = 0;
+
         for (Proxy proxy : forwardProxyConfig.getProxies()) {
 
             List<ProxyServerDescriptor> servers = proxy.getServers();
@@ -61,7 +63,7 @@ public class ForwardProxyService extends BaseService {
                 return;
             }
 
-            info( "Starting proxy in cluster %s and datacenter %s", proxy.getCluster(), proxy.getDatacenter() );
+            info( "Starting proxy %,d in cluster %s and datacenter %s", id, proxy.getCluster(), proxy.getDatacenter() );
 
             Membership membership = null;
 
@@ -76,6 +78,8 @@ public class ForwardProxyService extends BaseService {
                 ProxyServerDescriptor proxyServerDescriptor = servers.get( i );
                 httpProxyServers.add( create( proto.clone(), proxyServerDescriptor, proxy, membership ) );
             }
+
+            ++id;
 
         }
 
