@@ -1,8 +1,9 @@
-package com.spinn3r.noxy.discovery.fixed.init;
+package com.spinn3r.noxy.discovery.fixed;
 
 import com.google.inject.Inject;
 import com.spinn3r.noxy.discovery.*;
 import com.spinn3r.noxy.discovery.fixed.FixedDiscovery;
+import com.spinn3r.noxy.discovery.fixed.init.FixedDiscoveryConfig;
 
 /**
  *

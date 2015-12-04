@@ -4,6 +4,7 @@ import com.spinn3r.artemis.init.BaseService;
 import com.spinn3r.artemis.init.Config;
 import com.spinn3r.artemis.init.ServiceReference;
 import com.spinn3r.noxy.discovery.DiscoveryFactory;
+import com.spinn3r.noxy.discovery.fixed.FixedDiscoveryFactory;
 
 /**
  *
