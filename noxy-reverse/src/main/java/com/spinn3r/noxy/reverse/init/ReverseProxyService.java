@@ -128,6 +128,8 @@ public class ReverseProxyService extends BaseService {
 
                         if ( proxyServerMeta != null ) {
                             chainedProxies.add( new SimpleChainedProxy( proxyServerMeta.getInetSocketAddress() ) );
+                        } else {
+                            log.warn( "No online servers available for request on listener: %s", listener.getName() );
                         }
                     }
 
