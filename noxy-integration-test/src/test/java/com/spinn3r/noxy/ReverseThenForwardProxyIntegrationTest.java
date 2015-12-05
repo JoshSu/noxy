@@ -13,6 +13,7 @@ import com.spinn3r.artemis.init.ServiceReferences;
 import com.spinn3r.artemis.init.config.TestResourcesConfigLoader;
 import com.spinn3r.artemis.logging.init.ConsoleLoggingService;
 import com.spinn3r.artemis.metrics.init.MetricsService;
+import com.spinn3r.artemis.network.NetworkException;
 import com.spinn3r.artemis.network.builder.DirectHttpRequestBuilder;
 import com.spinn3r.artemis.network.builder.proxies.Proxies;
 import com.spinn3r.artemis.network.init.DirectNetworkService;
@@ -35,6 +36,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import java.net.Proxy;
+import java.util.concurrent.Callable;
 
 import static com.jayway.awaitility.Awaitility.await;
 import static org.hamcrest.Matchers.*;
@@ -186,25 +188,56 @@ public class ReverseThenForwardProxyIntegrationTest extends BaseZookeeperTest {
     @Test
     public void testCNN1() throws Exception {
 
-        Proxy proxy = Proxies.create( String.format( "http://localhost:%s", 8181 ) );
-
         await().until( () -> {
-
-            ListenerMetaIndex listenerMetaIndex = reverseProxyComponents.listenerMetaIndexProvider.get();
-
-            ListenerMeta listenerMeta = listenerMetaIndex.getListenerMetas().get( 0 );
-
-            ImmutableList<ServerMeta> onlineServers
-              = listenerMeta.getOnlineServerMetaIndexProvider().get()
-                  .getOnlineServers();
-
+            ImmutableList<ServerMeta> onlineServers = getOnlineServersFromReverseProxy();
             assertThat( onlineServers.size(), greaterThan( 0 ) );
-
           } );
+
+        Proxy proxy = Proxies.create( String.format( "http://localhost:%s", 8181 ) );
 
         String contentWithEncoding = directHttpRequestBuilder.get( "http://cnn.com" ).withProxy( proxy ).execute().getContentWithEncoding();
 
         assertThat( contentWithEncoding, containsString( "CNN" ) );
+
+    }
+
+    /**
+     * Stop the running proxy servers, make sure they are stopped, then verify that
+     * we have a Bad Gateway exception..
+     *
+     * @throws Exception
+     */
+    @Test
+    public void testWithoutRunningForwardProxyServers() throws Exception {
+
+        forwardProxyLauncher.stop();
+
+        await().until( () -> {
+            ImmutableList<ServerMeta> onlineServers = getOnlineServersFromReverseProxy();
+            assertThat( onlineServers.size(), equalTo( 0 ) );
+        } );
+
+        Proxy proxy = Proxies.create( String.format( "http://localhost:%s", 8181 ) );
+
+        try {
+            directHttpRequestBuilder.get( "http://cnn.com" ).withProxy( proxy ).execute().getContentWithEncoding();
+        } catch (NetworkException e) {
+            assertEquals( 502, e.getResponseCode() );
+            return;
+        }
+
+        throw new RuntimeException( "Didn't get 502 response code" );
+
+    }
+
+    private ImmutableList<ServerMeta> getOnlineServersFromReverseProxy() {
+
+        ListenerMetaIndex listenerMetaIndex = reverseProxyComponents.listenerMetaIndexProvider.get();
+
+        ListenerMeta listenerMeta = listenerMetaIndex.getListenerMetas().get( 0 );
+
+        return listenerMeta.getOnlineServerMetaIndexProvider().get()
+            .getOnlineServers();
 
     }
 
