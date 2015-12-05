@@ -16,6 +16,7 @@ import com.spinn3r.noxy.reverse.checks.CheckDaemonFactory;
 import com.spinn3r.noxy.reverse.filters.ReverseProxyHttpFiltersSourceAdapter;
 import com.spinn3r.noxy.reverse.meta.*;
 import com.spinn3r.artemis.util.net.HostPort;
+import com.spinn3r.noxy.reverse.proxies.chained.BalancingChainedProxyManager;
 import com.spinn3r.noxy.reverse.proxies.chained.SimpleChainedProxy;
 import io.netty.handler.codec.http.HttpRequest;
 import org.littleshoot.proxy.*;
@@ -119,21 +120,10 @@ public class ReverseProxyService extends BaseService {
                 // changed proxies here.
                 hostResolver = new BalancingProxyHostResolver();
 
-                httpProxyServerBootstrap.withChainProxyManager( new ChainedProxyManager() {
-                    @Override
-                    public void lookupChainedProxies(HttpRequest httpRequest, Queue<ChainedProxy> chainedProxies) {
+                ChainedProxyManager chainedProxyManager
+                  = new BalancingChainedProxyManager( listener, onlineServerMetaIndexProvider );
 
-                        ServerMetaIndex onlineProxyServers = onlineServerMetaIndexProvider.get();
-                        ServerMeta proxyServerMeta = onlineProxyServers.getBalancer().next();
-
-                        if ( proxyServerMeta != null ) {
-                            chainedProxies.add( new SimpleChainedProxy( proxyServerMeta.getInetSocketAddress() ) );
-                        } else {
-                            log.warn( "No online servers available for request on listener: %s", listener.getName() );
-                        }
-                    }
-
-                } );
+                httpProxyServerBootstrap.withChainProxyManager( chainedProxyManager );
 
             }
 
