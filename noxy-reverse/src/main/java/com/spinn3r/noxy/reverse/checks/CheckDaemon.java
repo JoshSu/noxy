@@ -159,8 +159,14 @@ public class CheckDaemon implements Runnable {
 
             } catch ( InterruptedException e ) {
 
-                // just let the daemon complete.
+                log.error( "Check daemon interrupted: ", e );
+                // just let the daemon continue
                 continue;
+
+            } catch ( Throwable t ) {
+
+                log.error( "Unknown exception handled during healthcheck of " + serverMeta.getServer().getName(), t );
+                stateChange = serverMeta.setOffline( true );
 
             } finally {
 
