@@ -3,6 +3,7 @@ package com.spinn3r.noxy.reverse.init;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.google.common.collect.Lists;
 import com.spinn3r.noxy.discovery.Cluster;
+import com.spinn3r.noxy.discovery.EndpointType;
 
 import java.util.List;
 
@@ -28,6 +29,8 @@ public class Listener {
     private Checks checks = new Checks();
 
     private Cluster cluster = null;
+
+    private EndpointType endpointTypes = EndpointType.WEBSERVER;
 
     public String getName() {
         return name;
@@ -61,6 +64,16 @@ public class Listener {
         return cluster;
     }
 
+    /**
+     * Used so that we can specify the type of servers that are using these
+     * end points.  They must all be the same.  We implement special handling
+     * for endpoint types of REVERSE_PROXY.
+     *
+     */
+    public EndpointType getEndpointTypes() {
+        return endpointTypes;
+    }
+
     @Override
     public String toString() {
         return "Listener{" +
@@ -72,6 +85,8 @@ public class Listener {
                  ", connectTimeout=" + connectTimeout +
                  ", checks=" + checks +
                  ", cluster=" + cluster +
+                 ", endpointTypes=" + endpointTypes +
                  '}';
     }
+
 }

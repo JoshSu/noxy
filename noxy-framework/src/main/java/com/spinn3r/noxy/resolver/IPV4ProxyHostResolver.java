@@ -1,4 +1,6 @@
-package com.spinn3r.noxy.forward;
+package com.spinn3r.noxy.resolver;
+
+import com.spinn3r.noxy.resolver.BaseHostResolver;
 
 import java.net.*;
 

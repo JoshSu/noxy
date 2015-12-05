@@ -1,6 +1,5 @@
-package com.spinn3r.noxy.reverse.filters;
+package com.spinn3r.noxy.forward.filters;
 
-import com.spinn3r.noxy.reverse.meta.OnlineServerMetaIndexProvider;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.http.*;
 import org.littleshoot.proxy.HttpFilters;
@@ -8,24 +7,22 @@ import org.littleshoot.proxy.HttpFiltersSource;
 import org.littleshoot.proxy.HttpFiltersSourceAdapter;
 
 import java.net.InetSocketAddress;
+import java.net.URI;
 
 /**
- * Provides our default HTTP request handling.
+ *
  */
-public class ReverseProxyHttpFiltersSourceAdapter implements HttpFiltersSource {
+public class ForwardProxyHttpFiltersSourceAdapter implements HttpFiltersSource {
 
     private HttpFiltersSourceAdapter httpFiltersSourceAdapterDelegate;
 
-    private final OnlineServerMetaIndexProvider onlineServerMetaIndexProvider;
-
-    public ReverseProxyHttpFiltersSourceAdapter(HttpFiltersSourceAdapter httpFiltersSourceAdapterDelegate, OnlineServerMetaIndexProvider onlineServerMetaIndexProvider) {
+    public ForwardProxyHttpFiltersSourceAdapter(HttpFiltersSourceAdapter httpFiltersSourceAdapterDelegate) {
         this.httpFiltersSourceAdapterDelegate = httpFiltersSourceAdapterDelegate;
-        this.onlineServerMetaIndexProvider = onlineServerMetaIndexProvider;
     }
 
     @Override
     public HttpFilters filterRequest(HttpRequest originalRequest, ChannelHandlerContext ctx) {
-        return new ReverseProxyHttpFiltersAdapter( httpFiltersSourceAdapterDelegate.filterRequest( originalRequest, ctx ) );
+        return new ForwardProxyHttpFiltersAdapter( httpFiltersSourceAdapterDelegate.filterRequest( originalRequest, ctx ) );
     }
 
     @Override
@@ -38,13 +35,11 @@ public class ReverseProxyHttpFiltersSourceAdapter implements HttpFiltersSource {
         return 0;
     }
 
-    class ReverseProxyHttpFiltersAdapter implements HttpFilters {
+    class ForwardProxyHttpFiltersAdapter implements HttpFilters {
 
         private HttpFilters delegate;
 
-        private HttpRequest httpRequest;
-
-        public ReverseProxyHttpFiltersAdapter(HttpFilters delegate) {
+        public ForwardProxyHttpFiltersAdapter(HttpFilters delegate) {
             this.delegate = delegate;
         }
 
@@ -52,7 +47,12 @@ public class ReverseProxyHttpFiltersSourceAdapter implements HttpFiltersSource {
         public HttpResponse clientToProxyRequest(HttpObject httpObject) {
 
             if ( httpObject instanceof HttpRequest ) {
-                this.httpRequest = (HttpRequest)httpObject;
+                HttpRequest httpRequest = (HttpRequest)httpObject;
+
+//                if ( ! httpRequest.getUri().startsWith( "http" ) ) {
+//
+//                }
+
             }
 
             return delegate.clientToProxyRequest( httpObject );
@@ -60,14 +60,8 @@ public class ReverseProxyHttpFiltersSourceAdapter implements HttpFiltersSource {
 
         @Override
         public HttpObject proxyToClientResponse(HttpObject httpObject) {
-
-            if ( onlineServerMetaIndexProvider.get().getBalancer().size() == 0 && httpObject instanceof HttpResponse ) {
-                return new DefaultHttpResponse( httpRequest.getProtocolVersion(), HttpResponseStatus.BAD_GATEWAY );
-            }
-
             return delegate.proxyToClientResponse( httpObject );
         }
-
 
         @Override
         public HttpResponse proxyToServerRequest(HttpObject httpObject) {

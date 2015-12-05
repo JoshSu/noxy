@@ -15,11 +15,13 @@ import com.spinn3r.noxy.reverse.checks.CheckDaemonFactory;
 import com.spinn3r.noxy.reverse.filters.ReverseProxyHttpFiltersSourceAdapter;
 import com.spinn3r.noxy.reverse.meta.*;
 import com.spinn3r.artemis.util.net.HostPort;
+import io.netty.handler.codec.http.HttpRequest;
 import org.littleshoot.proxy.*;
 import org.littleshoot.proxy.impl.DefaultHttpProxyServer;
 
 import java.net.UnknownHostException;
 import java.util.List;
+import java.util.Queue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -108,6 +110,22 @@ public class ReverseProxyService extends BaseService {
             HostResolver hostResolver = new LoadBalancingReverseProxyHostResolver( onlineServerMetaIndexProvider );
 
             HttpProxyServerBootstrap httpProxyServerBootstrap = DefaultHttpProxyServer.bootstrap();
+
+            if ( EndpointType.REVERSE_PROXY.equals( listener.getEndpointTypes() ) ) {
+
+                // FIXME: use a direct host resolver... here.. no funny business...
+
+//                hostResolver = new
+
+//                httpProxyServerBootstrap.withChainProxyManager( new ChainedProxyManager() {
+//                    @Override
+//                    public void lookupChainedProxies(HttpRequest httpRequest, Queue<ChainedProxy> chainedProxies) {
+//
+//                    }
+//
+//                } );
+
+            }
 
             httpProxyServerBootstrap
               .withAddress( new HostPort( listener.getBinding().getAddress() ).toInetSocketAddress() )

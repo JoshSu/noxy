@@ -1,8 +1,7 @@
-package com.spinn3r.noxy.forward;
+package com.spinn3r.noxy.resolver;
 
 import com.google.common.collect.Lists;
 import com.spinn3r.artemis.util.misc.Histograph;
-import com.spinn3r.artemis.util.misc.HitIndex;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -17,6 +16,7 @@ import static org.junit.Assert.*;
 import static org.hamcrest.Matchers.*;
 
 public class IPV6ProxyHostResolverTest {
+
 
     IPV6ProxyHostResolver hostResolver;
 
@@ -154,6 +154,5 @@ public class IPV6ProxyHostResolverTest {
                       histograph.toString() );
 
     }
-
 
 }

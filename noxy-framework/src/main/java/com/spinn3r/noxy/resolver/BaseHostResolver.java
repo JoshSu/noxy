@@ -1,4 +1,4 @@
-package com.spinn3r.noxy.forward;
+package com.spinn3r.noxy.resolver;
 
 import com.google.common.collect.Lists;
 import org.littleshoot.proxy.HostResolver;

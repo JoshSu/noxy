@@ -1,6 +1,7 @@
-package com.spinn3r.noxy.forward;
+package com.spinn3r.noxy.resolver;
 
-import java.net.Inet6Address;
+import com.spinn3r.noxy.resolver.BaseHostResolver;
+
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.UnknownHostException;

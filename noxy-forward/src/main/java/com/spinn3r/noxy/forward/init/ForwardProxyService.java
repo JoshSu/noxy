@@ -8,13 +8,14 @@ import com.spinn3r.artemis.init.Config;
 import com.spinn3r.artemis.init.advertisements.Hostname;
 import com.spinn3r.artemis.util.net.HostPort;
 import com.spinn3r.noxy.discovery.*;
-import com.spinn3r.noxy.forward.IPV4ProxyHostResolver;
-import com.spinn3r.noxy.forward.IPV6ProxyHostResolver;
-import com.spinn3r.noxy.forward.StandardProxyHostResolver;
+import com.spinn3r.noxy.resolver.IPV4ProxyHostResolver;
+import com.spinn3r.noxy.resolver.IPV6ProxyHostResolver;
+import com.spinn3r.noxy.resolver.StandardProxyHostResolver;
+import com.spinn3r.noxy.forward.filters.ForwardProxyHttpFiltersSourceAdapter;
 import com.spinn3r.noxy.logging.Log5jLogListener;
-import com.spinn3r.noxy.logging.LoggingHttpFiltersSourceAdapter;
 import com.spinn3r.noxy.logging.LoggingHttpFiltersSourceAdapterFactory;
 import org.littleshoot.proxy.HostResolver;
+import org.littleshoot.proxy.HttpFiltersSourceAdapter;
 import org.littleshoot.proxy.HttpProxyServer;
 import org.littleshoot.proxy.HttpProxyServerBootstrap;
 import org.littleshoot.proxy.impl.DefaultHttpProxyServer;
@@ -124,7 +125,7 @@ public class ForwardProxyService extends BaseService {
         // use a custom HostResolver for ipv6 and then one for ipv4 depending
         // on which mode a connection is taking.
 
-        info( "Using host resolver: %s" , hostResolver.getClass() );
+        info( "Using host resolver: %s", hostResolver.getClass() );
 
         httpProxyServerBootstrap
           .withName( name )
@@ -132,11 +133,14 @@ public class ForwardProxyService extends BaseService {
           .withServerResolver( hostResolver )
           .withNetworkInterface( networkInterface );
 
+        HttpFiltersSourceAdapter httpFiltersSourceAdapter = new HttpFiltersSourceAdapter();
+
         if ( proxy.getLogging() ) {
             Log5jLogListener log5jLogListener = new Log5jLogListener( proxy.getTracing() );
-            LoggingHttpFiltersSourceAdapter loggingHttpFiltersSourceAdapter = loggingHttpFiltersSourceAdapterFactory.create( log5jLogListener );
-            httpProxyServerBootstrap.withFiltersSource( loggingHttpFiltersSourceAdapter );
+            httpFiltersSourceAdapter = loggingHttpFiltersSourceAdapterFactory.create( log5jLogListener );
         }
+
+        httpProxyServerBootstrap.withFiltersSource( new ForwardProxyHttpFiltersSourceAdapter( httpFiltersSourceAdapter ) );
 
         HttpProxyServer httpProxyServer = httpProxyServerBootstrap.start();
 
