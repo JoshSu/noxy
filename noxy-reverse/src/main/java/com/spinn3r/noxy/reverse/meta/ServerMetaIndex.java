@@ -57,6 +57,24 @@ public class ServerMetaIndex {
         return serversReference.get();
     }
 
+    /**
+     * Get the list of servers that were online when we called this method.
+     */
+    public ImmutableList<ServerMeta> getOnlineServers() {
+
+        List<ServerMeta> result = Lists.newArrayList();
+
+        for (ServerMeta serverMeta : getServers()) {
+            if ( ! serverMeta.getOffline() ) {
+                result.add( serverMeta );
+            }
+        }
+
+        return ImmutableList.copyOf( result );
+
+    }
+
+
     public Balancer<ServerMeta> getBalancer() {
         return balancer;
     }

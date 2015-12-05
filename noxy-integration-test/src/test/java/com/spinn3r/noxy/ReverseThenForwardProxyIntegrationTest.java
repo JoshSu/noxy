@@ -1,5 +1,6 @@
 package com.spinn3r.noxy;
 
+import com.google.common.collect.ImmutableList;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.spinn3r.artemis.http.init.DebugWebserverReferencesService;
@@ -27,6 +28,7 @@ import com.spinn3r.noxy.reverse.init.ReverseProxyService;
 import com.spinn3r.noxy.reverse.meta.ListenerMeta;
 import com.spinn3r.noxy.reverse.meta.ListenerMetaIndex;
 import com.spinn3r.noxy.reverse.meta.OnlineServerMetaIndexProvider;
+import com.spinn3r.noxy.reverse.meta.ServerMeta;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -39,13 +41,13 @@ import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 
 /**
- * Test using a reverse proxy pointing to a forward proxy pointing to the Internet
- * and using zookeeper to have each component discovery each other.
+ * Test using a reverse proxy pointing to a forward proxy pointing to the public
+ * Internet and using zookeeper to have each component discovery each other.
  *
- * In the future we might use Netty's static webserver support to serve up files
- * and have a full pipeline
  */
-public class FullIntegrationTest extends BaseZookeeperTest {
+public class ReverseThenForwardProxyIntegrationTest extends BaseZookeeperTest {
+
+    // TODO: see if we can measure the number of keep alive requests...
 
     @Inject
     DirectHttpRequestBuilder directHttpRequestBuilder;
@@ -186,7 +188,19 @@ public class FullIntegrationTest extends BaseZookeeperTest {
 
         Proxy proxy = Proxies.create( String.format( "http://localhost:%s", 8181 ) );
 
-        Thread.sleep( 1_000 );
+        await().until( () -> {
+
+            ListenerMetaIndex listenerMetaIndex = reverseProxyComponents.listenerMetaIndexProvider.get();
+
+            ListenerMeta listenerMeta = listenerMetaIndex.getListenerMetas().get( 0 );
+
+            ImmutableList<ServerMeta> onlineServers
+              = listenerMeta.getOnlineServerMetaIndexProvider().get()
+                  .getOnlineServers();
+
+            assertThat( onlineServers.size(), greaterThan( 0 ) );
+
+          } );
 
         String contentWithEncoding = directHttpRequestBuilder.get( "http://cnn.com" ).withProxy( proxy ).execute().getContentWithEncoding();
 
@@ -279,6 +293,7 @@ public class FullIntegrationTest extends BaseZookeeperTest {
             add( WebserverService.class );
 
         }
+
     }
 
 }
