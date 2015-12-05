@@ -126,7 +126,9 @@ public class ReverseProxyService extends BaseService {
                         ServerMetaIndex onlineProxyServers = onlineServerMetaIndexProvider.get();
                         ServerMeta proxyServerMeta = onlineProxyServers.getBalancer().next();
 
-                        chainedProxies.add( new SimpleChainedProxy( proxyServerMeta.getInetSocketAddress() ) );
+                        if ( proxyServerMeta != null ) {
+                            chainedProxies.add( new SimpleChainedProxy( proxyServerMeta.getInetSocketAddress() ) );
+                        }
                     }
 
                 } );
