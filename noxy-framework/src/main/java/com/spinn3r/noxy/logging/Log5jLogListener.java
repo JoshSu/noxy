@@ -23,7 +23,7 @@ public class Log5jLogListener implements LogListener {
 
     @Override
     public void onLogMessage(LogMessage logMessage) {
-        log.info( "%s %s %s %s %sms %s %s",
+        log.info( "%s %s %s responseCode=%s, duration=%sms, resolutionHostAndPort=%s, resolvedRemoteAddress=%s",
                   logMessage.getHttpMethod(),
                   logMessage.getUri(),
                   logMessage.getProtocolVersion(),
@@ -35,7 +35,7 @@ public class Log5jLogListener implements LogListener {
 
     @Override
     public void onSecureLogMessage(SecureLogMessage secureLogMessage) {
-        log.info( "%s %s %s %s %s",
+        log.info( "%s %s %s resolutionHostAndPort=%s, resolvedRemoteAddress=%s",
                   secureLogMessage.getHttpMethod(),
                   secureLogMessage.getUri(),
                   secureLogMessage.getProtocolVersion(),
@@ -47,7 +47,7 @@ public class Log5jLogListener implements LogListener {
     public void clientToProxyRequest(HttpObject httpObject) {
 
         if ( trace ) {
-            log.info( "clientToProxyRequest: \n%s", httpObject );
+            log.info( "clientToProxyRequest (trace): \n%s", httpObject );
         }
 
     }
@@ -56,7 +56,7 @@ public class Log5jLogListener implements LogListener {
     public void proxyToClientResponse(HttpObject httpObject) {
 
         if ( trace ) {
-            log.info( "proxyToClientResponse: \n%s", httpObject );
+            log.info( "proxyToClientResponse (trace): \n%s", httpObject );
         }
 
     }
