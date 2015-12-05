@@ -4,41 +4,47 @@ import com.spinn3r.noxy.reverse.meta.OnlineServerMetaIndexProvider;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.http.*;
 import org.littleshoot.proxy.HttpFilters;
+import org.littleshoot.proxy.HttpFiltersSource;
 import org.littleshoot.proxy.HttpFiltersSourceAdapter;
 
 import java.net.InetSocketAddress;
 
 /**
- * Provides our default HTTP requuest handling.
+ * Provides our default HTTP request handling.
  */
-public class DefaultHttpFiltersSourceAdapter extends HttpFiltersSourceAdapter {
+public class ReverseProxyHttpFiltersSourceAdapter implements HttpFiltersSource {
 
     private HttpFiltersSourceAdapter httpFiltersSourceAdapterDelegate;
 
     private final OnlineServerMetaIndexProvider onlineServerMetaIndexProvider;
 
-    public DefaultHttpFiltersSourceAdapter(HttpFiltersSourceAdapter httpFiltersSourceAdapterDelegate, OnlineServerMetaIndexProvider onlineServerMetaIndexProvider) {
+    public ReverseProxyHttpFiltersSourceAdapter(HttpFiltersSourceAdapter httpFiltersSourceAdapterDelegate, OnlineServerMetaIndexProvider onlineServerMetaIndexProvider) {
         this.httpFiltersSourceAdapterDelegate = httpFiltersSourceAdapterDelegate;
         this.onlineServerMetaIndexProvider = onlineServerMetaIndexProvider;
     }
 
     @Override
-    public HttpFilters filterRequest(HttpRequest originalRequest) {
-        return new DefaultHttpFiltersAdapter(httpFiltersSourceAdapterDelegate.filterRequest( originalRequest ) );
+    public HttpFilters filterRequest(HttpRequest originalRequest, ChannelHandlerContext ctx) {
+        return new ReverseProxyHttpFiltersAdapter( httpFiltersSourceAdapterDelegate.filterRequest( originalRequest, ctx ) );
     }
 
     @Override
-    public HttpFilters filterRequest(HttpRequest originalRequest, ChannelHandlerContext ctx) {
-        return new DefaultHttpFiltersAdapter( httpFiltersSourceAdapterDelegate.filterRequest( originalRequest, ctx ) );
+    public int getMaximumRequestBufferSizeInBytes() {
+        return 0;
     }
 
-    class DefaultHttpFiltersAdapter implements HttpFilters {
+    @Override
+    public int getMaximumResponseBufferSizeInBytes() {
+        return 0;
+    }
+
+    class ReverseProxyHttpFiltersAdapter implements HttpFilters {
 
         private HttpFilters delegate;
 
         private HttpRequest httpRequest;
 
-        public DefaultHttpFiltersAdapter(HttpFilters delegate) {
+        public ReverseProxyHttpFiltersAdapter(HttpFilters delegate) {
             this.delegate = delegate;
         }
 

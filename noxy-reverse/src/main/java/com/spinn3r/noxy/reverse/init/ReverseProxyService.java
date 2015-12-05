@@ -12,7 +12,7 @@ import com.spinn3r.noxy.logging.LoggingHttpFiltersSourceAdapterFactory;
 import com.spinn3r.noxy.reverse.LoadBalancingReverseProxyHostResolver;
 import com.spinn3r.noxy.reverse.checks.CheckDaemon;
 import com.spinn3r.noxy.reverse.checks.CheckDaemonFactory;
-import com.spinn3r.noxy.reverse.filters.DefaultHttpFiltersSourceAdapter;
+import com.spinn3r.noxy.reverse.filters.ReverseProxyHttpFiltersSourceAdapter;
 import com.spinn3r.noxy.reverse.meta.*;
 import com.spinn3r.artemis.util.net.HostPort;
 import org.littleshoot.proxy.*;
@@ -126,7 +126,7 @@ public class ReverseProxyService extends BaseService {
                 info( "HTTP request log enabled for proxy requests." );
             }
 
-            httpProxyServerBootstrap.withFiltersSource( new DefaultHttpFiltersSourceAdapter( httpFiltersSourceAdapterDelegate, onlineServerMetaIndexProvider ) );
+            httpProxyServerBootstrap.withFiltersSource( new ReverseProxyHttpFiltersSourceAdapter( httpFiltersSourceAdapterDelegate, onlineServerMetaIndexProvider ) );
 
             httpProxyServerBootstrap.withConnectTimeout( listener.getConnectTimeout() );
 

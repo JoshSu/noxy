@@ -20,9 +20,9 @@ public class Proxy {
 
     private Datacenter datacenter = null;
 
-    private boolean enableRequestLogging = true;
+    private boolean logging = true;
 
-    private boolean enableRequestTracing = false;
+    private boolean tracing = false;
 
     private List<ProxyServerDescriptor> servers = Lists.newArrayList();
 
@@ -36,12 +36,12 @@ public class Proxy {
         return datacenter;
     }
 
-    public boolean getEnableRequestLogging() {
-        return enableRequestLogging;
+    public boolean getLogging() {
+        return logging;
     }
 
-    public boolean getEnableRequestTracing() {
-        return enableRequestTracing;
+    public boolean getTracing() {
+        return tracing;
     }
 
     public List<ProxyServerDescriptor> getServers() {
@@ -57,8 +57,8 @@ public class Proxy {
         return "Proxy{" +
                  "cluster=" + cluster +
                  ", datacenter=" + datacenter +
-                 ", enableRequestLogging=" + enableRequestLogging +
-                 ", enableRequestTracing=" + enableRequestTracing +
+                 ", logging=" + logging +
+                 ", tracing=" + tracing +
                  ", servers=" + servers +
                  ", hostResolutionMethod=" + hostResolutionMethod +
                  '}';

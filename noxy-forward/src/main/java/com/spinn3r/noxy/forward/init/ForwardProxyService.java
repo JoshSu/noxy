@@ -132,8 +132,8 @@ public class ForwardProxyService extends BaseService {
           .withServerResolver( hostResolver )
           .withNetworkInterface( networkInterface );
 
-        if ( proxy.getEnableRequestLogging() ) {
-            Log5jLogListener log5jLogListener = new Log5jLogListener( proxy.getEnableRequestTracing() );
+        if ( proxy.getLogging() ) {
+            Log5jLogListener log5jLogListener = new Log5jLogListener( proxy.getTracing() );
             LoggingHttpFiltersSourceAdapter loggingHttpFiltersSourceAdapter = loggingHttpFiltersSourceAdapterFactory.create( log5jLogListener );
             httpProxyServerBootstrap.withFiltersSource( loggingHttpFiltersSourceAdapter );
         }

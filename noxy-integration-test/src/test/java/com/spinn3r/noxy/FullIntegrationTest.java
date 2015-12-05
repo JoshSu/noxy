@@ -16,7 +16,7 @@ import com.spinn3r.artemis.network.builder.DirectHttpRequestBuilder;
 import com.spinn3r.artemis.network.builder.proxies.Proxies;
 import com.spinn3r.artemis.network.init.DirectNetworkService;
 import com.spinn3r.artemis.test.zookeeper.BaseZookeeperTest;
-import com.spinn3r.artemis.time.init.SyntheticClockService;
+import com.spinn3r.artemis.time.init.SystemClockService;
 import com.spinn3r.artemis.time.init.UptimeService;
 import com.spinn3r.artemis.util.io.Sockets;
 import com.spinn3r.noxy.discovery.support.init.DiscoveryListenerSupportService;
@@ -181,6 +181,21 @@ public class FullIntegrationTest extends BaseZookeeperTest {
 
     }
 
+    @Test
+    @Ignore
+    public void testCNN1() throws Exception {
+
+        Proxy proxy = Proxies.create( String.format( "http://localhost:%s", 8181 ) );
+
+        Thread.sleep( 5_000 );
+
+        String contentWithEncoding = directHttpRequestBuilder.get( "http://cnn.com" ).withProxy( proxy ).execute().getContentWithEncoding();
+
+        assertThat( contentWithEncoding, containsString( "CNN" ) );
+
+    }
+
+
     private Launcher launchForwardProxy() throws Exception {
 
         TestResourcesConfigLoader testResourcesConfigLoader
@@ -238,7 +253,7 @@ public class FullIntegrationTest extends BaseZookeeperTest {
 
             add( MockHostnameService.class );
             add( MockVersionService.class );
-            add( SyntheticClockService.class );
+            add( SystemClockService.class );
             add( ConsoleLoggingService.class );
             add( UptimeService.class );
             add( MetricsService.class );
