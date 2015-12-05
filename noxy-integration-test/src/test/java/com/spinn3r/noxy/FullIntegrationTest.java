@@ -182,12 +182,11 @@ public class FullIntegrationTest extends BaseZookeeperTest {
     }
 
     @Test
-    @Ignore
     public void testCNN1() throws Exception {
 
         Proxy proxy = Proxies.create( String.format( "http://localhost:%s", 8181 ) );
 
-        Thread.sleep( 5_000 );
+        Thread.sleep( 1_000 );
 
         String contentWithEncoding = directHttpRequestBuilder.get( "http://cnn.com" ).withProxy( proxy ).execute().getContentWithEncoding();
 

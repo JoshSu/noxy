@@ -9,12 +9,14 @@ import com.spinn3r.log5j.Logger;
 import com.spinn3r.noxy.discovery.*;
 import com.spinn3r.noxy.logging.Log5jLogListener;
 import com.spinn3r.noxy.logging.LoggingHttpFiltersSourceAdapterFactory;
+import com.spinn3r.noxy.resolver.BalancingProxyHostResolver;
 import com.spinn3r.noxy.reverse.LoadBalancingReverseProxyHostResolver;
 import com.spinn3r.noxy.reverse.checks.CheckDaemon;
 import com.spinn3r.noxy.reverse.checks.CheckDaemonFactory;
 import com.spinn3r.noxy.reverse.filters.ReverseProxyHttpFiltersSourceAdapter;
 import com.spinn3r.noxy.reverse.meta.*;
 import com.spinn3r.artemis.util.net.HostPort;
+import com.spinn3r.noxy.reverse.proxies.chained.SimpleChainedProxy;
 import io.netty.handler.codec.http.HttpRequest;
 import org.littleshoot.proxy.*;
 import org.littleshoot.proxy.impl.DefaultHttpProxyServer;
@@ -111,19 +113,23 @@ public class ReverseProxyService extends BaseService {
 
             HttpProxyServerBootstrap httpProxyServerBootstrap = DefaultHttpProxyServer.bootstrap();
 
-            if ( EndpointType.REVERSE_PROXY.equals( listener.getEndpointTypes() ) ) {
+            if ( EndpointType.FORWARD_PROXY.equals( listener.getEndpointTypes() ) ) {
 
-                // FIXME: use a direct host resolver... here.. no funny business...
+                // DO NOT use the load balancing resolver because we're using
+                // changed proxies here.
+                hostResolver = new BalancingProxyHostResolver();
 
-//                hostResolver = new
+                httpProxyServerBootstrap.withChainProxyManager( new ChainedProxyManager() {
+                    @Override
+                    public void lookupChainedProxies(HttpRequest httpRequest, Queue<ChainedProxy> chainedProxies) {
 
-//                httpProxyServerBootstrap.withChainProxyManager( new ChainedProxyManager() {
-//                    @Override
-//                    public void lookupChainedProxies(HttpRequest httpRequest, Queue<ChainedProxy> chainedProxies) {
-//
-//                    }
-//
-//                } );
+                        ServerMetaIndex onlineProxyServers = onlineServerMetaIndexProvider.get();
+                        ServerMeta proxyServerMeta = onlineProxyServers.getBalancer().next();
+
+                        chainedProxies.add( new SimpleChainedProxy( proxyServerMeta.getInetSocketAddress() ) );
+                    }
+
+                } );
 
             }
 

@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import org.littleshoot.proxy.HostResolver;
 
 import java.net.InetAddress;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
@@ -38,6 +39,17 @@ public abstract class BaseHostResolver implements HostResolver {
             if ( address.getClass().isAssignableFrom( inetAddrType ) ) {
                 result.add( address );
             }
+        }
+
+        return result;
+
+    }
+
+    protected List<InetAddress> toList( InetAddress[] addresses ) {
+        List<InetAddress> result = new ArrayList<>( addresses.length );
+
+        for (InetAddress address : addresses) {
+            result.add( address );
         }
 
         return result;

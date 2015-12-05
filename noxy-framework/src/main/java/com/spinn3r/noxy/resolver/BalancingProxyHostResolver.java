@@ -5,15 +5,20 @@ import java.net.InetSocketAddress;
 import java.net.UnknownHostException;
 
 /**
- * The standard proxy host resolver. The only problem with this one is that
- * it always fetches the first host an doesn't randomize them.
+ * Uses the standard resolver BUT balances properly by randomizing.
  */
-public class StandardProxyHostResolver extends BaseHostResolver {
+public class BalancingProxyHostResolver extends BaseHostResolver {
 
     @Override
     public InetSocketAddress resolve(String host, int port) throws UnknownHostException {
 
-        InetAddress inetAddress = InetAddress.getByName( host );
+        InetAddress[] inetAddresses = InetAddress.getAllByName( host );
+
+        if ( inetAddresses == null || inetAddresses.length == 0 ) {
+            return null;
+        }
+
+        InetAddress inetAddress = randomize( toList( inetAddresses ) );
 
         if ( inetAddress == null ) {
             return null;
