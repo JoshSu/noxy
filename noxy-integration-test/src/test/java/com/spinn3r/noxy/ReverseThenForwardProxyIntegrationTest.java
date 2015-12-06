@@ -169,7 +169,7 @@ public class ReverseThenForwardProxyIntegrationTest extends BaseZookeeperTest {
 
     @Test
     @Ignore
-    public void testBulkRequests1() throws Exception {
+    public void testCNNBulkRequests1() throws Exception {
 
         Proxy proxy = Proxies.create( String.format( "http://localhost:%s", 8081 ) );
 
