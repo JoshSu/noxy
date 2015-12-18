@@ -1,15 +1,14 @@
 package com.spinn3r.noxy.forward;
 
-import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 import com.spinn3r.artemis.init.BaseLauncherTest;
 import com.spinn3r.artemis.init.MockHostnameService;
 import com.spinn3r.artemis.init.MockVersionService;
 import com.spinn3r.artemis.logging.init.ConsoleLoggingService;
-import com.spinn3r.artemis.network.builder.DefaultHttpRequestBuilderService;
 import com.spinn3r.artemis.network.builder.HttpRequestBuilder;
 import com.spinn3r.artemis.network.builder.proxies.Proxies;
 import com.spinn3r.artemis.network.builder.proxies.ProxyReference;
+import com.spinn3r.artemis.network.init.DirectNetworkService;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -18,8 +17,6 @@ import org.littleshoot.proxy.HttpProxyServer;
 import org.littleshoot.proxy.impl.DefaultHttpProxyServer;
 
 import java.net.InetSocketAddress;
-import java.net.Proxy;
-import java.util.List;
 
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
@@ -57,7 +54,7 @@ public class TestLittleProxy extends BaseLauncherTest {
         super.setUp( MockHostnameService.class,
                      MockVersionService.class,
                      ConsoleLoggingService.class,
-                     DefaultHttpRequestBuilderService.class );
+                     DirectNetworkService.class );
 
         httpProxyServer =
           DefaultHttpProxyServer.bootstrap()

@@ -9,19 +9,17 @@ import com.spinn3r.artemis.init.MockHostnameService;
 import com.spinn3r.artemis.init.MockVersionService;
 import com.spinn3r.artemis.logging.init.ConsoleLoggingService;
 import com.spinn3r.artemis.metrics.init.MetricsService;
-import com.spinn3r.artemis.network.builder.DefaultHttpRequestBuilderService;
 import com.spinn3r.artemis.network.builder.HttpRequestBuilder;
 import com.spinn3r.artemis.network.builder.proxies.Proxies;
 import com.spinn3r.artemis.network.builder.proxies.ProxyReference;
+import com.spinn3r.artemis.network.init.DirectNetworkService;
 import com.spinn3r.artemis.time.init.UptimeService;
 import com.spinn3r.noxy.discovery.support.init.MembershipSupportService;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import java.net.Proxy;
-
-import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 
 /**
@@ -41,7 +39,7 @@ public class ForwardProxyServiceTest extends BaseLauncherTest {
                      UptimeService.class,
                      MetricsService.class,
                      ConsoleLoggingService.class,
-                     DefaultHttpRequestBuilderService.class,
+                     DirectNetworkService.class,
                      MembershipSupportService.class,
                      ForwardProxyService.class,
                      DefaultWebserverReferencesService.class,
