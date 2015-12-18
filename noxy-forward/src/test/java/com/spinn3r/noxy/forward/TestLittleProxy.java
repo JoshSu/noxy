@@ -9,6 +9,7 @@ import com.spinn3r.artemis.logging.init.ConsoleLoggingService;
 import com.spinn3r.artemis.network.builder.DefaultHttpRequestBuilderService;
 import com.spinn3r.artemis.network.builder.HttpRequestBuilder;
 import com.spinn3r.artemis.network.builder.proxies.Proxies;
+import com.spinn3r.artemis.network.builder.proxies.ProxyReference;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -37,7 +38,7 @@ public class TestLittleProxy extends BaseLauncherTest {
 
     HttpProxyServer httpProxyServer = null;
 
-    Proxy proxy = Proxies.create( String.format( "http://localhost:%s", PORT ) );
+    ProxyReference proxy = Proxies.create( String.format( "http://localhost:%s", PORT ) );
 
     // TODO:
     //

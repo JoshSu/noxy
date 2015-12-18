@@ -16,6 +16,7 @@ import com.spinn3r.artemis.metrics.init.MetricsService;
 import com.spinn3r.artemis.network.NetworkException;
 import com.spinn3r.artemis.network.builder.DirectHttpRequestBuilder;
 import com.spinn3r.artemis.network.builder.proxies.Proxies;
+import com.spinn3r.artemis.network.builder.proxies.ProxyReference;
 import com.spinn3r.artemis.network.init.DirectNetworkService;
 import com.spinn3r.artemis.test.zookeeper.BaseZookeeperTest;
 import com.spinn3r.artemis.time.init.SystemClockService;
@@ -147,7 +148,7 @@ public class ReverseThenForwardProxyIntegrationTest extends BaseZookeeperTest {
     @Ignore
     public void testBulkRequestsWithEcho() throws Exception {
 
-        Proxy proxy = Proxies.create( String.format( "http://127.0.0.1:%s", 8081 ) );
+        ProxyReference proxy = Proxies.create( String.format( "http://127.0.0.1:%s", 8081 ) );
 
         Sockets.waitForOpenPort( "127.0.0.1", 8081 );
         Sockets.waitForOpenPort( "127.0.0.1", 8100 );
@@ -171,7 +172,7 @@ public class ReverseThenForwardProxyIntegrationTest extends BaseZookeeperTest {
     @Ignore
     public void testCNNBulkRequests1() throws Exception {
 
-        Proxy proxy = Proxies.create( String.format( "http://localhost:%s", 8081 ) );
+        ProxyReference proxy = Proxies.create( String.format( "http://localhost:%s", 8081 ) );
 
         int nrRequest = 100;
 
@@ -193,7 +194,7 @@ public class ReverseThenForwardProxyIntegrationTest extends BaseZookeeperTest {
             assertThat( onlineServers.size(), greaterThan( 0 ) );
           } );
 
-        Proxy proxy = Proxies.create( String.format( "http://localhost:%s", 8181 ) );
+        ProxyReference proxy = Proxies.create( String.format( "http://localhost:%s", 8181 ) );
 
         String contentWithEncoding = directHttpRequestBuilder.get( "http://cnn.com" ).withProxy( proxy ).execute().getContentWithEncoding();
 
@@ -217,7 +218,7 @@ public class ReverseThenForwardProxyIntegrationTest extends BaseZookeeperTest {
             assertThat( onlineServers.size(), equalTo( 0 ) );
         } );
 
-        Proxy proxy = Proxies.create( String.format( "http://localhost:%s", 8181 ) );
+        ProxyReference proxy = Proxies.create( String.format( "http://localhost:%s", 8181 ) );
 
         try {
             directHttpRequestBuilder.get( "http://cnn.com" ).withProxy( proxy ).execute().getContentWithEncoding();
