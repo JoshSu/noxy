@@ -3,7 +3,7 @@
     <parent>
         <artifactId>noxy</artifactId>
         <groupId>com.spinn3r.noxy</groupId>
-        <version>5.1-LATEST-4</version>
+        <version>5.1-LATEST-5</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
