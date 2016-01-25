@@ -30,6 +30,9 @@ public class ForwardProxyServiceTest extends BaseLauncherTest {
     @Inject
     HttpRequestBuilder httpRequestBuilder;
 
+    @Inject
+    ForwardProxyPorts forwardProxyPorts;
+
     @Override
     @Before
     public void setUp() throws Exception {
@@ -51,7 +54,9 @@ public class ForwardProxyServiceTest extends BaseLauncherTest {
     @Test
     public void testRequestsWithProxyService() throws Exception {
 
-        ProxyReference proxy = Proxies.create( String.format( "http://localhost:%s", 8080 ) );
+        int port = forwardProxyPorts.getPort( "server0" );
+
+        ProxyReference proxy = Proxies.create( String.format( "http://localhost:%s", port ) );
         String contentWithEncoding = httpRequestBuilder.get( "http://cnn.com" ).withProxy( proxy ).execute().getContentWithEncoding();
 
         assertThat( contentWithEncoding, containsString( "CNN" ) );
@@ -61,7 +66,9 @@ public class ForwardProxyServiceTest extends BaseLauncherTest {
     @Test
     public void testRequestsWithProxyServiceUsingSSL() throws Exception {
 
-        ProxyReference proxy = Proxies.create( String.format( "http://localhost:%s", 8080 ) );
+        int port = forwardProxyPorts.getPort( "server0" );
+
+        ProxyReference proxy = Proxies.create( String.format( "http://localhost:%s", port ) );
         String contentWithEncoding = httpRequestBuilder.get( "https://www.google.com" ).withProxy( proxy ).execute().getContentWithEncoding();
 
         assertThat( contentWithEncoding, containsString( "<title>Google</title>" ) );
@@ -71,7 +78,9 @@ public class ForwardProxyServiceTest extends BaseLauncherTest {
     @Test
     public void testTestOnSecondaryServer() throws Exception {
 
-        ProxyReference proxyReference = Proxies.create( String.format( "http://localhost:%s", 8081 ) );
+        int port = forwardProxyPorts.getPort( "server1" );
+
+        ProxyReference proxyReference = Proxies.create( String.format( "http://localhost:%s", port ) );
         String contentWithEncoding = httpRequestBuilder.get( "http://cnn.com" ).withProxy( proxyReference ).execute().getContentWithEncoding();
 
         assertThat( contentWithEncoding, containsString( "CNN" ) );
@@ -82,7 +91,9 @@ public class ForwardProxyServiceTest extends BaseLauncherTest {
     @Ignore
     public void testBulkRequests1() throws Exception {
 
-        ProxyReference proxy = Proxies.create( String.format( "http://localhost:%s", 8081 ) );
+        int port = forwardProxyPorts.getPort( "server1" );
+
+        ProxyReference proxy = Proxies.create( String.format( "http://localhost:%s", port ) );
 
         int nrRequest = 100;
 
@@ -100,7 +111,9 @@ public class ForwardProxyServiceTest extends BaseLauncherTest {
     @Ignore
     public void testBulkRequestsWithEcho() throws Exception {
 
-        ProxyReference proxy = Proxies.create( String.format( "http://localhost:%s", 8081 ) );
+        int port = forwardProxyPorts.getPort( "server1" );
+
+        ProxyReference proxy = Proxies.create( String.format( "http://localhost:%s", port ) );
 
         int nrRequest = 5000;
 
@@ -118,7 +131,9 @@ public class ForwardProxyServiceTest extends BaseLauncherTest {
     @Test
     public void testHttpHeaders() throws Exception {
 
-        ProxyReference proxy = Proxies.create( String.format( "http://localhost:%s", 8081 ) );
+        int port = forwardProxyPorts.getPort( "server1" );
+
+        ProxyReference proxy = Proxies.create( String.format( "http://localhost:%s", port ) );
         String contentWithEncoding = httpRequestBuilder.get( "https://httpbin.org/get" ).withProxy( proxy ).execute().getContentWithEncoding();
 
         System.out.printf( "%s\n", contentWithEncoding );
