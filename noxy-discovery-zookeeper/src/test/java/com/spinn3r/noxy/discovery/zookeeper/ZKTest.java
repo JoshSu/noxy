@@ -8,6 +8,7 @@ import com.google.inject.Provider;
 import com.spinn3r.artemis.init.Launcher;
 import com.spinn3r.artemis.init.ServiceReferences;
 import com.spinn3r.artemis.test.zookeeper.BaseZookeeperTest;
+import com.spinn3r.artemis.zookeeper.embedded.EmbeddedZookeeperService;
 import com.spinn3r.artemis.zookeeper.init.ZookeeperService;
 import com.spinn3r.noxy.discovery.*;
 import com.spinn3r.noxy.discovery.zookeeper.init.ZKDiscoveryService;
@@ -26,7 +27,7 @@ import static org.junit.Assert.*;
 
 import static com.jayway.awaitility.Awaitility.*;
 
-public class ZKTest extends BaseZookeeperTest {
+public class ZKTest {
 
     Launcher launcher;
 
@@ -44,10 +45,8 @@ public class ZKTest extends BaseZookeeperTest {
     Datacenter datacenter = new Datacenter( "local", "Castro Valley, CA" );
     Endpoint endpoint = new Endpoint( "localhost:12345", "localhost", EndpointType.WEBSERVER, datacenter );
 
-    @Override
     @Before
     public void setUp() throws Exception {
-        super.setUp();
 
         launcher = Launcher.forResourceConfigLoader().build();
         launcher.launch( new TestServiceReferences() );
@@ -201,6 +200,7 @@ public class ZKTest extends BaseZookeeperTest {
     static class TestServiceReferences extends ServiceReferences {
 
         public TestServiceReferences() {
+            add( EmbeddedZookeeperService.class );
             add( ZookeeperService.class );
             add( ZKDiscoveryService.class );
         }
