@@ -16,6 +16,11 @@ public class ForwardProxyPorts {
     }
 
     public int getPort( String name ) {
+
+        if ( ! index.containsKey( name ) ) {
+            throw new RuntimeException( String.format( "no entry for %s in %s", name, index ) );
+        }
+
         return index.get( name );
     }
 

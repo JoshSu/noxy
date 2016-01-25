@@ -5,6 +5,7 @@ import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.spinn3r.artemis.http.init.DebugWebserverReferencesService;
 import com.spinn3r.artemis.http.init.DefaultWebserverReferencesService;
+import com.spinn3r.artemis.http.init.WebserverPort;
 import com.spinn3r.artemis.http.init.WebserverService;
 import com.spinn3r.artemis.init.Launcher;
 import com.spinn3r.artemis.init.MockHostnameService;
@@ -24,8 +25,10 @@ import com.spinn3r.artemis.time.init.UptimeService;
 import com.spinn3r.artemis.util.io.Sockets;
 import com.spinn3r.noxy.discovery.support.init.DiscoveryListenerSupportService;
 import com.spinn3r.noxy.discovery.support.init.MembershipSupportService;
+import com.spinn3r.noxy.forward.init.ForwardProxyPorts;
 import com.spinn3r.noxy.forward.init.ForwardProxyService;
 import com.spinn3r.noxy.reverse.admin.init.ReverseProxyAdminWebserverReferencesService;
+import com.spinn3r.noxy.reverse.init.ListenerPorts;
 import com.spinn3r.noxy.reverse.init.ReverseProxyService;
 import com.spinn3r.noxy.reverse.meta.ListenerMeta;
 import com.spinn3r.noxy.reverse.meta.ListenerMetaIndex;
@@ -54,6 +57,9 @@ public class ReverseThenForwardProxyIntegrationTest extends BaseZookeeperTest {
 
     @Inject
     DirectHttpRequestBuilder directHttpRequestBuilder;
+
+    @Inject
+    WebserverPort webserverPort;
 
     ForwardProxyComponents forwardProxyComponents;
 
@@ -138,7 +144,9 @@ public class ReverseThenForwardProxyIntegrationTest extends BaseZookeeperTest {
         } );
 
 
-        String status = directHttpRequestBuilder.get( "http://localhost:7100/status" ).execute().getContentWithEncoding();
+        String url = String.format( "http://localhost:%s/status", webserverPort.getPort() );
+
+        String status = directHttpRequestBuilder.get( url ).execute().getContentWithEncoding();
 
         System.out.printf( "%s\n", status );
 
@@ -148,16 +156,20 @@ public class ReverseThenForwardProxyIntegrationTest extends BaseZookeeperTest {
     @Ignore
     public void testBulkRequestsWithEcho() throws Exception {
 
-        ProxyReference proxy = Proxies.create( String.format( "http://127.0.0.1:%s", 8081 ) );
+        int forwardProxyPort = forwardProxyComponents.forwardProxyPorts.getPort( "server0" );
 
-        Sockets.waitForOpenPort( "127.0.0.1", 8081 );
-        Sockets.waitForOpenPort( "127.0.0.1", 8100 );
+        ProxyReference proxy = Proxies.create( String.format( "http://127.0.0.1:%s", forwardProxyPort ) );
+
+        Sockets.waitForOpenPort( "127.0.0.1", forwardProxyPort );
+        Sockets.waitForOpenPort( "127.0.0.1", webserverPort.getPort() );
 
         NetworkTests.test( 500, () -> {
 
+            String url = String.format( "http://127.0.0.1:%s/echo?message=hello", webserverPort.getPort() );
+
             String contentWithEncoding =
               directHttpRequestBuilder
-                .get( "http://127.0.0.1:8100/echo?message=hello" )
+                .get( url )
                 .withProxy( proxy )
                 .execute()
                 .getContentWithEncoding();
@@ -172,7 +184,9 @@ public class ReverseThenForwardProxyIntegrationTest extends BaseZookeeperTest {
     @Ignore
     public void testCNNBulkRequests1() throws Exception {
 
-        ProxyReference proxy = Proxies.create( String.format( "http://localhost:%s", 8081 ) );
+        int forwardProxyPort = forwardProxyComponents.forwardProxyPorts.getPort( "server0" );
+
+        ProxyReference proxy = Proxies.create( String.format( "http://localhost:%s", forwardProxyPort ) );
 
         int nrRequest = 100;
 
@@ -194,7 +208,9 @@ public class ReverseThenForwardProxyIntegrationTest extends BaseZookeeperTest {
             assertThat( onlineServers.size(), greaterThan( 0 ) );
           } );
 
-        ProxyReference proxy = Proxies.create( String.format( "http://localhost:%s", 8181 ) );
+        int forwardProxyPort = forwardProxyComponents.forwardProxyPorts.getPort( "server0" );
+
+        ProxyReference proxy = Proxies.create( String.format( "http://localhost:%s", forwardProxyPort ) );
 
         String contentWithEncoding = directHttpRequestBuilder.get( "http://cnn.com" ).withProxy( proxy ).execute().getContentWithEncoding();
 
@@ -211,6 +227,8 @@ public class ReverseThenForwardProxyIntegrationTest extends BaseZookeeperTest {
     @Test
     public void testWithoutRunningForwardProxyServers() throws Exception {
 
+        int reverseProxyPort = reverseProxyComponents.listenerPortsProvider.get().getPort( "default" );
+
         forwardProxyLauncher.stop();
 
         await().until( () -> {
@@ -218,7 +236,7 @@ public class ReverseThenForwardProxyIntegrationTest extends BaseZookeeperTest {
             assertThat( onlineServers.size(), equalTo( 0 ) );
         } );
 
-        ProxyReference proxy = Proxies.create( String.format( "http://localhost:%s", 8181 ) );
+        ProxyReference proxy = Proxies.create( String.format( "http://localhost:%s", reverseProxyPort ) );
 
         try {
             directHttpRequestBuilder.get( "http://cnn.com" ).withProxy( proxy ).execute().getContentWithEncoding();
@@ -271,6 +289,9 @@ public class ReverseThenForwardProxyIntegrationTest extends BaseZookeeperTest {
 
     static class ForwardProxyComponents {
 
+        @Inject
+        ForwardProxyPorts forwardProxyPorts;
+
     }
 
     static class ForwardProxyServiceReferences extends ServiceReferences {
@@ -291,6 +312,9 @@ public class ReverseThenForwardProxyIntegrationTest extends BaseZookeeperTest {
 
         @Inject
         Provider<ListenerMetaIndex> listenerMetaIndexProvider;
+
+        @Inject
+        Provider<ListenerPorts> listenerPortsProvider;
 
     }
 
