@@ -14,6 +14,7 @@ import com.spinn3r.artemis.network.builder.HttpRequestBuilder;
 import com.spinn3r.artemis.network.builder.proxies.Proxies;
 import com.spinn3r.artemis.network.init.DirectNetworkService;
 import com.spinn3r.noxy.discovery.support.init.DiscoveryListenerSupportService;
+import com.spinn3r.noxy.reverse.init.ListenerPorts;
 import com.spinn3r.noxy.reverse.init.ReverseProxyService;
 import com.spinn3r.noxy.reverse.meta.ListenerMeta;
 import com.spinn3r.noxy.reverse.meta.ListenerMetaIndex;
@@ -44,6 +45,9 @@ public class ReverseProxyServiceTest extends BaseLauncherTest {
 
     @Inject
     Provider<ListenerMetaIndex> listenerMetaIndexProvider;
+
+    @Inject
+    Provider<ListenerPorts> listenerPortsProvider;
 
     Map<String, Server> httpDaemonMap = new HashMap<>();
 
@@ -152,9 +156,13 @@ public class ReverseProxyServiceTest extends BaseLauncherTest {
 
     private String fetch( String link ) throws NetworkException {
 
+        int port = listenerPortsProvider.get().getPort( "default" );
+
+        String proxyURL = String.format( "http://localhost:%s", port );
+
         return httpRequestBuilder
                  .get( link )
-                 .withProxy( Proxies.create( "http://localhost:8181" ) )
+                 .withProxy( Proxies.create( proxyURL ) )
                  .execute()
                  .getContentWithEncoding();
 
@@ -165,10 +173,14 @@ public class ReverseProxyServiceTest extends BaseLauncherTest {
 
         try {
 
+            int port = listenerPortsProvider.get().getPort( "default" );
+
+            String proxyURL = String.format( "http://localhost:%s", port );
+
             HttpRequest httpRequest =
               httpRequestBuilder
                 .get( link )
-                .withProxy( Proxies.create( "http://localhost:8181" ) )
+                .withProxy( Proxies.create( proxyURL ) )
                 .execute();
 
             httpRequest.connect();

@@ -1,5 +1,6 @@
 package com.spinn3r.noxy.reverse.meta;
 
+import com.spinn3r.artemis.init.resource_mutexes.PortMutex;
 import com.spinn3r.noxy.reverse.checks.CheckDaemon;
 import com.spinn3r.noxy.reverse.init.Listener;
 import org.littleshoot.proxy.HttpProxyServer;
@@ -23,12 +24,15 @@ public class ListenerMeta {
 
     private final ExecutorService executorService;
 
-    public ListenerMeta( Listener listener,
-                         ServerMetaIndexProvider serverMetaIndexProvider,
-                         OnlineServerMetaIndexProvider onlineServerMetaIndexProvider,
-                         CheckDaemon checkDaemon,
-                         HttpProxyServer httpProxyServer,
-                         ExecutorService executorService ) {
+    private final PortMutex portMutex;
+
+    public ListenerMeta(Listener listener,
+                        ServerMetaIndexProvider serverMetaIndexProvider,
+                        OnlineServerMetaIndexProvider onlineServerMetaIndexProvider,
+                        CheckDaemon checkDaemon,
+                        HttpProxyServer httpProxyServer,
+                        ExecutorService executorService,
+                        PortMutex portMutex) {
 
         this.listener = listener;
         this.serverMetaIndexProvider = serverMetaIndexProvider;
@@ -36,7 +40,7 @@ public class ListenerMeta {
         this.checkDaemon = checkDaemon;
         this.httpProxyServer = httpProxyServer;
         this.executorService = executorService;
-
+        this.portMutex = portMutex;
     }
 
     public Listener getListener() {
@@ -61,6 +65,10 @@ public class ListenerMeta {
 
     public ExecutorService getExecutorService() {
         return executorService;
+    }
+
+    public PortMutex getPortMutex() {
+        return portMutex;
     }
 
 }

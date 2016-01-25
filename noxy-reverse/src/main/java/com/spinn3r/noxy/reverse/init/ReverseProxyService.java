@@ -5,6 +5,8 @@ import com.google.inject.Inject;
 import com.spinn3r.artemis.init.AtomicReferenceProvider;
 import com.spinn3r.artemis.init.BaseService;
 import com.spinn3r.artemis.init.Config;
+import com.spinn3r.artemis.init.resource_mutexes.PortMutex;
+import com.spinn3r.artemis.init.resource_mutexes.PortMutexes;
 import com.spinn3r.log5j.Logger;
 import com.spinn3r.noxy.discovery.*;
 import com.spinn3r.noxy.logging.Log5jLogListener;
@@ -17,14 +19,11 @@ import com.spinn3r.noxy.reverse.filters.ReverseProxyHttpFiltersSourceAdapter;
 import com.spinn3r.noxy.reverse.meta.*;
 import com.spinn3r.artemis.util.net.HostPort;
 import com.spinn3r.noxy.reverse.proxies.chained.BalancingChainedProxyManager;
-import com.spinn3r.noxy.reverse.proxies.chained.SimpleChainedProxy;
-import io.netty.handler.codec.http.HttpRequest;
 import org.littleshoot.proxy.*;
 import org.littleshoot.proxy.impl.DefaultHttpProxyServer;
 
 import java.net.UnknownHostException;
 import java.util.List;
-import java.util.Queue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -50,18 +49,26 @@ public class ReverseProxyService extends BaseService {
 
     private final DiscoveryFactory discoveryFactory;
 
+    private final PortMutexes portMutexes;
+
+    private final ListenerPorts listenerPorts = new ListenerPorts();
+
+    private final AtomicReferenceProvider<ListenerPorts> listenerPortsProvider = new AtomicReferenceProvider<>( listenerPorts );
+
     @Inject
-    ReverseProxyService(ReverseProxyConfig reverseProxyConfig, LoggingHttpFiltersSourceAdapterFactory loggingHttpFiltersSourceAdapterFactory, CheckDaemonFactory checkDaemonFactory, DiscoveryFactory discoveryFactory) {
+    ReverseProxyService(ReverseProxyConfig reverseProxyConfig, LoggingHttpFiltersSourceAdapterFactory loggingHttpFiltersSourceAdapterFactory, CheckDaemonFactory checkDaemonFactory, DiscoveryFactory discoveryFactory, PortMutexes portMutexes) {
         this.reverseProxyConfig = reverseProxyConfig;
         this.loggingHttpFiltersSourceAdapterFactory = loggingHttpFiltersSourceAdapterFactory;
         this.checkDaemonFactory = checkDaemonFactory;
         this.discoveryFactory = discoveryFactory;
+        this.portMutexes = portMutexes;
     }
 
 
     @Override
     public void init() {
         provider( ListenerMetaIndex.class, listenerMetaIndexProvider );
+        provider( ListenerPorts.class, listenerPortsProvider );
     }
 
     @Override
@@ -127,8 +134,19 @@ public class ReverseProxyService extends BaseService {
 
             }
 
+            HostPort hostPort = new HostPort( listener.getBinding().getAddress() );
+
+            PortMutex portMutex = null;
+
+            if ( hostPort.getPort() <= 0 ) {
+                portMutex = portMutexes.acquire( 8082, 9081 );
+                hostPort = new HostPort( hostPort.getHostname(), portMutex.getPort() );
+            }
+
+            listenerPorts.register( listener.getName(), hostPort.getPort() );
+
             httpProxyServerBootstrap
-              .withAddress( new HostPort( listener.getBinding().getAddress() ).toInetSocketAddress() )
+              .withAddress( hostPort.toInetSocketAddress() )
               .withServerResolver( hostResolver )
               ;
 
@@ -148,6 +166,8 @@ public class ReverseProxyService extends BaseService {
 
             httpProxyServerBootstrap.withConnectTimeout( listener.getConnectTimeout() );
 
+            info( "Starting listener %s on %s:%s", listener.getName(), hostPort.getHostname(), hostPort.getPort() );
+
             HttpProxyServer httpProxyServer = httpProxyServerBootstrap.start();
 
             ExecutorService executorService = Executors.newCachedThreadPool();
@@ -161,7 +181,8 @@ public class ReverseProxyService extends BaseService {
                                                           onlineServerMetaIndexProvider,
                                                           checkDaemon,
                                                           httpProxyServer,
-                                                          executorService );
+                                                          executorService,
+                                                          portMutex );
 
             listenerMetas.add( listenerMeta );
 
@@ -179,6 +200,11 @@ public class ReverseProxyService extends BaseService {
             listenerMeta.getHttpProxyServer().stop();
             listenerMeta.getCheckDaemon().markTerminated();
             listenerMeta.getExecutorService().shutdown();
+
+            if( listenerMeta.getPortMutex() != null ) {
+                listenerMeta.getPortMutex().close();
+            }
+
         }
 
     }
