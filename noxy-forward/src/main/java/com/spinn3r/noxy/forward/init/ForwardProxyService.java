@@ -11,6 +11,7 @@ import com.spinn3r.artemis.init.resource_mutexes.PortMutex;
 import com.spinn3r.artemis.init.resource_mutexes.PortMutexes;
 import com.spinn3r.artemis.init.resource_mutexes.ResourceMutexException;
 import com.spinn3r.artemis.util.net.HostPort;
+import com.spinn3r.noxy.Allocator;
 import com.spinn3r.noxy.discovery.*;
 import com.spinn3r.noxy.resolver.BalancingProxyHostResolver;
 import com.spinn3r.noxy.resolver.IPV4ProxyHostResolver;
@@ -67,6 +68,14 @@ public class ForwardProxyService extends BaseService {
     @Override
     public void init() {
         provider( ForwardProxyPorts.class, forwardProxyPortsProvider );
+
+        if ( forwardProxyConfig.getAllocator().equals( Allocator.POOLED ) ) {
+            info( "Enabling pooled allocator for netty" );
+            // this is a non-ideal way to set the allocator but right now
+            // littleproxy doesn't expose this setting directly.
+            System.setProperty( "io.netty.allocator.type", "pooled" );
+        }
+
     }
 
     @Override

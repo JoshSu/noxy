@@ -8,6 +8,7 @@ import com.spinn3r.artemis.init.Config;
 import com.spinn3r.artemis.init.resource_mutexes.PortMutex;
 import com.spinn3r.artemis.init.resource_mutexes.PortMutexes;
 import com.spinn3r.log5j.Logger;
+import com.spinn3r.noxy.Allocator;
 import com.spinn3r.noxy.discovery.*;
 import com.spinn3r.noxy.logging.Log5jLogListener;
 import com.spinn3r.noxy.logging.LoggingHttpFiltersSourceAdapterFactory;
@@ -69,6 +70,14 @@ public class ReverseProxyService extends BaseService {
     public void init() {
         provider( ListenerMetaIndex.class, listenerMetaIndexProvider );
         provider( ListenerPorts.class, listenerPortsProvider );
+
+        if ( reverseProxyConfig.getAllocator().equals( Allocator.POOLED ) ) {
+            info( "Enabling pooled allocator for netty" );
+            // this is a non-ideal way to set the allocator but right now
+            // littleproxy doesn't expose this setting directly.
+            System.setProperty( "io.netty.allocator.type", "pooled" );
+        }
+
     }
 
     @Override
