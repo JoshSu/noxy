@@ -72,6 +72,14 @@ public class ReverseProxyService extends BaseService {
         provider( ListenerPorts.class, listenerPortsProvider );
 
         if ( reverseProxyConfig.getAllocator().equals( Allocator.POOLED ) ) {
+
+            // http://netty.io/4.0/xref/io/netty/buffer/ByteBufUtil.html
+            //
+            // we might also have to set:
+            //
+            // io.netty.threadLocalDirectBufferSize
+            // io.netty.maxThreadLocalCharBufferSize
+
             info( "Enabling pooled allocator for netty" );
             // this is a non-ideal way to set the allocator but right now
             // littleproxy doesn't expose this setting directly.
