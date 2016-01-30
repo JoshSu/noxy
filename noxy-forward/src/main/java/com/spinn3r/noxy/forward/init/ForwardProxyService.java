@@ -67,6 +67,7 @@ public class ForwardProxyService extends BaseService {
 
     @Override
     public void init() {
+
         provider( ForwardProxyPorts.class, forwardProxyPortsProvider );
 
         if ( forwardProxyConfig.getAllocator().equals( Allocator.POOLED ) ) {
