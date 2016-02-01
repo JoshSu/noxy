@@ -15,7 +15,7 @@ public class ServerMetaIndexProvider {
         return reference.get();
     }
 
-    public void set( ServerMetaIndex serverMetaIndex) {
+    public void set( ServerMetaIndex serverMetaIndex ) {
         this.reference.set( serverMetaIndex );
     }
 

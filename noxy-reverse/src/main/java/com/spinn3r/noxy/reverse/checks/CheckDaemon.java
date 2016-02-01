@@ -106,8 +106,10 @@ public class CheckDaemon implements Runnable {
 
         List<ServerMeta> onlineServers = computeOnlineServers( serverMetaFutures );
 
+        log.debug( "Found %,d servers online", onlineServers.size() );
+
         ServerMetaIndex newServerMetaIndex
-          = new ServerMetaIndex( Lists.newCopyOnWriteArrayList( onlineServers ) );
+          = new ServerMetaIndex( Lists.newArrayList( onlineServers ) );
 
         onlineServerMetaIndexProvider.set( newServerMetaIndex );
 
