@@ -1,39 +1,23 @@
 package com.spinn3r.noxy;
 
 import com.google.inject.Inject;
-import com.google.inject.Provider;
-import com.spinn3r.artemis.http.init.DefaultWebserverReferencesService;
-import com.spinn3r.artemis.http.init.WebserverService;
 import com.spinn3r.artemis.init.Launcher;
 import com.spinn3r.artemis.init.MockHostnameService;
 import com.spinn3r.artemis.init.MockVersionService;
 import com.spinn3r.artemis.init.ServiceReferences;
 import com.spinn3r.artemis.init.config.TestResourcesConfigLoader;
 import com.spinn3r.artemis.logging.init.ConsoleLoggingService;
-import com.spinn3r.artemis.metrics.init.MetricsService;
 import com.spinn3r.artemis.network.builder.DirectHttpRequestBuilder;
 import com.spinn3r.artemis.network.builder.proxies.Proxies;
 import com.spinn3r.artemis.network.builder.proxies.ProxyReference;
 import com.spinn3r.artemis.network.init.DirectNetworkService;
-import com.spinn3r.artemis.test.zookeeper.BaseZookeeperTest;
-import com.spinn3r.artemis.time.init.SyntheticClockService;
-import com.spinn3r.artemis.time.init.UptimeService;
-import com.spinn3r.noxy.discovery.support.init.DiscoveryListenerSupportService;
 import com.spinn3r.noxy.discovery.support.init.MembershipSupportService;
 import com.spinn3r.noxy.forward.init.ForwardProxyService;
-import com.spinn3r.noxy.reverse.admin.init.ReverseProxyAdminWebserverReferencesService;
-import com.spinn3r.noxy.reverse.init.ReverseProxyService;
-import com.spinn3r.noxy.reverse.meta.ListenerMeta;
-import com.spinn3r.noxy.reverse.meta.ListenerMetaIndex;
-import com.spinn3r.noxy.reverse.meta.OnlineServerMetaIndexProvider;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import java.net.Proxy;
-
-import static com.jayway.awaitility.Awaitility.*;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 
@@ -45,7 +29,8 @@ import static org.junit.Assert.*;
  * and have a full pipeline
  */
 @Ignore
-public class FullIntegrationWithForwardProxyOnlyTest extends BaseZookeeperTest {
+@SuppressWarnings( "deprecation" )
+public class FullIntegrationWithForwardProxyOnlyTest extends com.spinn3r.artemis.test.zookeeper.BaseZookeeperTest {
 
     @Inject
     DirectHttpRequestBuilder directHttpRequestBuilder;

@@ -19,7 +19,6 @@ import com.spinn3r.artemis.network.builder.DirectHttpRequestBuilder;
 import com.spinn3r.artemis.network.builder.proxies.Proxies;
 import com.spinn3r.artemis.network.builder.proxies.ProxyReference;
 import com.spinn3r.artemis.network.init.DirectNetworkService;
-import com.spinn3r.artemis.test.zookeeper.BaseZookeeperTest;
 import com.spinn3r.artemis.time.init.SystemClockService;
 import com.spinn3r.artemis.time.init.UptimeService;
 import com.spinn3r.artemis.util.io.Sockets;
@@ -51,7 +50,8 @@ import static org.junit.Assert.*;
  * Internet and using zookeeper to have each component discovery each other.
  *
  */
-public class ReverseThenForwardProxyIntegrationTest extends BaseZookeeperTest {
+@SuppressWarnings( "deprecation" )
+public class ReverseThenForwardProxyIntegrationTest extends com.spinn3r.artemis.test.zookeeper.BaseZookeeperTest {
 
     // TODO: see if we can measure the number of keep alive requests...
 

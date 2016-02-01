@@ -15,7 +15,6 @@ import com.spinn3r.artemis.network.builder.DirectHttpRequestBuilder;
 import com.spinn3r.artemis.network.builder.proxies.Proxies;
 import com.spinn3r.artemis.network.builder.proxies.ProxyReference;
 import com.spinn3r.artemis.network.init.DirectNetworkService;
-import com.spinn3r.artemis.test.zookeeper.BaseZookeeperTest;
 import com.spinn3r.artemis.time.init.SyntheticClockService;
 import com.spinn3r.artemis.time.init.UptimeService;
 import com.spinn3r.artemis.util.io.Sockets;
@@ -28,14 +27,12 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import java.net.Proxy;
-
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 
 @Ignore
 @SuppressWarnings( "deprecation" )
-public class FullIntegrationPinpointProblemTest extends BaseZookeeperTest {
+public class FullIntegrationPinpointProblemTest extends com.spinn3r.artemis.test.zookeeper.BaseZookeeperTest {
 
     @Inject
     DirectHttpRequestBuilder directHttpRequestBuilder;
