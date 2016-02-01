@@ -247,6 +247,7 @@
                             <src>src/main/conf</src>
                             <type>directory</type>
                             <includes>**</includes>
+                            <conffile>true</conffile>
 
                             <mapper>
                                 <type>perm</type>

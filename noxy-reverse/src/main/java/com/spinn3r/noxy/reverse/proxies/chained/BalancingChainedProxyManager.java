@@ -34,11 +34,18 @@ public class BalancingChainedProxyManager implements ChainedProxyManager {
         ServerMeta proxyServerMeta = onlineProxyServers.getBalancer().next();
 
         if ( proxyServerMeta != null ) {
+
+            // TODO: might want to make this debug in the future.
+            log.info( "Using proxy server (%,d available) for request: %s (%s)",
+                      onlineProxyServers.getServers().size(), proxyServerMeta.getServer().getAddress(), proxyServerMeta.getServer().getName() );
+
             chainedProxies.add( new SimpleChainedProxy( proxyServerMeta.getInetSocketAddress() ) );
+
         } else {
             log.warn( "No online servers available for request on listener: %s (with %,d servers)",
                       listener.getName(), onlineProxyServers.getServers().size() );
         }
+
     }
 
 }
