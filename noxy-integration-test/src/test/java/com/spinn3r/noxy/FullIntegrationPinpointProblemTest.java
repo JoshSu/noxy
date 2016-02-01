@@ -34,6 +34,7 @@ import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 
 @Ignore
+@SuppressWarnings( "deprecation" )
 public class FullIntegrationPinpointProblemTest extends BaseZookeeperTest {
 
     @Inject

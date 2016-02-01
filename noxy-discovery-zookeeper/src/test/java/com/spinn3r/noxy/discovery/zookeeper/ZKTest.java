@@ -7,7 +7,6 @@ import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.spinn3r.artemis.init.Launcher;
 import com.spinn3r.artemis.init.ServiceReferences;
-import com.spinn3r.artemis.test.zookeeper.BaseZookeeperTest;
 import com.spinn3r.artemis.zookeeper.embedded.EmbeddedZookeeperService;
 import com.spinn3r.artemis.zookeeper.init.ZookeeperService;
 import com.spinn3r.noxy.discovery.*;
