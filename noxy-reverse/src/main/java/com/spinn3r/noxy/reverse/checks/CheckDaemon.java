@@ -49,6 +49,8 @@ public class CheckDaemon implements Runnable {
 
                 long millisUntilNextCheck = performChecks();
 
+                log.debug( "Sleeping for %,d ms until next check", millisUntilNextCheck );
+
                 // now wait until the next check
                 clock.sleepUninterruptibly( millisUntilNextCheck, TimeUnit.MILLISECONDS );
 
@@ -88,6 +90,8 @@ public class CheckDaemon implements Runnable {
 
         // compute the checks which need to be updated as they have expired
         List<ServerMeta> serversNeedingChecks = computeServersNeedingChecks(serverMetaIndex);
+
+        log.debug( "Performing checks on %,d servers", serversNeedingChecks.size() );
 
         // the way this work is that we run one interval and create an
         // async socket per server testing if the port is open... if
@@ -213,6 +217,8 @@ public class CheckDaemon implements Runnable {
             }
 
             try {
+
+                log.debug( "Performing HTTP check on: %s (%s)", serverMeta.getServer(), serverMeta.getInetSocketAddress() );
 
                 AsynchronousSocketChannel asynchronousSocketChannel = AsynchronousSocketChannel.open();
 

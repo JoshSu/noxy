@@ -1,5 +1,6 @@
 package com.spinn3r.noxy.reverse.meta;
 
+import com.spinn3r.log5j.Logger;
 import com.spinn3r.noxy.reverse.init.Server;
 import com.spinn3r.noxy.reverse.net.InetSocketAddresses;
 
@@ -12,6 +13,8 @@ import java.util.concurrent.atomic.AtomicLong;
  * Metadata around a server so we can determine when it was last checked.
  */
 public class ServerMeta {
+
+    private static final Logger log = Logger.getLogger();
 
     private final Server server;
 
@@ -44,6 +47,8 @@ public class ServerMeta {
     }
 
     public StateChange setOffline( boolean offline ) {
+
+        log.debug( "Marking server %s (%s) offline=%s", server.getAddress(), server.getName(), offline );
 
         boolean prev = this.offline.getAndSet( offline );
 
