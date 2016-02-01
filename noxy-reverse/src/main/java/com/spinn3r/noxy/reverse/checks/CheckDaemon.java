@@ -1,5 +1,6 @@
 package com.spinn3r.noxy.reverse.checks;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.spinn3r.noxy.reverse.init.Listener;
 import com.spinn3r.noxy.reverse.meta.*;
@@ -102,9 +103,9 @@ public class CheckDaemon implements Runnable {
 
         // now see which ones have timed out...
 
-        collectChecks( serverMetaFutures );
+        collectChecksAndUpdateServerMeta( serverMetaFutures );
 
-        List<ServerMeta> onlineServers = computeOnlineServers( serverMetaFutures );
+        List<ServerMeta> onlineServers = computeOnlineServers( serverMetaIndex );
 
         log.debug( "Found %,d servers online", onlineServers.size() );
 
@@ -133,14 +134,16 @@ public class CheckDaemon implements Runnable {
 
     }
 
-    private List<ServerMeta> computeOnlineServers( List<ServerMetaFuture> serverMetaFutures ) {
+    private List<ServerMeta> computeOnlineServers( ServerMetaIndex serverMetaIndex ) {
+
+        ImmutableList<ServerMeta> servers = serverMetaIndex.getServers();
 
         List<ServerMeta> result = Lists.newArrayList();
 
-        for (ServerMetaFuture serverMetaFuture : serverMetaFutures) {
+        for (ServerMeta serverMeta : servers) {
 
-            if ( ! serverMetaFuture.getServerMeta().getOffline() ) {
-                result.add( serverMetaFuture.getServerMeta() );
+            if ( ! serverMeta.getOffline() ) {
+                result.add( serverMeta );
             }
 
         }
@@ -149,9 +152,9 @@ public class CheckDaemon implements Runnable {
 
     }
 
-    private void collectChecks(List<ServerMetaFuture> serverMetaFutures) {
+    private void collectChecksAndUpdateServerMeta(List<ServerMetaFuture> serverMetaFutures) {
 
-        for (ServerMetaFuture serverMetaFuture : serverMetaFutures) {
+        for ( ServerMetaFuture serverMetaFuture : serverMetaFutures ) {
 
             ServerMeta serverMeta = serverMetaFuture.getServerMeta();
 
@@ -204,7 +207,7 @@ public class CheckDaemon implements Runnable {
 
     }
 
-    private List<ServerMetaFuture> initiateChecks(List<ServerMeta> serversNeedingChecks) {
+    private List<ServerMetaFuture> initiateChecks( List<ServerMeta> serversNeedingChecks ) {
 
         List<ServerMetaFuture> serverMetaFutures = Lists.newArrayList();
 
