@@ -7,10 +7,7 @@ import com.spinn3r.artemis.http.init.DebugWebserverReferencesService;
 import com.spinn3r.artemis.http.init.DefaultWebserverReferencesService;
 import com.spinn3r.artemis.http.init.WebserverPort;
 import com.spinn3r.artemis.http.init.WebserverService;
-import com.spinn3r.artemis.init.Launcher;
-import com.spinn3r.artemis.init.MockHostnameService;
-import com.spinn3r.artemis.init.MockVersionService;
-import com.spinn3r.artemis.init.ServiceReferences;
+import com.spinn3r.artemis.init.*;
 import com.spinn3r.artemis.init.config.TestResourcesConfigLoader;
 import com.spinn3r.artemis.logging.init.ConsoleLoggingService;
 import com.spinn3r.artemis.metrics.init.MetricsService;
@@ -300,7 +297,9 @@ public class ReverseThenForwardProxyIntegrationTest extends com.spinn3r.artemis.
 
             add( MockHostnameService.class );
             add( MockVersionService.class );
+            add( MockCallerService.class );
             add( ConsoleLoggingService.class );
+            add( MetricsService.class );
             add( MembershipSupportService.class );
             add( ForwardProxyService.class );
 
