@@ -24,6 +24,8 @@ public class Proxy {
 
     private boolean tracing = false;
 
+    private boolean metrics = false;
+
     private List<ProxyServerDescriptor> servers = Lists.newArrayList();
 
     private HostResolutionMethod hostResolutionMethod = HostResolutionMethod.IPV4;
@@ -44,6 +46,13 @@ public class Proxy {
         return tracing;
     }
 
+    /**
+     * When true, we enable sending metrics about log events.
+     */
+    public boolean getMetrics() {
+        return metrics;
+    }
+
     public List<ProxyServerDescriptor> getServers() {
         return servers;
     }
@@ -59,6 +68,7 @@ public class Proxy {
                  ", datacenter=" + datacenter +
                  ", logging=" + logging +
                  ", tracing=" + tracing +
+                 ", metrics=" + metrics +
                  ", servers=" + servers +
                  ", hostResolutionMethod=" + hostResolutionMethod +
                  '}';

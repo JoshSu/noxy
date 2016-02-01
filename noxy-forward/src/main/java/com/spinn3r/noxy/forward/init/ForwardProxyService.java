@@ -1,5 +1,6 @@
 package com.spinn3r.noxy.forward.init;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
@@ -13,6 +14,9 @@ import com.spinn3r.artemis.init.resource_mutexes.ResourceMutexException;
 import com.spinn3r.artemis.util.net.HostPort;
 import com.spinn3r.noxy.Allocator;
 import com.spinn3r.noxy.discovery.*;
+import com.spinn3r.noxy.logging.CompositeLogListener;
+import com.spinn3r.noxy.logging.LogListener;
+import com.spinn3r.noxy.logging.instrumented.MetricsLogListener;
 import com.spinn3r.noxy.resolver.BalancingProxyHostResolver;
 import com.spinn3r.noxy.resolver.IPV4ProxyHostResolver;
 import com.spinn3r.noxy.resolver.IPV6ProxyHostResolver;
@@ -48,6 +52,8 @@ public class ForwardProxyService extends BaseService {
 
     private final PortMutexes portMutexes;
 
+    private final MetricsLogListener metricsLogListener;
+
     private final ForwardProxyPorts forwardProxyPorts = new ForwardProxyPorts();
 
     private final Provider<ForwardProxyPorts> forwardProxyPortsProvider = new AtomicReferenceProvider<>( forwardProxyPorts );
@@ -57,12 +63,13 @@ public class ForwardProxyService extends BaseService {
     private final List<ProxyServerMeta> proxyServerMetas = Lists.newArrayList();
 
     @Inject
-    ForwardProxyService(ForwardProxyConfig forwardProxyConfig, LoggingHttpFiltersSourceAdapterFactory loggingHttpFiltersSourceAdapterFactory, MembershipFactory membershipFactory, Provider<Hostname> hostnameProvider, PortMutexes portMutexes) {
+    ForwardProxyService(ForwardProxyConfig forwardProxyConfig, LoggingHttpFiltersSourceAdapterFactory loggingHttpFiltersSourceAdapterFactory, MembershipFactory membershipFactory, Provider<Hostname> hostnameProvider, PortMutexes portMutexes, MetricsLogListener metricsLogListener) {
         this.forwardProxyConfig = forwardProxyConfig;
         this.loggingHttpFiltersSourceAdapterFactory = loggingHttpFiltersSourceAdapterFactory;
         this.membershipFactory = membershipFactory;
         this.hostnameProvider = hostnameProvider;
         this.portMutexes = portMutexes;
+        this.metricsLogListener = metricsLogListener;
     }
 
     @Override
@@ -198,9 +205,22 @@ public class ForwardProxyService extends BaseService {
 
         HttpFiltersSourceAdapter httpFiltersSourceAdapter = new HttpFiltersSourceAdapter();
 
+        List<LogListener> compositeLogListenerDelegates = Lists.newArrayList();
+
         if ( proxy.getLogging() ) {
+            info( "Enabling log5j log listener." );
             Log5jLogListener log5jLogListener = new Log5jLogListener( proxy.getTracing() );
-            httpFiltersSourceAdapter = loggingHttpFiltersSourceAdapterFactory.create( log5jLogListener );
+            compositeLogListenerDelegates.add( log5jLogListener );
+        }
+
+        if ( proxy.getMetrics() ) {
+            info( "Enabling metrics log listener." );
+            compositeLogListenerDelegates.add( metricsLogListener );
+        }
+
+        if ( compositeLogListenerDelegates.size() > 0 ) {
+            CompositeLogListener compositeLogListener = new CompositeLogListener( ImmutableList.copyOf( compositeLogListenerDelegates ) );
+            httpFiltersSourceAdapter = loggingHttpFiltersSourceAdapterFactory.create( compositeLogListener );
         }
 
         httpProxyServerBootstrap.withFiltersSource( new ForwardProxyHttpFiltersSourceAdapter( httpFiltersSourceAdapter ) );
