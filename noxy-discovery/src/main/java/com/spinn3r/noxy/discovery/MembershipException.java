@@ -3,6 +3,7 @@ package com.spinn3r.noxy.discovery;
 /**
  *
  */
+@SuppressWarnings( "serial" )
 public class MembershipException extends Exception {
 
     public MembershipException() {
