@@ -5,9 +5,11 @@ import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.spinn3r.artemis.http.ServerBuilder;
 import com.spinn3r.artemis.init.BaseLauncherTest;
+import com.spinn3r.artemis.init.MockCallerService;
 import com.spinn3r.artemis.init.MockHostnameService;
 import com.spinn3r.artemis.init.MockVersionService;
 import com.spinn3r.artemis.logging.init.ConsoleLoggingService;
+import com.spinn3r.artemis.metrics.init.MetricsService;
 import com.spinn3r.artemis.network.NetworkException;
 import com.spinn3r.artemis.network.builder.HttpRequest;
 import com.spinn3r.artemis.network.builder.HttpRequestBuilder;
@@ -57,6 +59,7 @@ public class ReverseProxyServiceTest extends BaseLauncherTest {
 
         super.setUp( MockHostnameService.class,
                      MockVersionService.class,
+                     MetricsService.class,
                      DirectNetworkService.class,
                      ConsoleLoggingService.class,
                      DiscoveryListenerSupportService.class,

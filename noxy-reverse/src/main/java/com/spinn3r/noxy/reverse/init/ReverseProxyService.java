@@ -72,7 +72,6 @@ public class ReverseProxyService extends BaseService {
         this.metricsLogListener = metricsLogListener;
     }
 
-
     @Override
     public void init() {
         provider( ListenerMetaIndex.class, listenerMetaIndexProvider );
