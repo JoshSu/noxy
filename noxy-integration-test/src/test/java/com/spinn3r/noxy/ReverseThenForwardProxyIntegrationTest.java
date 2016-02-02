@@ -338,6 +338,7 @@ public class ReverseThenForwardProxyIntegrationTest extends com.spinn3r.artemis.
     }
 
     static class MainServiceReferences extends ServiceReferences {
+
         public MainServiceReferences() {
 
             add( MockVersionService.class );
