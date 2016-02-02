@@ -1,5 +1,6 @@
 package com.spinn3r.noxy.reverse.init;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 import com.spinn3r.artemis.init.AtomicReferenceProvider;
@@ -10,8 +11,11 @@ import com.spinn3r.artemis.init.resource_mutexes.PortMutexes;
 import com.spinn3r.log5j.Logger;
 import com.spinn3r.noxy.Allocator;
 import com.spinn3r.noxy.discovery.*;
+import com.spinn3r.noxy.logging.CompositeLogListener;
 import com.spinn3r.noxy.logging.Log5jLogListener;
+import com.spinn3r.noxy.logging.LogListener;
 import com.spinn3r.noxy.logging.LoggingHttpFiltersSourceAdapterFactory;
+import com.spinn3r.noxy.logging.instrumented.MetricsLogListener;
 import com.spinn3r.noxy.resolver.BalancingProxyHostResolver;
 import com.spinn3r.noxy.reverse.LoadBalancingReverseProxyHostResolver;
 import com.spinn3r.noxy.reverse.checks.CheckDaemon;
@@ -52,17 +56,20 @@ public class ReverseProxyService extends BaseService {
 
     private final PortMutexes portMutexes;
 
+    private final MetricsLogListener metricsLogListener;
+
     private final ListenerPorts listenerPorts = new ListenerPorts();
 
     private final AtomicReferenceProvider<ListenerPorts> listenerPortsProvider = new AtomicReferenceProvider<>( listenerPorts );
 
     @Inject
-    ReverseProxyService(ReverseProxyConfig reverseProxyConfig, LoggingHttpFiltersSourceAdapterFactory loggingHttpFiltersSourceAdapterFactory, CheckDaemonFactory checkDaemonFactory, DiscoveryFactory discoveryFactory, PortMutexes portMutexes) {
+    ReverseProxyService(ReverseProxyConfig reverseProxyConfig, LoggingHttpFiltersSourceAdapterFactory loggingHttpFiltersSourceAdapterFactory, CheckDaemonFactory checkDaemonFactory, DiscoveryFactory discoveryFactory, PortMutexes portMutexes, MetricsLogListener metricsLogListener) {
         this.reverseProxyConfig = reverseProxyConfig;
         this.loggingHttpFiltersSourceAdapterFactory = loggingHttpFiltersSourceAdapterFactory;
         this.checkDaemonFactory = checkDaemonFactory;
         this.discoveryFactory = discoveryFactory;
         this.portMutexes = portMutexes;
+        this.metricsLogListener = metricsLogListener;
     }
 
 
@@ -171,15 +178,27 @@ public class ReverseProxyService extends BaseService {
                 httpProxyServerBootstrap.withName( listener.getName() );
             }
 
-            HttpFiltersSourceAdapter httpFiltersSourceAdapterDelegate = new HttpFiltersSourceAdapter();
+            HttpFiltersSourceAdapter httpFiltersSourceAdapter = new HttpFiltersSourceAdapter();
+
+            List<LogListener> compositeLogListenerDelegates = Lists.newArrayList();
 
             if ( listener.getLogging() ) {
+                info( "HTTP request logging enabled for proxy requests." );
                 Log5jLogListener log5jLogListener = new Log5jLogListener( listener.getTracing() );
-                httpFiltersSourceAdapterDelegate = loggingHttpFiltersSourceAdapterFactory.create( log5jLogListener );
-                info( "HTTP request log enabled for proxy requests." );
+                compositeLogListenerDelegates.add( log5jLogListener );
             }
 
-            httpProxyServerBootstrap.withFiltersSource( new ReverseProxyHttpFiltersSourceAdapter( httpFiltersSourceAdapterDelegate, onlineServerMetaIndexProvider ) );
+            if ( listener.getMetrics() ) {
+                info( "HTTP request metrics enabled for proxy requests." );
+                compositeLogListenerDelegates.add( metricsLogListener );
+            }
+
+            if ( compositeLogListenerDelegates.size() > 0 ) {
+                CompositeLogListener compositeLogListener = new CompositeLogListener( ImmutableList.copyOf( compositeLogListenerDelegates ) );
+                httpFiltersSourceAdapter = loggingHttpFiltersSourceAdapterFactory.create( compositeLogListener );
+            }
+
+            httpProxyServerBootstrap.withFiltersSource( new ReverseProxyHttpFiltersSourceAdapter( httpFiltersSourceAdapter, onlineServerMetaIndexProvider ) );
 
             httpProxyServerBootstrap.withConnectTimeout( listener.getConnectTimeout() );
 

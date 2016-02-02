@@ -208,13 +208,13 @@ public class ForwardProxyService extends BaseService {
         List<LogListener> compositeLogListenerDelegates = Lists.newArrayList();
 
         if ( proxy.getLogging() ) {
-            info( "Enabling log5j log listener." );
+            info( "HTTP request logging enabled for proxy requests." );
             Log5jLogListener log5jLogListener = new Log5jLogListener( proxy.getTracing() );
             compositeLogListenerDelegates.add( log5jLogListener );
         }
 
         if ( proxy.getMetrics() ) {
-            info( "Enabling metrics log listener." );
+            info( "HTTP request metrics enabled for proxy requests." );
             compositeLogListenerDelegates.add( metricsLogListener );
         }
 
