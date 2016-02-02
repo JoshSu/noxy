@@ -323,6 +323,7 @@ public class ReverseThenForwardProxyIntegrationTest extends com.spinn3r.artemis.
 
             add( MockHostnameService.class );
             add( MockVersionService.class );
+            add( MockCallerService.class );
             add( SystemClockService.class );
             add( ConsoleLoggingService.class );
             add( UptimeService.class );
