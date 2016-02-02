@@ -15,6 +15,7 @@ import com.spinn3r.artemis.network.builder.HttpRequest;
 import com.spinn3r.artemis.network.builder.HttpRequestBuilder;
 import com.spinn3r.artemis.network.builder.proxies.Proxies;
 import com.spinn3r.artemis.network.init.DirectNetworkService;
+import com.spinn3r.metrics.kairosdb.TaggedMetrics;
 import com.spinn3r.noxy.discovery.support.init.DiscoveryListenerSupportService;
 import com.spinn3r.noxy.reverse.init.ListenerPorts;
 import com.spinn3r.noxy.reverse.init.ReverseProxyService;
@@ -50,6 +51,9 @@ public class ReverseProxyServiceTest extends BaseLauncherTest {
 
     @Inject
     Provider<ListenerPorts> listenerPortsProvider;
+
+    @Inject
+    TaggedMetrics taggedMetrics;
 
     Map<String, Server> httpDaemonMap = new HashMap<>();
 
