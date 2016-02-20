@@ -197,7 +197,7 @@ public class ReverseProxyService extends BaseService {
                 httpFiltersSourceAdapter = loggingHttpFiltersSourceAdapterFactory.create( compositeLogListener );
             }
 
-            httpProxyServerBootstrap.withFiltersSource( new ReverseProxyHttpFiltersSourceAdapter( httpFiltersSourceAdapter, onlineServerMetaIndexProvider ) );
+            httpProxyServerBootstrap.withFiltersSource( new ReverseProxyHttpFiltersSourceAdapter( listener, httpFiltersSourceAdapter, onlineServerMetaIndexProvider ) );
 
             httpProxyServerBootstrap.withConnectTimeout( listener.getConnectTimeout() );
 

@@ -2,10 +2,12 @@ package com.spinn3r.noxy.reverse.init;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.spinn3r.noxy.discovery.Cluster;
 import com.spinn3r.noxy.discovery.EndpointType;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * A configuration to listen on a port and direct all requests to a backend
@@ -33,6 +35,8 @@ public class Listener {
     private Cluster cluster = null;
 
     private EndpointType endpointTypes = EndpointType.WEBSERVER;
+
+    private Map<String,String> requestHeaders = Maps.newLinkedHashMap();
 
     public String getName() {
         return name;
@@ -80,6 +84,10 @@ public class Listener {
         return endpointTypes;
     }
 
+    public Map<String, String> getRequestHeaders() {
+        return requestHeaders;
+    }
+
     @Override
     public String toString() {
         return "Listener{" +
@@ -93,6 +101,7 @@ public class Listener {
                  ", checks=" + checks +
                  ", cluster=" + cluster +
                  ", endpointTypes=" + endpointTypes +
+                 ", requestHeaders=" + requestHeaders +
                  '}';
     }
 

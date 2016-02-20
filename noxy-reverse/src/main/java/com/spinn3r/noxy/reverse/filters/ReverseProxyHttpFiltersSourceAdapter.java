@@ -1,5 +1,6 @@
 package com.spinn3r.noxy.reverse.filters;
 
+import com.spinn3r.noxy.reverse.init.Listener;
 import com.spinn3r.noxy.reverse.meta.OnlineServerMetaIndexProvider;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.http.*;
@@ -8,17 +9,21 @@ import org.littleshoot.proxy.HttpFiltersSource;
 import org.littleshoot.proxy.HttpFiltersSourceAdapter;
 
 import java.net.InetSocketAddress;
+import java.util.Map;
 
 /**
  * Provides our default HTTP request handling.
  */
 public class ReverseProxyHttpFiltersSourceAdapter implements HttpFiltersSource {
 
-    private HttpFiltersSourceAdapter httpFiltersSourceAdapterDelegate;
+    private final Listener listener;
+
+    private final HttpFiltersSourceAdapter httpFiltersSourceAdapterDelegate;
 
     private final OnlineServerMetaIndexProvider onlineServerMetaIndexProvider;
 
-    public ReverseProxyHttpFiltersSourceAdapter(HttpFiltersSourceAdapter httpFiltersSourceAdapterDelegate, OnlineServerMetaIndexProvider onlineServerMetaIndexProvider) {
+    public ReverseProxyHttpFiltersSourceAdapter(Listener listener, HttpFiltersSourceAdapter httpFiltersSourceAdapterDelegate, OnlineServerMetaIndexProvider onlineServerMetaIndexProvider) {
+        this.listener = listener;
         this.httpFiltersSourceAdapterDelegate = httpFiltersSourceAdapterDelegate;
         this.onlineServerMetaIndexProvider = onlineServerMetaIndexProvider;
     }
@@ -53,6 +58,16 @@ public class ReverseProxyHttpFiltersSourceAdapter implements HttpFiltersSource {
 
             if ( httpObject instanceof HttpRequest ) {
                 this.httpRequest = (HttpRequest)httpObject;
+
+                // add HTTP headers if required...
+                if ( listener.getRequestHeaders() != null ) {
+
+                    for (Map.Entry<String, String> header : listener.getRequestHeaders().entrySet()) {
+                        this.httpRequest.headers().add( header.getKey(), header.getValue() );
+                    }
+
+                }
+
             }
 
             return delegate.clientToProxyRequest( httpObject );

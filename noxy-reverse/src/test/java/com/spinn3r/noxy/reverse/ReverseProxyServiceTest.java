@@ -3,7 +3,10 @@ package com.spinn3r.noxy.reverse;
 import com.codahale.metrics.servlets.PingServlet;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
+import com.spinn3r.artemis.corpus.test.CorporaAsserter;
 import com.spinn3r.artemis.http.ServerBuilder;
+import com.spinn3r.artemis.http.servlets.RequestMeta;
+import com.spinn3r.artemis.http.servlets.RequestMetaServlet;
 import com.spinn3r.artemis.init.BaseLauncherTest;
 import com.spinn3r.artemis.init.MockCallerService;
 import com.spinn3r.artemis.init.MockHostnameService;
@@ -44,6 +47,9 @@ public class ReverseProxyServiceTest extends BaseLauncherTest {
     HttpRequestBuilder httpRequestBuilder;
 
     @Inject
+    RequestMetaServlet requestMetaServlet;
+
+    @Inject
     PingServlet pingServlet;
 
     @Inject
@@ -54,6 +60,8 @@ public class ReverseProxyServiceTest extends BaseLauncherTest {
 
     @Inject
     TaggedMetrics taggedMetrics;
+
+    CorporaAsserter corporaAsserter = new CorporaAsserter( getClass() );
 
     Map<String, Server> httpDaemonMap = new HashMap<>();
 
@@ -84,6 +92,7 @@ public class ReverseProxyServiceTest extends BaseLauncherTest {
                 .setMaxThreads( 10 )
                 .setUseLocalhost( true )
                 .addServlet( "/ping", pingServlet )
+                .addServlet( "/request-meta", requestMetaServlet )
                 .build();
 
             server.start();
@@ -138,6 +147,27 @@ public class ReverseProxyServiceTest extends BaseLauncherTest {
         await().until( () -> {
             assertThat( onlineServerMetaIndexProvider.get().getBalancer().size(), equalTo( 3 ) );
         } );
+
+    }
+
+
+    @Test
+    public void testRequestMetaForSuccessfulRequest() throws Exception {
+
+        ListenerMeta listenerMeta = listenerMetaIndexProvider.get().getListenerMetas().get( 0 );
+
+        OnlineServerMetaIndexProvider onlineServerMetaIndexProvider = listenerMeta.getOnlineServerMetaIndexProvider();
+
+        await().until( () -> {
+            assertThat( onlineServerMetaIndexProvider.get().getBalancer().size(), equalTo( 3 ) );
+        } );
+
+        String content = fetch( "http://example.com/request-meta" );
+
+        RequestMeta requestMeta = RequestMeta.fromJSON(content);
+        assertEquals( "foo", requestMeta.getHeaders().get( "X-foo" ) );
+
+        corporaAsserter.assertEquals( "testRequestMetaForSuccessfulRequest", content );
 
     }
 

@@ -38,6 +38,7 @@ public class AuthenticatingForwardProxyServiceTest extends BaseLauncherTest {
     public void testRequestsWithProxyServiceWithFailedAuthentication() throws Exception {
 
         try {
+
             int port = forwardProxyPorts.getPort( "server0" );
 
             ProxyReference proxy = Proxies.create( String.format( "http://localhost:%s", port ) );
