@@ -201,7 +201,8 @@ public class ForwardProxyService extends BaseService {
           .withName( name )
           .withAddress( address )
           .withServerResolver( hostResolver )
-          .withNetworkInterface( networkInterface );
+          .withNetworkInterface( networkInterface )
+        ;
 
         HttpFiltersSourceAdapter httpFiltersSourceAdapter = new HttpFiltersSourceAdapter();
 

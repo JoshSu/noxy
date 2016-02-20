@@ -30,6 +30,8 @@ public class Proxy {
 
     private HostResolutionMethod hostResolutionMethod = HostResolutionMethod.IPV4;
 
+    private Authentication authentication = null;
+
     public Cluster getCluster() {
         return cluster;
     }
@@ -61,6 +63,10 @@ public class Proxy {
         return hostResolutionMethod;
     }
 
+    public Authentication getAuthentication() {
+        return authentication;
+    }
+
     @Override
     public String toString() {
         return "Proxy{" +
@@ -71,6 +77,7 @@ public class Proxy {
                  ", metrics=" + metrics +
                  ", servers=" + servers +
                  ", hostResolutionMethod=" + hostResolutionMethod +
+                 ", authentication=" + authentication +
                  '}';
     }
 
