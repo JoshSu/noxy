@@ -14,6 +14,7 @@ import com.spinn3r.artemis.init.resource_mutexes.ResourceMutexException;
 import com.spinn3r.artemis.util.net.HostPort;
 import com.spinn3r.noxy.Allocator;
 import com.spinn3r.noxy.discovery.*;
+import com.spinn3r.noxy.forward.authenticator.DefaultProxyAuthenticator;
 import com.spinn3r.noxy.logging.CompositeLogListener;
 import com.spinn3r.noxy.logging.LogListener;
 import com.spinn3r.noxy.logging.instrumented.MetricsLogListener;
@@ -189,6 +190,18 @@ public class ForwardProxyService extends BaseService {
 
             default:
                 throw new RuntimeException( "Unknown host resolution method: " + proxy.getHostResolutionMethod() );
+
+        }
+
+        Authentication authentication = proxy.getAuthentication();
+
+        if ( authentication != null ) {
+
+            info( "Enabling proxy authentication");
+
+            DefaultProxyAuthenticator proxyAuthenticator
+              = new DefaultProxyAuthenticator( authentication.getUsername(), authentication.getPassword() );
+            httpProxyServerBootstrap.withProxyAuthenticator( proxyAuthenticator );
 
         }
 

@@ -15,6 +15,7 @@ import com.spinn3r.artemis.network.builder.proxies.ProxyReference;
 import com.spinn3r.artemis.network.init.DirectNetworkService;
 import com.spinn3r.artemis.time.init.UptimeService;
 import com.spinn3r.noxy.discovery.support.init.MembershipSupportService;
+import com.spinn3r.noxy.forward.TestServiceReferences;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -37,17 +38,7 @@ public class ForwardProxyServiceTest extends BaseLauncherTest {
     @Before
     public void setUp() throws Exception {
 
-        super.setUp( MockHostnameService.class,
-                     MockVersionService.class,
-                     UptimeService.class,
-                     MetricsService.class,
-                     ConsoleLoggingService.class,
-                     DirectNetworkService.class,
-                     MembershipSupportService.class,
-                     ForwardProxyService.class,
-                     DefaultWebserverReferencesService.class,
-                     DebugWebserverReferencesService.class,
-                     WebserverService.class );
+        super.setUp( new TestServiceReferences() );
 
     }
 
