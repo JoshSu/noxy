@@ -46,11 +46,12 @@ public class AuthenticatingForwardProxyServiceTest extends BaseLauncherTest {
 
             assertThat( contentWithEncoding, containsString( "CNN" ) );
 
+            throw new NetworkException( "proxy should have failed due to lack of auth" );
+
         } catch ( NetworkException ne ) {
             assertEquals( 407, ne.getResponseCode() );
-        }
 
-        throw new NetworkException( "proxy should have failed due to lack of auth" );
+        }
 
     }
 
