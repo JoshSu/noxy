@@ -30,6 +30,7 @@
         <module>noxy-discovery-none</module>
         <module>noxy-discovery-fixed</module>
         <module>noxy-integration-test</module>
+        <module>noxy-checkd</module>
     </modules>
 
     <scm>
