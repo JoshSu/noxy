@@ -165,7 +165,11 @@ public class ReverseProxyServiceTest extends BaseLauncherTest {
         String content = fetch( "http://example.com/request-meta" );
 
         RequestMeta requestMeta = RequestMeta.fromJSON(content);
+        requestMeta.getHeaders().remove( "Via" );
+
         assertEquals( "foo", requestMeta.getHeaders().get( "X-foo" ) );
+
+        content = requestMeta.toJSON();
 
         corporaAsserter.assertEquals( "testRequestMetaForSuccessfulRequest", content );
 

@@ -6,8 +6,7 @@
     "Host" : "example.com",
     "Accept-Encoding" : "gzip",
     "Accept" : "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2",
-    "X-foo" : "foo",
-    "Via" : "1.1 dev-1"
+    "X-foo" : "foo"
   },
   "parameters" : { }
 }
