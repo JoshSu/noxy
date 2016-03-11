@@ -29,13 +29,6 @@
     <dependencies>
 
         <dependency>
-            <groupId>com.spinn3r.artemis.corpus.test</groupId>
-            <artifactId>artemis-corpus-test-framework</artifactId>
-            <version>${project.version}</version>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
             <groupId>com.spinn3r.artemis.sequence</groupId>
             <artifactId>artemis-sequence-support</artifactId>
             <version>${project.version}</version>
