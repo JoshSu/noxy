@@ -146,7 +146,7 @@ public class ForwardProxyService extends BaseService {
 
             try {
 
-                portMutex = portMutexes.acquire( 8090, 9090 );
+                portMutex = portMutexes.acquire( 8090, 9080 );
 
                 addressHostPort = new HostPort( addressHostPort.getHostname(), portMutex.getPort() );
 
