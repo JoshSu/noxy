@@ -31,7 +31,9 @@ import org.littleshoot.proxy.HttpProxyServer;
 import org.littleshoot.proxy.HttpProxyServerBootstrap;
 import org.littleshoot.proxy.impl.DefaultHttpProxyServer;
 
+import java.net.InetAddress;
 import java.net.InetSocketAddress;
+import java.net.UnknownHostException;
 import java.util.Collections;
 import java.util.List;
 
@@ -134,11 +136,13 @@ public class ForwardProxyService extends BaseService {
     private HttpProxyServer create( HttpProxyServerBootstrap httpProxyServerBootstrap,
                                     ProxyServerDescriptor proxyServerDescriptor,
                                     Proxy proxy,
-                                    Membership membership ) throws MembershipException {
+                                    Membership membership ) throws MembershipException, UnknownHostException {
 
         info( "Creating proxy server: %s", proxyServerDescriptor );
 
         HostPort addressHostPort = new HostPort( proxyServerDescriptor.getInbound().getAddress(), proxyServerDescriptor.getInbound().getPort() );
+
+        InetAddress inetAddress = InetAddress.getByName( addressHostPort.getHostname() );
 
         PortMutex portMutex = null;
 
@@ -146,7 +150,7 @@ public class ForwardProxyService extends BaseService {
 
             try {
 
-                portMutex = portMutexes.acquire( 8090, 9080 );
+                portMutex = portMutexes.acquire( inetAddress, 8090, 9080 );
 
                 addressHostPort = new HostPort( addressHostPort.getHostname(), portMutex.getPort() );
 
