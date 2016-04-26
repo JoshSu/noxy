@@ -2,10 +2,12 @@
   "pathInfo" : null,
   "queryString" : null,
   "headers" : {
+    "Cache-Control" : "no-cache",
+    "Accept" : "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2",
     "User-Agent" : "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2490.71 Safari/537.36",
     "Host" : "example.com",
+    "Pragma" : "no-cache",
     "Accept-Encoding" : "gzip",
-    "Accept" : "text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2",
     "X-foo" : "foo"
   },
   "parameters" : { }
