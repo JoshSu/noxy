@@ -167,6 +167,11 @@ public class ReverseProxyServiceTest extends BaseLauncherTest {
         RequestMeta requestMeta = RequestMeta.fromJSON(content);
         requestMeta.getHeaders().remove( "Via" );
 
+        //Those headers are sometimes missing in the example.com response
+        requestMeta.getHeaders().remove( "Cache-Control" );
+        requestMeta.getHeaders().remove( "Accept" );
+        requestMeta.getHeaders().remove( "Pragma" );
+
         assertEquals( "foo", requestMeta.getHeaders().get( "X-foo" ) );
 
         content = requestMeta.toJSON();
