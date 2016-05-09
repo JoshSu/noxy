@@ -48,9 +48,9 @@ public class ForwardProxyServiceTest extends BaseLauncherTest {
         int port = forwardProxyPorts.getPort( "server0" );
 
         ProxyReference proxy = Proxies.create( String.format( "http://localhost:%s", port ) );
-        String contentWithEncoding = httpRequestBuilder.get( "http://cnn.com" ).withProxy( proxy ).execute().getContentWithEncoding();
+        String contentWithEncoding = httpRequestBuilder.get( "http://msnbc.com" ).withProxy( proxy ).execute().getContentWithEncoding();
 
-        assertThat( contentWithEncoding, containsString( "CNN" ) );
+        assertThat( contentWithEncoding, containsString( "<title>MSNBC:" ) );
 
     }
 
@@ -72,9 +72,9 @@ public class ForwardProxyServiceTest extends BaseLauncherTest {
         int port = forwardProxyPorts.getPort( "server1" );
 
         ProxyReference proxyReference = Proxies.create( String.format( "http://localhost:%s", port ) );
-        String contentWithEncoding = httpRequestBuilder.get( "http://cnn.com" ).withProxy( proxyReference ).execute().getContentWithEncoding();
+        String contentWithEncoding = httpRequestBuilder.get( "http://msnbc.com" ).withProxy( proxyReference ).execute().getContentWithEncoding();
 
-        assertThat( contentWithEncoding, containsString( "CNN" ) );
+        assertThat( contentWithEncoding, containsString( "<title>MSNBC:" ) );
 
     }
 

@@ -64,11 +64,13 @@ public class AuthenticatingForwardProxyServiceTest extends BaseLauncherTest {
 
         String contentWithEncoding =
           httpRequestBuilder
-            .get( "http://cnn.com" )
+            .get( "http://msnbc.com" )
             .withRequestHeader( "Proxy-Authorization", "Basic YmF0bWFuOjEyMzQ1" )
             .withProxy( proxy ).execute().getContentWithEncoding();
 
-        assertThat( contentWithEncoding, containsString( "CNN" ) );
+        System.out.printf("FIXME content is now\n%s\n", contentWithEncoding );
+
+        assertThat( contentWithEncoding, containsString( "<title>MSNBC:" ) );
 
     }
 
