@@ -198,7 +198,7 @@ public class ReverseThenForwardProxyIntegrationTest extends com.spinn3r.artemis.
     }
 
     @Test
-    public void testCNN1() throws Exception {
+    public void testMSNBC1() throws Exception {
 
         await().until( () -> {
             ImmutableList<ServerMeta> onlineServers = getOnlineServersFromReverseProxy();
@@ -209,9 +209,9 @@ public class ReverseThenForwardProxyIntegrationTest extends com.spinn3r.artemis.
 
         ProxyReference proxy = Proxies.create( String.format( "http://localhost:%s", forwardProxyPort ) );
 
-        String contentWithEncoding = directHttpRequestBuilder.get( "http://cnn.com" ).withProxy( proxy ).execute().getContentWithEncoding();
+        String contentWithEncoding = directHttpRequestBuilder.get( "http://msnbc.com" ).withProxy( proxy ).execute().getContentWithEncoding();
 
-        assertThat( contentWithEncoding, containsString( "CNN" ) );
+        assertThat( contentWithEncoding, containsString( "<title>MSNBC:" ) );
 
     }
 
