@@ -36,6 +36,7 @@ import java.net.InetSocketAddress;
 import java.net.UnknownHostException;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 /**
  *
@@ -150,7 +151,7 @@ public class ForwardProxyService extends BaseService {
 
             try {
 
-                portMutex = portMutexes.acquire( inetAddress, 8090, 9080 );
+                portMutex = portMutexes.acquire(Optional.of(inetAddress), 8090, 9080 );
 
                 addressHostPort = new HostPort( addressHostPort.getHostname(), portMutex.getPort() );
 
