@@ -25,7 +25,7 @@ public class ForwardProxyServiceReferencesTest {
             .setProduct(ROLE)
             .setRole(Robot.class)
             .setConfigLoader(new ResourceConfigLoader())
-            .createInitializer();
+            .build();
 
         initializer.init( new ForwardProxyServiceReferences() );
 

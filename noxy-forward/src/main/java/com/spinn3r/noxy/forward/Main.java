@@ -19,7 +19,7 @@ public class Main {
                 .setRole(ROLE)
                 .setProduct(PRODUCT)
                 .setCaller(Main.class)
-                .createInitializer();
+                .build();
 
             initializer.launch( new ForwardProxyServiceReferences() );
 
