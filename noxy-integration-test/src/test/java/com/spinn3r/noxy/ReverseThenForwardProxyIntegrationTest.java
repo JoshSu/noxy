@@ -35,9 +35,6 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import java.net.Proxy;
-import java.util.concurrent.Callable;
-
 import static com.jayway.awaitility.Awaitility.await;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
@@ -85,7 +82,7 @@ public class ReverseThenForwardProxyIntegrationTest extends com.spinn3r.artemis.
         reverseProxyComponents = new ReverseProxyComponents();
         reverseProxyLauncher.getInjector().injectMembers( reverseProxyComponents );
 
-        mainLauncher = Launcher.forResourceConfigLoader().build();
+        mainLauncher = Launcher.newBuilder().build();
         mainLauncher.launch( new MainServiceReferences() );
         mainLauncher.getInjector().injectMembers( this );
 
@@ -263,7 +260,7 @@ public class ReverseThenForwardProxyIntegrationTest extends com.spinn3r.artemis.
         TestResourcesConfigLoader testResourcesConfigLoader
           = new TestResourcesConfigLoader( "src/test/resources/noxy-forward" );
 
-        Launcher launcher = Launcher.forConfigLoader( testResourcesConfigLoader ).build();
+        Launcher launcher = Launcher.newBuilder(testResourcesConfigLoader ).build();
 
         launcher.launch( new ForwardProxyServiceReferences() );
 
@@ -276,7 +273,7 @@ public class ReverseThenForwardProxyIntegrationTest extends com.spinn3r.artemis.
         TestResourcesConfigLoader testResourcesConfigLoader
           = new TestResourcesConfigLoader( "src/test/resources/noxy-reverse" );
 
-        Launcher launcher = Launcher.forConfigLoader(testResourcesConfigLoader).build();
+        Launcher launcher = Launcher.newBuilder(testResourcesConfigLoader).build();
 
         launcher.launch( new ReverseProxyServiceReferences() );
 
