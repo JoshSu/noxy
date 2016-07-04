@@ -18,7 +18,7 @@ public class Main {
               .setRole(ROLE)
               .setProduct(PRODUCT)
               .setCaller(Main.class)
-              .build();
+              .createInitializer();
 
             initializer.launch(new ReverseProxyServiceReferences());
 

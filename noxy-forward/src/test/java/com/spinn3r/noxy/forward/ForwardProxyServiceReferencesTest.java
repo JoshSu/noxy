@@ -6,7 +6,6 @@ import com.spinn3r.artemis.init.config.ResourceConfigLoader;
 import org.junit.Test;
 
 import java.awt.Robot;
-import java.util.Optional;
 
 import static com.spinn3r.artemis.util.text.TextFormatter.wrap;
 import static org.junit.Assert.assertEquals;
@@ -26,7 +25,7 @@ public class ForwardProxyServiceReferencesTest {
             .setProduct(ROLE)
             .setRole(Robot.class)
             .setConfigLoader(new ResourceConfigLoader())
-            .build();
+            .createInitializer();
 
         initializer.init( new ForwardProxyServiceReferences() );
 
