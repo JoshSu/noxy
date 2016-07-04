@@ -2,9 +2,7 @@ package com.spinn3r.noxy.forward;
 
 import com.google.inject.Injector;
 import com.spinn3r.artemis.init.Initializer;
-import com.spinn3r.artemis.init.advertisements.Caller;
 import com.spinn3r.artemis.init.config.ResourceConfigLoader;
-import com.spinn3r.noxy.forward.ForwardProxyServiceReferences;
 import org.junit.Test;
 
 import java.awt.Robot;
@@ -23,7 +21,12 @@ public class ForwardProxyServiceReferencesTest {
     @Test
     public void testBindings() throws Exception {
 
-        Initializer initializer = new Initializer(ROLE, Robot.class, Optional.of( new ResourceConfigLoader() ));
+        Initializer initializer =
+          new Initializer.Builder()
+            .setProduct(ROLE)
+            .setRole(Robot.class)
+            .setConfigLoader(new ResourceConfigLoader())
+            .build();
 
         initializer.init( new ForwardProxyServiceReferences() );
 
