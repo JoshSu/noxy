@@ -8,6 +8,7 @@ import com.spinn3r.noxy.forward.ForwardProxyServiceReferences;
 import org.junit.Test;
 
 import java.awt.Robot;
+import java.util.Optional;
 
 import static com.spinn3r.artemis.util.text.TextFormatter.wrap;
 import static org.junit.Assert.assertEquals;
@@ -22,9 +23,7 @@ public class ForwardProxyServiceReferencesTest {
     @Test
     public void testBindings() throws Exception {
 
-        Initializer initializer = new Initializer( ROLE, new ResourceConfigLoader() );
-
-        initializer.replace( Caller.class, new Caller( Robot.class) );
+        Initializer initializer = new Initializer(ROLE, Robot.class, Optional.of( new ResourceConfigLoader() ));
 
         initializer.init( new ForwardProxyServiceReferences() );
 
