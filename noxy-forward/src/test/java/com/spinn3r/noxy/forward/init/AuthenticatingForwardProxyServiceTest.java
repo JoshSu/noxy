@@ -70,7 +70,7 @@ public class AuthenticatingForwardProxyServiceTest extends BaseLauncherTest {
 
         System.out.printf("FIXME content is now\n%s\n", contentWithEncoding );
 
-        assertThat( contentWithEncoding, containsString( "<title>MSNBC:" ) );
+        assertThat( contentWithEncoding, containsString( "<title>MSNBC" ) );
 
     }
 

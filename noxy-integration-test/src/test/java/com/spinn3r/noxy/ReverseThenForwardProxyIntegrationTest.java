@@ -208,7 +208,7 @@ public class ReverseThenForwardProxyIntegrationTest extends com.spinn3r.artemis.
 
         String contentWithEncoding = directHttpRequestBuilder.get( "http://msnbc.com" ).withProxy( proxy ).execute().getContentWithEncoding();
 
-        assertThat( contentWithEncoding, containsString( "<title>MSNBC:" ) );
+        assertThat( contentWithEncoding, containsString( "<title>MSNBC" ) );
 
     }
 
