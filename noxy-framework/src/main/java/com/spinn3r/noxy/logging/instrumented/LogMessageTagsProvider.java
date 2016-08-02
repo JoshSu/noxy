@@ -6,7 +6,6 @@ import com.spinn3r.artemis.init.advertisements.Caller;
 import com.spinn3r.artemis.metrics.tags.SimpleTagsProvider;
 import com.spinn3r.artemis.metrics.tags.TagNameSets;
 import com.spinn3r.artemis.metrics.tags.Tags;
-import com.spinn3r.artemis.util.misc.StacktraceIdentifiers;
 import com.spinn3r.metrics.kairosdb.Tag;
 import com.spinn3r.noxy.logging.LogMessage;
 
@@ -47,7 +46,7 @@ public class LogMessageTagsProvider extends SimpleTagsProvider<LogMessage> {
         tags.add( tag( CALLER, caller.get() ) );
         tags.add( tag( METHOD, logMessage.getHttpMethod().name() ) );
         tags.add( tag( STATUS, logMessage.getHttpResponseStatus().code() ) );
-        tags.add( tag( STATUS_TOKENIZED, Tags.tokenize( logMessage.getHttpResponseStatus().code(), 100, "xx" ) ) );
+        tags.add( tag( STATUS_TOKENIZED, Tags.tokenized(logMessage.getHttpResponseStatus().code(), 100, "xx" ) ) );
 
         // TODO: duration tokenized?
         // TODO: site and domain of the URL?
