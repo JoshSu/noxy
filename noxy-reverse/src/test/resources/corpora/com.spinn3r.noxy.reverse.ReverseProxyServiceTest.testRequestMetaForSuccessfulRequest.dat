@@ -7,5 +7,6 @@
     "Accept-Encoding" : "gzip",
     "X-foo" : "foo"
   },
-  "parameters" : { }
+  "parameters" : { },
+  "cookies" : [ ]
 }
