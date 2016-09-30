@@ -12,7 +12,7 @@ import com.spinn3r.artemis.init.config.TestResourcesConfigLoader;
 import com.spinn3r.artemis.logging.init.ConsoleLoggingService;
 import com.spinn3r.artemis.metrics.init.MetricsService;
 import com.spinn3r.artemis.network.builder.DirectHttpRequestBuilder;
-import com.spinn3r.artemis.network.builder.proxies.Proxies;
+import com.spinn3r.artemis.network.builder.proxies.ProxyReferences;
 import com.spinn3r.artemis.network.builder.proxies.ProxyReference;
 import com.spinn3r.artemis.network.init.DirectNetworkService;
 import com.spinn3r.artemis.time.init.SyntheticClockService;
@@ -87,7 +87,7 @@ public class FullIntegrationPinpointProblemTest extends com.spinn3r.artemis.test
     @Ignore
     public void testBulkRequests1() throws Exception {
 
-        ProxyReference proxy = Proxies.create( String.format( "http://localhost:%s", 8081 ) );
+        ProxyReference proxy = ProxyReferences.create(String.format("http://localhost:%s", 8081 ) );
 
         int nrRequest = 100;
 
@@ -105,7 +105,7 @@ public class FullIntegrationPinpointProblemTest extends com.spinn3r.artemis.test
     @Ignore
     public void testBulkRequestsWithEcho() throws Exception {
 
-        ProxyReference proxy = Proxies.create( String.format( "http://127.0.0.1:%s", 8081 ) );
+        ProxyReference proxy = ProxyReferences.create(String.format("http://127.0.0.1:%s", 8081 ) );
 
         Sockets.waitForOpenPort( "127.0.0.1", 8081 );
         Sockets.waitForOpenPort( "127.0.0.1", 8100 );

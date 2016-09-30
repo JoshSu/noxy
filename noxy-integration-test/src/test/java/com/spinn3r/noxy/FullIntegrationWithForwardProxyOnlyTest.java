@@ -8,7 +8,7 @@ import com.spinn3r.artemis.init.ServiceReferences;
 import com.spinn3r.artemis.init.config.TestResourcesConfigLoader;
 import com.spinn3r.artemis.logging.init.ConsoleLoggingService;
 import com.spinn3r.artemis.network.builder.DirectHttpRequestBuilder;
-import com.spinn3r.artemis.network.builder.proxies.Proxies;
+import com.spinn3r.artemis.network.builder.proxies.ProxyReferences;
 import com.spinn3r.artemis.network.builder.proxies.ProxyReference;
 import com.spinn3r.artemis.network.init.DirectNetworkService;
 import com.spinn3r.noxy.discovery.support.init.MembershipSupportService;
@@ -159,7 +159,7 @@ public class FullIntegrationWithForwardProxyOnlyTest extends com.spinn3r.artemis
     @Ignore
     public void testBulkRequests1() throws Exception {
 
-        ProxyReference proxy = Proxies.create( String.format( "http://localhost:%s", 8081 ) );
+        ProxyReference proxy = ProxyReferences.create(String.format("http://localhost:%s", 8081 ) );
 
         int nrRequest = 100;
 

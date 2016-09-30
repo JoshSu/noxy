@@ -13,7 +13,7 @@ import com.spinn3r.artemis.logging.init.ConsoleLoggingService;
 import com.spinn3r.artemis.metrics.init.MetricsService;
 import com.spinn3r.artemis.network.NetworkException;
 import com.spinn3r.artemis.network.builder.DirectHttpRequestBuilder;
-import com.spinn3r.artemis.network.builder.proxies.Proxies;
+import com.spinn3r.artemis.network.builder.proxies.ProxyReferences;
 import com.spinn3r.artemis.network.builder.proxies.ProxyReference;
 import com.spinn3r.artemis.network.init.DirectNetworkService;
 import com.spinn3r.artemis.time.init.SystemClockService;
@@ -152,7 +152,7 @@ public class ReverseThenForwardProxyIntegrationTest extends com.spinn3r.artemis.
 
         int forwardProxyPort = forwardProxyComponents.forwardProxyPorts.getPort( "server0" );
 
-        ProxyReference proxy = Proxies.create( String.format( "http://127.0.0.1:%s", forwardProxyPort ) );
+        ProxyReference proxy = ProxyReferences.create(String.format("http://127.0.0.1:%s", forwardProxyPort ) );
 
         Sockets.waitForOpenPort( "127.0.0.1", forwardProxyPort );
         Sockets.waitForOpenPort( "127.0.0.1", webserverPort.getPort() );
@@ -180,7 +180,7 @@ public class ReverseThenForwardProxyIntegrationTest extends com.spinn3r.artemis.
 
         int forwardProxyPort = forwardProxyComponents.forwardProxyPorts.getPort( "server0" );
 
-        ProxyReference proxy = Proxies.create( String.format( "http://localhost:%s", forwardProxyPort ) );
+        ProxyReference proxy = ProxyReferences.create(String.format("http://localhost:%s", forwardProxyPort ) );
 
         int nrRequest = 100;
 
@@ -204,7 +204,7 @@ public class ReverseThenForwardProxyIntegrationTest extends com.spinn3r.artemis.
 
         int forwardProxyPort = forwardProxyComponents.forwardProxyPorts.getPort( "server0" );
 
-        ProxyReference proxy = Proxies.create( String.format( "http://localhost:%s", forwardProxyPort ) );
+        ProxyReference proxy = ProxyReferences.create(String.format("http://localhost:%s", forwardProxyPort ) );
 
         String contentWithEncoding = directHttpRequestBuilder.get( "http://msnbc.com" ).withProxy( proxy ).execute().getContentWithEncoding();
 
@@ -230,7 +230,7 @@ public class ReverseThenForwardProxyIntegrationTest extends com.spinn3r.artemis.
             assertThat( onlineServers.size(), equalTo( 0 ) );
         } );
 
-        ProxyReference proxy = Proxies.create( String.format( "http://localhost:%s", reverseProxyPort ) );
+        ProxyReference proxy = ProxyReferences.create(String.format("http://localhost:%s", reverseProxyPort ) );
 
         try {
             directHttpRequestBuilder.get( "http://cnn.com" ).withProxy( proxy ).execute().getContentWithEncoding();

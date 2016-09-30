@@ -8,7 +8,6 @@ import com.spinn3r.artemis.http.ServerBuilder;
 import com.spinn3r.artemis.http.servlets.RequestMeta;
 import com.spinn3r.artemis.http.servlets.RequestMetaServlet;
 import com.spinn3r.artemis.init.BaseLauncherTest;
-import com.spinn3r.artemis.init.MockCallerService;
 import com.spinn3r.artemis.init.MockHostnameService;
 import com.spinn3r.artemis.init.MockVersionService;
 import com.spinn3r.artemis.logging.init.ConsoleLoggingService;
@@ -16,7 +15,7 @@ import com.spinn3r.artemis.metrics.init.MetricsService;
 import com.spinn3r.artemis.network.NetworkException;
 import com.spinn3r.artemis.network.builder.HttpRequest;
 import com.spinn3r.artemis.network.builder.HttpRequestBuilder;
-import com.spinn3r.artemis.network.builder.proxies.Proxies;
+import com.spinn3r.artemis.network.builder.proxies.ProxyReferences;
 import com.spinn3r.artemis.network.init.DirectNetworkService;
 import com.spinn3r.metrics.kairosdb.TaggedMetrics;
 import com.spinn3r.noxy.discovery.support.init.DiscoveryListenerSupportService;
@@ -208,7 +207,7 @@ public class ReverseProxyServiceTest extends BaseLauncherTest {
 
         return httpRequestBuilder
                  .get( link )
-                 .withProxy( Proxies.create( proxyURL ) )
+                 .withProxy(ProxyReferences.create(proxyURL ) )
                  .execute()
                  .getContentWithEncoding();
 
@@ -226,7 +225,7 @@ public class ReverseProxyServiceTest extends BaseLauncherTest {
             HttpRequest httpRequest =
               httpRequestBuilder
                 .get( link )
-                .withProxy( Proxies.create( proxyURL ) )
+                .withProxy(ProxyReferences.create(proxyURL ) )
                 .execute();
 
             httpRequest.connect();

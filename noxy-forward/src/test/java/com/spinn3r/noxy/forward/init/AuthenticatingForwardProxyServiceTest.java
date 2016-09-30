@@ -5,11 +5,10 @@ import com.spinn3r.artemis.init.BaseLauncherTest;
 import com.spinn3r.artemis.init.config.ResourceConfigLoader;
 import com.spinn3r.artemis.network.NetworkException;
 import com.spinn3r.artemis.network.builder.HttpRequestBuilder;
-import com.spinn3r.artemis.network.builder.proxies.Proxies;
+import com.spinn3r.artemis.network.builder.proxies.ProxyReferences;
 import com.spinn3r.artemis.network.builder.proxies.ProxyReference;
 import com.spinn3r.noxy.forward.TestServiceReferences;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.hamcrest.Matchers.*;
@@ -41,7 +40,7 @@ public class AuthenticatingForwardProxyServiceTest extends BaseLauncherTest {
 
             int port = forwardProxyPorts.getPort( "server0" );
 
-            ProxyReference proxy = Proxies.create( String.format( "http://localhost:%s", port ) );
+            ProxyReference proxy = ProxyReferences.create(String.format("http://localhost:%s", port ) );
             String contentWithEncoding = httpRequestBuilder.get( "http://cnn.com" ).withProxy( proxy ).execute().getContentWithEncoding();
 
             assertThat( contentWithEncoding, containsString( "CNN" ) );
@@ -60,7 +59,7 @@ public class AuthenticatingForwardProxyServiceTest extends BaseLauncherTest {
 
         int port = forwardProxyPorts.getPort( "server0" );
 
-        ProxyReference proxy = Proxies.create( String.format( "http://localhost:%s", port ) );
+        ProxyReference proxy = ProxyReferences.create(String.format("http://localhost:%s", port ) );
 
         String contentWithEncoding =
           httpRequestBuilder

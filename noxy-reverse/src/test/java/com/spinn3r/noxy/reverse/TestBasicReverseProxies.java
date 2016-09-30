@@ -7,7 +7,7 @@ import com.spinn3r.artemis.init.MockVersionService;
 import com.spinn3r.artemis.logging.init.ConsoleLoggingService;
 import com.spinn3r.artemis.network.NetworkException;
 import com.spinn3r.artemis.network.builder.HttpRequestBuilder;
-import com.spinn3r.artemis.network.builder.proxies.Proxies;
+import com.spinn3r.artemis.network.builder.proxies.ProxyReferences;
 import com.spinn3r.artemis.network.init.DirectNetworkService;
 import com.spinn3r.noxy.logging.LoggingHttpFiltersSourceAdapterFactory;
 import org.junit.Before;
@@ -111,7 +111,7 @@ public class TestBasicReverseProxies extends BaseLauncherTest {
 
         return httpRequestBuilder
                  .get( link )
-                 .withProxy( Proxies.create( "http://localhost:8080" ) )
+                 .withProxy(ProxyReferences.create("http://localhost:8080" ) )
                  .execute()
                  .getContentWithEncoding();
 
