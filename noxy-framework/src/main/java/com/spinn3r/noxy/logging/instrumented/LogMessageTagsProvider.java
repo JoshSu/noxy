@@ -2,6 +2,7 @@ package com.spinn3r.noxy.logging.instrumented;
 
 import com.google.common.collect.Lists;
 import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import com.spinn3r.artemis.init.advertisements.Caller;
 import com.spinn3r.artemis.metrics.tags.SimpleTagsProvider;
 import com.spinn3r.artemis.metrics.tags.TagNameSets;
@@ -16,6 +17,7 @@ import static com.spinn3r.metrics.kairosdb.TaggedMetrics.tag;
 /**
  *
  */
+@Singleton
 public class LogMessageTagsProvider extends SimpleTagsProvider<LogMessage> {
 
     private static final String CALLER = "caller";
