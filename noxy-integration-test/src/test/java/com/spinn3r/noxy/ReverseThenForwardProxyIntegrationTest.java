@@ -16,6 +16,7 @@ import com.spinn3r.artemis.network.builder.DirectHttpRequestBuilder;
 import com.spinn3r.artemis.network.builder.proxies.ProxyReferences;
 import com.spinn3r.artemis.network.builder.proxies.ProxyReference;
 import com.spinn3r.artemis.network.init.DirectNetworkService;
+import com.spinn3r.artemis.test.zookeeper.BaseZookeeperTest;
 import com.spinn3r.artemis.time.init.SystemClockService;
 import com.spinn3r.artemis.time.init.UptimeService;
 import com.spinn3r.artemis.util.io.Sockets;
@@ -45,7 +46,7 @@ import static org.junit.Assert.*;
  *
  */
 @SuppressWarnings( "deprecation" )
-public class ReverseThenForwardProxyIntegrationTest extends com.spinn3r.artemis.test.zookeeper.BaseZookeeperTest {
+public class ReverseThenForwardProxyIntegrationTest extends BaseZookeeperTest {
 
     // TODO: see if we can measure the number of keep alive requests...
 
