@@ -31,8 +31,8 @@ public class AuthenticatingForwardProxyServiceTest extends LauncherTest {
     @Before
     public void setUp() throws Exception {
 
-        setConfigLoader(MultiConfigLoaders.create(new ResourceConfigLoader( "/profiles/authentication" ),
-                                                  new ResourceConfigLoader()));
+        setConfigLoader(MultiConfigLoaders.createMultiConfigLoader(new ResourceConfigLoader( "/profiles/authentication" ),
+                                                                   new ResourceConfigLoader()));
 
         setServiceReferences(new TestServiceReferences());
 
