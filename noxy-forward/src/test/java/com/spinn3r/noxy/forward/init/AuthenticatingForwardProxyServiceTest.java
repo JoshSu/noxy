@@ -2,6 +2,8 @@ package com.spinn3r.noxy.forward.init;
 
 import com.google.inject.Inject;
 import com.spinn3r.artemis.init.BaseLauncherTest;
+import com.spinn3r.artemis.init.LauncherTest;
+import com.spinn3r.artemis.init.config.MultiConfigLoaders;
 import com.spinn3r.artemis.init.config.ResourceConfigLoader;
 import com.spinn3r.artemis.network.NetworkException;
 import com.spinn3r.artemis.network.builder.HttpRequestBuilder;
@@ -17,7 +19,7 @@ import static org.junit.Assert.*;
 /**
  *
  */
-public class AuthenticatingForwardProxyServiceTest extends BaseLauncherTest {
+public class AuthenticatingForwardProxyServiceTest extends LauncherTest {
 
     @Inject
     HttpRequestBuilder httpRequestBuilder;
@@ -29,7 +31,12 @@ public class AuthenticatingForwardProxyServiceTest extends BaseLauncherTest {
     @Before
     public void setUp() throws Exception {
 
-        super.setUp( new ResourceConfigLoader( "/profiles/authentication" ),  new TestServiceReferences() );
+        setConfigLoader(MultiConfigLoaders.create(new ResourceConfigLoader( "/profiles/authentication" ),
+                                                  new ResourceConfigLoader()));
+
+        setServiceReferences(new TestServiceReferences());
+
+        super.setUp();
 
     }
 
