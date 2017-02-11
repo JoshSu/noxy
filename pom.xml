@@ -44,18 +44,10 @@
     <dependencies>
 
         <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-core</artifactId>
-            <version>1.10.19</version>
+            <groupId>com.spinn3r.artemis.mockito</groupId>
+            <artifactId>artemis-mockito</artifactId>
+            <version>${project.version}</version>
             <scope>test</scope>
-
-            <exclusions>
-                <exclusion>
-                    <groupId>org.hamcrest</groupId>
-                    <artifactId>hamcrest-core</artifactId>
-                </exclusion>
-            </exclusions>
-
         </dependency>
 
         <dependency>
