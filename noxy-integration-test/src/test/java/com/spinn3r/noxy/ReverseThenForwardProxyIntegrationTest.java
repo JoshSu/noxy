@@ -209,7 +209,7 @@ public class ReverseThenForwardProxyIntegrationTest extends BaseZookeeperTest {
 
         String contentWithEncoding = directHttpRequestBuilder.get( "http://msnbc.com" ).withProxy( proxy ).execute().getContentWithEncoding();
 
-        assertThat( contentWithEncoding, containsString( "<title>MSNBC" ) );
+        assertThat( contentWithEncoding, containsString( "MSNBC" ) );
 
     }
 
