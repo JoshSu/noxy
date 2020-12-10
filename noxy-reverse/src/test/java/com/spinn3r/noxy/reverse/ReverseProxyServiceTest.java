@@ -176,7 +176,7 @@ public class ReverseProxyServiceTest extends BaseLauncherTest {
 
         content = requestMeta.toJSON();
 
-        JSONAssert.assertEquals(corporaAsserter.getCorporaCache().read("testRequestMetaForSuccessfulRequest"), content, false);
+        JSONAssert.assertEquals(content,corporaAsserter.getCorporaCache().read("testRequestMetaForSuccessfulRequest"), false);
     }
 
     @Test
