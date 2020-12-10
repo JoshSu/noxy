@@ -28,9 +28,11 @@ import org.eclipse.jetty.server.Server;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.skyscreamer.jsonassert.JSONAssert;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import static org.hamcrest.Matchers.*;
 
@@ -62,7 +64,7 @@ public class ReverseProxyServiceTest extends BaseLauncherTest {
 
     CorporaAsserter corporaAsserter = new CorporaAsserter( getClass() );
 
-    Map<String, Server> httpDaemonMap = new HashMap<>();
+    Map<String, Server> httpDaemonMap = new ConcurrentHashMap<>();
 
     @Override
     @Before
@@ -175,8 +177,7 @@ public class ReverseProxyServiceTest extends BaseLauncherTest {
 
         content = requestMeta.toJSON();
 
-        corporaAsserter.assertEquals( "testRequestMetaForSuccessfulRequest", content );
-
+        JSONAssert.assertEquals(corporaAsserter.getCorporaCache().read("testRequestMetaForSuccessfulRequest"), content, false);
     }
 
     @Test
