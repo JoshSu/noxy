@@ -32,7 +32,6 @@ import org.skyscreamer.jsonassert.JSONAssert;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 import static org.hamcrest.Matchers.*;
 
@@ -64,7 +63,7 @@ public class ReverseProxyServiceTest extends BaseLauncherTest {
 
     CorporaAsserter corporaAsserter = new CorporaAsserter( getClass() );
 
-    Map<String, Server> httpDaemonMap = new ConcurrentHashMap<>();
+    Map<String, Server> httpDaemonMap = new HashMap<>();
 
     @Override
     @Before
